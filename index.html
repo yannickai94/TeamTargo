@@ -1186,6 +1186,11 @@ form.quick[data-form=qtask]{display:flex;gap:10px;flex-wrap:nowrap;align-items:c
 @media (max-width:900px){.lem-tb .mnav{margin-left:0}.lh-v{font-size:42px}}
 .lem-tb .mnav b{white-space:nowrap;min-width:84px;text-align:center}.lem-tb{flex-wrap:nowrap}.lem-tb .seg{flex:none}
 .lem-tb{flex-wrap:wrap!important}.lem-tb .mnav{margin-left:auto!important}
+.vp-sum{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding:8px 12px;margin:0 0 8px;border-radius:12px;background:rgba(var(--tint-rgb),.08);color:var(--text);text-decoration:none}
+.vp-sum b{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}.vp-sum span{font-size:13px;color:var(--muted);flex:1;min-width:0}.vp-sum.link .ic{color:var(--muted);align-self:center}
+.deal-vp{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;background:rgba(31,157,85,.12)}.deal-vp b{font-size:20px;color:var(--good)}.deal-vp span{font-size:13px;color:var(--muted)}
+.lem-sh{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:10px;align-items:center;padding:6px 0;border-bottom:.5px solid var(--line)}.lem-sh span{display:flex;flex-direction:column;min-width:0}.lem-sh small{font-size:12px;color:var(--muted)}.lem-sh input{text-align:right}
+.dealf optgroup{font-weight:700}
 
 </style>
 </head>
@@ -1369,7 +1374,7 @@ var OBS_PHASES=[
   {id:'doku',n:'Dokumentation & Compliance',s:'Doku',comp:'reg',h:'Beratungsprotokoll, Legitimation, Pflichtangaben'}
 ];
 var OBS_KINDS=['Beratungsgespräch','Kreditgespräch','Kontoeröffnung','Anlage / Vorsorge','Telefonat','Service-Situation'];
-var METRIC_UNITS=['Stück','€','Punkte'];
+var METRIC_UNITS=['Stück','€','Punkte','VP'];
 var Q_CATS=['Pflicht','Zulassung','Fachlich'];
 var DEF_METRICS=[
   {id:'m_kre',n:'Kreditabschlüsse',s:'Kredit',unit:'Stück',t:6,c:'#BC123D',comp:'kre'},
@@ -1417,7 +1422,7 @@ function blank(settings){
     quals:DEF_QUALS.map(function(q){return Object.assign({},q,{roles:q.roles.slice()})}),qrec:{},staff:defStaff()};
   normExtra(o,{});return o;
 }
-function normMetric(m){m=m||{};return {id:String(m.id||uid()),n:String(m.n||'Kennzahl').slice(0,40),s:String(m.s||String(m.n||'K').slice(0,10)).slice(0,14),unit:METRIC_UNITS.indexOf(m.unit)>-1?m.unit:'Stück',t:clampNum(m.t,0,0,1e9),c:hexOk(m.c)?m.c:'#1c7ed6',comp:String(m.comp||'')}}
+function normMetric(m){m=m||{};return {id:String(m.id||uid()),n:String(m.n||'Kennzahl').slice(0,40),s:String(m.s||String(m.n||'K').slice(0,10)).slice(0,14),unit:METRIC_UNITS.indexOf(m.unit)>-1?m.unit:'Stück',t:clampNum(m.t,0,0,1e9),c:hexOk(m.c)?m.c:'#1c7ed6',comp:String(m.comp||''),lem:LEM_PRODS.some(function(p){return p[0]===m.lem})?m.lem:''}}
 function numMap(m){var o={};if(m&&typeof m==='object')Object.keys(m).forEach(function(k){var v=parseFloat(m[k]);if(isFinite(v)&&v>=0&&v<1e9)o[k]=v});return o}
 function normSales(s){
   var o={targets:{},actual:{}};if(!s||typeof s!=='object')return o;
@@ -1779,7 +1784,7 @@ var DEF_ROUTINES=[
   {id:'r3',t:'Wochenplanung und Besetzung prüfen',f:'w'},{id:'r4',t:'Offene Überleitungen nachfassen',f:'w'},{id:'r5',t:'Mindestens ein 1:1-Gespräch führen',f:'w'},
   {id:'r6',t:'Monatsergebnisse auswerten und Ziele setzen',f:'m'},{id:'r7',t:'Nachweise und Fristen prüfen',f:'m'},{id:'r8',t:'Backup von myTeamz sichern',f:'m'}
 ];
-var DEF_KPIS=[{id:'k_kred',n:'Kredit-Neugeschäft',unit:'T€',hi:true,metric:''},{id:'k_nk',n:'Neukunden',unit:'Stück',hi:true,metric:''},{id:'k_gk',n:'Girokonten',unit:'Stück',hi:true,metric:'m_kon'},{id:'k_vers',n:'Versicherungen',unit:'Stück',hi:true,metric:'m_ver'},{id:'k_ze',n:'Zielerreichung',unit:'%',hi:true,metric:''},{id:'k_lem',n:'LEM-Punkte',unit:'Punkte',hi:true,metric:'__lem'}];
+var DEF_KPIS=[{id:'k_kred',n:'Kredit-Neugeschäft',unit:'T€',hi:true,metric:''},{id:'k_nk',n:'Neukunden',unit:'Stück',hi:true,metric:''},{id:'k_gk',n:'Girokonten',unit:'Stück',hi:true,metric:'__cnt:gk'},{id:'k_vers',n:'Versicherungen',unit:'Stück',hi:true,metric:'__cnt:ver'},{id:'k_ze',n:'Zielerreichung',unit:'%',hi:true,metric:''},{id:'k_lem',n:'LEM-Punkte',unit:'Punkte',hi:true,metric:'__lem'}];
 function defReviews(st){return {cfg:{name:'TARGOBANK '+((st&&st.branch)||'Lünen'),query:'TARGOBANK Münsterstraße 23, 44534 Lünen',placeId:'',url:''},snaps:[],list:[]}}
 function defRegion(st){return {name:'Mein Gebiet',branches:[{id:'b_own',n:(st&&st.branch)||'Lünen',lead:(st&&st.manager)||'',phone:'',mail:'',own:true}],kpis:DEF_KPIS.map(function(k){return Object.assign({},k)}),data:{},imports:[]}}
 function str(v,n){return String(v==null?'':v).slice(0,n||200)}
@@ -1817,7 +1822,7 @@ function normExtra(b,o){
   b.todos=normTodos(o.todos);b.routines=normRoutines(o.routines);b.wv=normWv(o.wv);b.events=normEvents(o.events);
   b.media=normMediaMeta(o.media);b.appts=normAppts(o.appts);
   b.kls=normKls(o.kls);b.lem=normLem(o.lem);b.settings.home=normHome(b.settings.home);
-  var hadH=!!(b.settings.hrs&&typeof b.settings.hrs==='object');b.settings.hrs=normHrs(b.settings.hrs);if(!hadH)syncStaffRange(b);b.reviews=normReviews(o.reviews,b.settings);b.region=normRegion(o.region,b.settings);
+  var hadH=!!(b.settings.hrs&&typeof b.settings.hrs==='object');b.settings.hrs=normHrs(b.settings.hrs);if(!hadH)syncStaffRange(b);b.reviews=normReviews(o.reviews,b.settings);b.region=normRegion(o.region,b.settings);b.deals=normDeals(o.deals);b.lemMig=o.lemMig?1:0;migrateLemMetrics(b);
 }
 function seedExtra(st,by,td){
   var mk=monthKey();
@@ -1859,7 +1864,7 @@ function seedExtra(st,by,td){
     {t:'Gebietsrunde Filialleitungen',date:W[3],start:'13:00',end:'16:30',cat:'gebiet',loc:'Dortmund'},
     {t:'Zahnarzt',date:W[4],start:'17:30',end:'18:30',cat:'privat'}
   ]);
-  seedKls(st,by);seedLem(st);
+  seedKls(st,by);seedLem(st,by);st.metrics=lemMetrics().concat(st.metrics.filter(function(m){return !m.lem&&['m_kre','m_kon','m_ver'].indexOf(m.id)<0}));st.lemMig=1;st.goals=[{id:uid(),name:'Girokonto laut LEM',unit:'VP',target:0,actual:0,metric:'__lp:gk'},{id:uid(),name:'Neue Google-Bewertungen',unit:'Stück',target:10,actual:4,metric:''}];
   st.reviews=defReviews(st.settings);
   st.reviews.snaps=[[-170,4.1,61],[-140,4.1,64],[-110,4.2,68],[-80,4.2,71],[-50,4.3,75],[-20,4.3,79]].map(function(x){return {date:td(x[0]),rating:x[1],count:x[2]}});
   st.reviews.list=[
@@ -2077,7 +2082,7 @@ function paletteItems(){
   items.push({k:'Aktion',t:'Anerkennung festhalten',icon:'award',run:function(){openKudosForm('')}});
   items.push({k:'Aktion',t:'Entwicklungsmaßnahme anlegen',icon:'trend',run:function(){openMeasForm('')}});
   items.push({k:'Aktion',t:'Arbeitszeit heute eintragen',icon:'clock',run:function(){openDayForm('me',todayISO())}});
-  items.push({k:'Aktion',t:'Ergebnisse eintragen',icon:'chart',run:function(){openSalesForm('')}});
+  items.push({k:'Aktion',t:'Abschluss erfassen (Verkaufspunkte)',icon:'chart',run:function(){openDealForm({})}});
   items.push({k:'Aktion',t:'Gespräch beobachten',icon:'eye',run:function(){openObsForm('')}});
   items.push({k:'Aktion',t:'Nachweis eintragen',icon:'shield',run:function(){openQrecForm('','')}});
   items.push({k:'Aktion',t:'Überleitung erfassen',icon:'send',run:function(){openRefForm('', '')}});
@@ -2425,7 +2430,7 @@ function viewRefs(){
   var goalCard='<section class="card glass rise s4"><div class="card-h"><h2>Ziel im Monat</h2><span class="sub">'+tgt+' je Person</span></div>'+(S.employees.length?S.employees.map(function(e){
     var n=refsOf({emp:e.id,month:mk}).length,p=tgt>0?Math.min(100,Math.round(n/tgt*100)):0;
     return '<div class="prow"><div class="l"><span class="who">'+avatar(e.name,'sm')+esc(e.name.split(' ')[0])+'</span><span class="muted">'+n+' / '+tgt+'</span></div><div class="bar"><i class="'+(n>=tgt?'good':'')+'" data-w="'+p+'"></i></div></div>';
-  }).join(''):'<p class="muted">Keine Mitarbeitenden.</p>')+'<p class="muted small" style="margin-top:8px">Das Ziel stellst du in den Einstellungen ein.</p></section>';
+  }).join(''):'<p class="muted">Keine Mitarbeitenden.</p>')+'<p class="muted small" style="margin-top:8px">Anzahl-Ziel aus den Einstellungen. Die Verkaufspunkte für One Bank stehen unter LEM-Ziele und Ergebnisse.</p></section>';
   return '<div class="grid">'+staleCard()+chs+listCard+goalCard+refMatrix()+'</div>';
 }
 
@@ -2989,7 +2994,7 @@ function quickAct(k,pid){
   else if(k==='kudos')openKudosForm(pid);
   else if(k==='meas')openMeasForm('',{emp:pid});
   else if(k==='ref')openRefForm('',{emp:pid});
-  else if(k==='sales')openSalesForm(pid);
+  else if(k==='sales')openDealForm({emp:pid});
   else if(k==='obs')openObsForm(pid);
   else if(k==='qrec')openQrecForm(pid,'');
   else if(k==='time')openDayForm('me',todayISO());
@@ -3081,19 +3086,21 @@ function monthNav(mk,act){
   return '<div class="mnav"><button class="btn icon sm" data-act="'+act+'" data-k="-1" aria-label="Vorheriger Monat">'+ic('left',16)+'</button><b>'+esc(monthLabel(mk))+'</b><button class="btn icon sm" data-act="'+act+'" data-k="1" aria-label="Nächster Monat">'+ic('right',16)+'</button>'+(cur?'':'<button class="btn sm" data-act="'+act+'" data-k="0">Heute</button>')+'</div>';
 }
 function salesPersonCard(e,mk,i){
-  var res=personRes(e,mk),cur=mk===monthKey();
-  return '<section class="card glass rise s6 spc click" data-act="sales-new" data-emp="'+esc(e.id)+'" data-lp="emp" data-id="'+esc(e.id)+'" style="--i:'+Math.min(i,10)+'"><div class="card-h"><div class="sp-who">'+avatar(e.name,'sm')+'<div style="min-width:0"><b>'+esc(e.name)+'</b><span class="muted small">'+esc(e.role)+'</span></div></div><div class="ch-r">'+(res.entered?chipC(pctTxt(res.avg),res.st.c):chipC('offen','#7b8794'))+ic('edit',16)+'</div></div>'+lemVpRow(e,mk)+
-    (res.entered||cur?res.rows.map(function(r){return metRow(r,e,res.pace,false)}).join(''):'<p class="muted small">Für diesen Monat wurde noch nichts erfasst.</p>')+'</section>';
+  var res=personRes(e,mk),cur=mk===monthKey(),rows=res.rows.filter(function(r){return r.t.v>0||r.a!=null});
+  return '<section class="card glass rise s6 spc click" data-act="sales-new" data-emp="'+esc(e.id)+'" data-lp="emp" data-id="'+esc(e.id)+'" style="--i:'+Math.min(i,10)+'"><div class="card-h"><div class="sp-who">'+avatar(e.name,'sm')+'<div style="min-width:0"><b>'+esc(e.name)+'</b><span class="muted small">'+esc(e.role)+'</span></div></div><div class="ch-r">'+(res.vp.t>0||res.entered?chipC(pctTxt(res.avg),res.st.c):chipC('kein Ziel','#7b8794'))+ic('plus',16)+'</div></div>'+
+    (res.vp.t>0||res.vp.a?'<div class="vp-sum"><b>'+num(Math.round(res.vp.a))+'</b><span>von '+num(Math.round(res.vp.t))+' Verkaufspunkten · '+Math.round(lemShareOf(e.id)*100)+' % vom Filialziel</span></div>':'')+
+    (rows.length?rows.map(function(r){return metRow(r,e,res.pace,false)}).join(''):'<p class="muted small">'+(cur?'Noch keine Abschlüsse in diesem Monat.':'Für diesen Monat wurde nichts erfasst.')+'</p>')+'</section>';
 }
 function viewSales(){
   var mk=UI.salesMonth||monthKey();UI.salesMonth=mk;
   if(!S.employees.length)return '<section class="glass rise">'+empty('users','Noch keine Mitarbeitenden','Lege dein Team an, dann kannst du Ergebnisse erfassen.','<button class="btn primary" data-act="emp-new">'+ic('plus',16)+' Mitarbeiter anlegen</button>')+'</section>';
-  if(!S.metrics.length)return '<section class="glass rise">'+empty('chart','Keine Kennzahlen angelegt','Lege in den Einstellungen fest, welche Ergebnisse du steuern willst.','<a class="btn primary" href="#/settings">'+ic('settings',16)+' Zu den Einstellungen</a>')+'</section>';
-  var pace=monthPace(mk),cur=mk===monthKey(),rs=teamRes(mk),hints=salesHints(mk);
+  var pace=monthPace(mk),cur=mk===monthKey(),rs=teamRes(mk).filter(function(x){return x.t>0||x.a>0}),hints=salesHints(mk),R=lemCalc(mk,'m');
   var tool='<div class="toolbar rise">'+monthNav(mk,'sales-m')+'</div>';
+  var fil=R.v.ist,me=dealSum(mk,{emp:'me'})||0,un=dealSum(mk,{emp:''})||0;
   var team='<section class="card glass rise s12"><div class="card-h"><h2>Team gesamt</h2><span class="sub">'+(cur?'Monat zu '+Math.round(pace*100)+' % vorbei':(mk<monthKey()?'Monat abgeschlossen':'Zukünftiger Monat'))+'</span></div>'+
-    (hasSales(mk)||cur?rs.map(function(x){var p=x.t>0?Math.min(100,Math.round(x.a/x.t*100)):0;return '<div class="prow"><div class="l"><span>'+esc(x.m.n)+'</span><span class="muted">'+fmtV(x.m,x.a)+' / '+fmtV(x.m,x.t)+' · '+chipC(x.st.l,x.st.c)+'</span></div><div class="bar"><i class="'+barCls(x.st)+'" data-w="'+p+'"></i>'+(pace>.03&&pace<.97?'<b class="pace" style="left:'+Math.round(pace*100)+'%"></b>':'')+'</div></div>'}).join(''):'<p class="muted">Für diesen Monat wurden keine Ergebnisse erfasst.</p>')+
-    '<p class="muted small" style="margin-top:10px">Die Marke zeigt, wo das Team heute stehen müsste. Ziele sind '+(S.settings.prorate!==false?'anteilig zur Wochenarbeitszeit berechnet':'für alle gleich')+', persönliche Ziele überschreiben das.</p></section>';
+    (R.v.ziel?'<a class="vp-sum link" href="#/goals"><b>'+num(Math.round(fil))+'</b><span>von '+num(Math.round(R.v.ziel))+' VP Filialziel · LEM Verkauf '+(cur?'bisher '+lemPctTxt(R.v.zeN)+(R.v.fc!=null?' · Prognose '+lemPctTxt(R.v.fc)+' = '+R.v.fcPts+' Punkte':''):lemPctTxt(R.v.zeN)+' = '+lemF(R.v.pts)+' Punkte')+(me||un?' · davon Filialleitung '+num(Math.round(me))+(un?', nicht zugeordnet '+num(Math.round(un)):''):'')+'</span>'+ic('right',15)+'</a>':'<div class="nb">'+ic('target',16)+'<span class="grow">Für '+esc(monthLabel(mk))+' ist noch kein LEM-Verkaufsziel erfasst. Ohne Ziel gibt es keine persönlichen Verkaufsziele.</span><button class="btn sm primary" data-act="lem-edit" data-v="v">Ziel</button></div>')+
+    (rs.length?rs.map(function(x){var p=x.t>0?Math.min(100,Math.round(x.a/x.t*100)):0;return '<div class="prow"><div class="l"><span>'+esc(x.m.n)+'</span><span class="muted">'+fmtV(x.m,x.a)+' / '+fmtV(x.m,x.t)+' · '+chipC(x.st.l,x.st.c)+'</span></div><div class="bar"><i class="'+barCls(x.st)+'" data-w="'+p+'"></i>'+(pace>.03&&pace<.97?'<b class="pace" style="left:'+Math.round(pace*100)+'%"></b>':'')+'</div></div>'}).join(''):'<p class="muted">Für diesen Monat wurden keine Ergebnisse erfasst.</p>')+
+    '<p class="muted small" style="margin-top:10px">Eine Zielquelle: Die Teamziele sind das LEM-Filialziel je Produkt, verteilt nach Zielverteilung (⋯). Die Marke zeigt, wo das Team heute stehen müsste.</p></section>';
   var hintCard=(hints.low.length||hints.high.length)?'<section class="card glass rise s12"><div class="card-h"><h2>Daraus folgt</h2><span class="sub">Vorschläge, abgeleitet aus Ergebnis und Kompetenz</span></div>'+hintRows(hints)+'</section>':'';
   var people=S.employees.map(function(e,i){return salesPersonCard(e,mk,i)}).join('');
   var note='<p class="muted small s12" style="padding:0 4px">Ergebnisdaten sind Leistungsdaten. Kläre vor dem Einsatz Datenschutz und Mitbestimmung (Betriebsrat). Nur Zahlen erfassen, keine Kundennamen.</p>';
@@ -3101,13 +3108,13 @@ function viewSales(){
 }
 function tabSales(e){
   var mk=UI.salesMonth||monthKey();UI.salesMonth=mk;
-  if(!S.metrics.length)return '<section class="card glass">'+empty('chart','Keine Kennzahlen angelegt','Lege in den Einstellungen Kennzahlen an.','<a class="btn primary" href="#/settings">Zu den Einstellungen</a>')+'</section>';
   var res=personRes(e,mk),cur=mk===monthKey(),pace=res.pace;
   var rn=refsOf({emp:e.id,month:mk}).length,rt=S.settings.refTarget||0;
   var refRow2=rt>0?'<div class="prow"><div class="l"><span>Überleitungen (automatisch)</span><span class="muted">'+rn+' / '+rt+'</span></div><div class="bar-wrap"><div class="bar"><i class="'+(rn>=rt?'good':'')+'" data-w="'+Math.min(100,Math.round(rn/rt*100))+'"></i></div></div></div>':'';
   var main='<section class="card glass rise s7"><div class="card-h"><h2>Ergebnisse</h2>'+(res.entered?chipC(pctTxt(res.avg)+' · '+res.st.l,res.st.c):'')+'</div>'+monthNav(mk,'sales-m')+'<div style="height:10px"></div>'+
-    (res.entered||cur?res.rows.map(function(r){return metRow(r,e,pace,cur)}).join(''):'<p class="muted small">Für diesen Monat wurde noch nichts erfasst.</p>')+refRow2+lemVpRow(e,mk)+
-    '<div class="btn-row" style="margin-top:14px"><button class="btn primary" data-act="sales-new" data-emp="'+esc(e.id)+'">'+ic('edit',15)+' Eintragen</button><button class="btn" data-act="sales-targets" data-emp="'+esc(e.id)+'">'+ic('target',15)+' Ziele anpassen</button></div></section>';
+    (res.entered||cur?res.rows.filter(function(r){return r.t.v>0||r.a!=null||!r.m.lem}).map(function(r){return metRow(r,e,pace,cur)}).join(''):'<p class="muted small">Für diesen Monat wurde noch nichts erfasst.</p>')+refRow2+lemVpRow(e,mk)+
+    (res.vp.t>0?'<p class="muted small" style="margin-top:8px">Verkaufspunkte '+num(Math.round(res.vp.a))+' von '+num(Math.round(res.vp.t))+' · '+Math.round(lemShareOf(e.id)*100)+' % vom LEM-Filialziel</p>':'')+
+    '<div class="btn-row" style="margin-top:14px"><button class="btn primary" data-act="sales-new" data-emp="'+esc(e.id)+'">'+ic('plus',15)+' Abschluss</button><button class="btn" data-act="deal-list" data-emp="'+esc(e.id)+'">'+ic('tasks',15)+' Abschlüsse</button><button class="btn icon" data-act="sales-targets" data-emp="'+esc(e.id)+'" aria-label="Ziele anpassen">'+ic('target',15)+'</button></div></section>';
   var months=[];for(var k=-5;k<=0;k++)months.push(shiftMonth(monthKey(),k));
   var hist=months.map(function(m){var r=personRes(e,m);return {m:m,r:r}}).filter(function(x){return x.r.entered});
   var vals=hist.map(function(x){return x.r.avg*5});
@@ -3127,30 +3134,30 @@ function salesDash(){
 function stepFor(m){return m.unit==='€'?100:1}
 function openSalesForm(empId,mk){
   if(!S.employees.length){toast('Lege zuerst einen Mitarbeiter an','warn');return}
-  if(!S.metrics.length){toast('Lege zuerst Kennzahlen in den Einstellungen an','warn');return}
+  if(!manualMets().length){toast('Es gibt keine weiteren Kennzahlen. Verkäufe erfasst du als Abschluss.','warn');return}
   mk=mk||UI.salesMonth||monthKey();var e=emp(empId)||S.employees[0];UI.salesMonth=mk;
   var pace=monthPace(mk);
-  var rows=S.metrics.map(function(m){
+  var rows=manualMets().map(function(m){
     var t=metTarget(e,m),a=metAct(mk,e,m),plan=Math.round(t.v*pace*10)/10;
     return '<div class="full sf-row"><div class="sf-l"><b>'+esc(m.n)+'</b><span class="muted small">Ziel '+fmtV(m,t.v)+(pace>0&&pace<1?' · Plan bis heute ca. '+fmtV(m,plan):'')+'</span></div><div class="stepper"><button type="button" class="cb" data-act="sf-step" data-n="'+esc(m.id)+'" data-s="-'+stepFor(m)+'" aria-label="weniger">−</button><input name="v_'+esc(m.id)+'" type="number" inputmode="decimal" min="0" step="any" value="'+(a==null?'':a)+'" placeholder="0" aria-label="'+esc(m.n)+'"><button type="button" class="cb" data-act="sf-step" data-n="'+esc(m.id)+'" data-s="'+stepFor(m)+'" aria-label="mehr">+</button></div></div>';
   }).join('');
   var sel=SEL('Mitarbeiter','emp',empOpts(false),e.id,'full').replace('<select name="emp"','<select name="emp" data-change="sf-person"');
-  openModal('<div class="m-head"><div><h3>Ergebnisse eintragen</h3><span class="muted small">'+esc(monthLabel(mk))+' · Stand heute, Gesamtsumme des Monats</span></div>'+X()+'</div><form data-form="sales" class="form"><input type="hidden" name="mk" value="'+mk+'">'+sel+rows+
+  openModal('<div class="m-head"><div><h3>Weitere Kennzahlen</h3><span class="muted small">'+esc(monthLabel(mk))+' · Stand heute, Summe des Monats · Verkäufe als Abschluss erfassen</span></div>'+X()+'</div><form data-form="sales" class="form"><input type="hidden" name="mk" value="'+mk+'">'+sel+rows+
     '<div class="full"><button type="button" class="btn sm" data-act="sales-targets" data-emp="'+esc(e.id)+'">'+ic('target',14)+' Ziele für '+esc(e.name.split(' ')[0])+' anpassen</button></div>'+
     '<div class="full m-foot" style="margin-top:6px"><button type="button" class="btn" data-act="modal-close">Abbrechen</button><button class="btn primary" type="submit">'+ic('check',15)+' Speichern</button></div></form>');
 }
 function saveSales(f,d){
   var mk=d.get('mk'),e=emp(d.get('emp'));if(!e||!/^\d{4}-\d{2}$/.test(mk||'')){toast('Bitte einen Mitarbeiter wählen','err');return}
   if(!S.sales.actual[mk])S.sales.actual[mk]={};
-  var o={};S.metrics.forEach(function(m){var raw=String(d.get('v_'+m.id)||'').trim().replace(',','.');if(raw==='')return;var v=parseFloat(raw);if(isFinite(v)&&v>=0)o[m.id]=Math.round(v*10)/10});
+  var o=Object.assign({},(S.sales.actual[mk]||{})[e.id]||{});manualMets().forEach(function(m){delete o[m.id];var raw=String(d.get('v_'+m.id)||'').trim().replace(',','.');if(raw==='')return;var v=parseFloat(raw);if(isFinite(v)&&v>=0)o[m.id]=Math.round(v*10)/10});
   S.sales.actual[mk][e.id]=o;
   save();closeModal();rerender();toast('Ergebnisse von '+e.name.split(' ')[0]+' gespeichert');
 }
 function openSalesTargets(empId){
   var e=emp(empId);if(!e)return;
   var own=S.sales.targets[e.id]||{};
-  openModal('<div class="m-head"><div><h3>Ziele von '+esc(e.name.split(' ')[0])+'</h3><span class="muted small">Pro Monat. Leer lassen = Standardziel'+(S.settings.prorate!==false&&e.hours<39?' (anteilig zu '+dec(e.hours)+' h)':'')+'</span></div>'+X()+'</div><form data-form="stargets" class="form"><input type="hidden" name="emp" value="'+esc(e.id)+'">'+
-    S.metrics.map(function(m){var std=metTarget({id:'__',hours:e.hours},m).v;return F(m.n+' ('+m.unit+')','t_'+m.id,own[m.id]!=null?own[m.id]:'','number','inputmode="decimal" min="0" step="any" placeholder="Standard: '+fmtV(m,std).replace(/"/g,'')+'"')}).join('')+
+  openModal('<div class="m-head"><div><h3>Ziele von '+esc(e.name.split(' ')[0])+'</h3><span class="muted small">Pro Monat. Leer lassen = anteiliges LEM-Ziel bzw. Standardziel'+(S.settings.prorate!==false&&e.hours<39?' (anteilig zu '+dec(e.hours)+' h)':'')+'</span></div>'+X()+'</div><form data-form="stargets" class="form"><input type="hidden" name="emp" value="'+esc(e.id)+'">'+
+    S.metrics.map(function(m){var std=m.lem?Math.round((lemProdZiel(UI.salesMonth||monthKey(),m.lem)||0)*lemShareOf(e.id)):metTarget({id:'__',hours:e.hours},m).v;return F(m.n+' ('+m.unit+')','t_'+m.id,own[m.id]!=null?own[m.id]:'','number','inputmode="decimal" min="0" step="any" placeholder="'+(m.lem?'anteilig: ':'Standard: ')+fmtV(m,std).replace(/"/g,'')+'"')}).join('')+
     '<div class="full m-foot" style="margin-top:6px"><button type="button" class="btn" data-act="modal-close">Abbrechen</button><button class="btn primary" type="submit">'+ic('check',15)+' Speichern</button></div></form>');
 }
 function saveTargets(f,d){
@@ -4108,7 +4115,7 @@ function regBranch(id){return byId(R_().branches,id)}
 function regKpi(id){return byId(R_().kpis,id)}
 function regMonths(){return Object.keys(R_().data).filter(function(mk){var d=R_().data[mk];return Object.keys(d).some(function(b){return Object.keys(d[b]).length})}).sort()}
 function regMk(){if(UI.regMonth)return UI.regMonth;var ms=regMonths();return ms.length?ms[ms.length-1]:monthKey()}
-function regVal(mk,bid,kid){var d=R_().data[mk];if(!d||!d[bid])return null;var v=d[bid][kid];return typeof v==='number'?v:null}
+function regVal(mk,bid,kid){var d=R_().data[mk],v=d&&d[bid]?d[bid][kid]:null;if(typeof v==='number')return v;var b=regBranch(bid),k=regKpi(kid);if(b&&b.own&&k&&k.metric&&d&&Object.keys(d).length){var a=teamMetricSum(mk,k.metric);return typeof a==='number'?a:null}return null}
 function regRank(mk,kid){
   var k=regKpi(kid);if(!k)return [];
   var l=R_().branches.map(function(b){return {b:b,v:regVal(mk,b.id,kid)}}).filter(function(x){return x.v!==null});
@@ -4421,7 +4428,7 @@ var LP_MENUS={
     {icon:'chat',label:'Gespräch festhalten',fn:function(){openTalkForm(e.id)}},
     {icon:'file',label:'Briefing fürs Gespräch',fn:function(){openBriefing(e.id)}},
     {icon:'award',label:'Anerkennung',fn:function(){openKudosForm(e.id)}},
-    {icon:'chart',label:'Ergebnisse eintragen',fn:function(){openSalesForm(e.id)}},
+    {icon:'chart',label:'Abschluss erfassen',fn:function(){openDealForm({emp:e.id})}},
     {icon:'eye',label:'Gespräch beobachten',fn:function(){openObsForm(e.id)}},
     {icon:'inbox',label:'Wiedervorlage',fn:function(){openWvForm('',{emp:e.id})}},
     e.phone?{icon:'phone',label:'Anrufen',href:'tel:'+e.phone.replace(/[^+\d]/g,'')}:null,
@@ -4704,7 +4711,7 @@ function viewSettings2(){
       li({icon:'tasks',c:'#7048e8',t:'Führungsroutinen',s:S.routines.length+' Routinen',act:'rout-edit'}),
       li({icon:'shield',c:'#7048e8',t:'Nachweise und Pflichtschulungen',s:S.quals.length+' im Katalog',act:'qual-cat'})])+
     lgroup('Vertrieb',[
-      li({icon:'target',c:'#1c7ed6',t:'LEM-Zielsystem',s:'Verkaufspunkte verknüpfen · Normierung',act:'lem-prods'}),
+      li({icon:'target',c:'#1c7ed6',t:'LEM-Zielsystem',s:'Zielverteilung · Baufi-Phase · TBOL-Ziel',act:'lem-share'}),
       li({icon:'chart',c:'#1c7ed6',t:'Kennzahlen und Ziele',s:S.metrics.map(function(m){return m.s||m.n}).slice(0,3).join(', ')+(S.metrics.length>3?' …':''),act:'set-mets'}),
       li({icon:'send',c:'#1c7ed6',t:'Kanäle und Ansprechpartner',s:S.channels.map(function(c){return c.s||c.n}).join(', '),act:'set-chans'})])+
     lgroup('Darstellung',[li({icon:'moon',c:'#3d5a80',t:'Design',s:{auto:'Automatisch',light:'Hell',dark:'Dunkel'}[st.theme]+' · Hausfarben',act:'set-design'})])+
@@ -4745,9 +4752,9 @@ function compDelete(id){var c=comp(id);if(!c)return;confirmBox('„'+c.n+'“ l�
   S.channels.forEach(function(ch){if(ch.comp===c.id)ch.comp=''});S.meas.forEach(function(m){if(m.compId===c.id)m.compId=''});S.metrics.forEach(function(m){if(m.comp===c.id)m.comp=''});
   save();rerender();openSetComps();toast('Kompetenz gelöscht')})}
 function openSetMets(){var st=S.settings;
-  sheet('Kennzahlen und Ziele','<div class="lbox">'+S.metrics.map(function(m){return li({t:esc(m.n),s:'Standardziel '+num(m.t)+' '+esc(m.unit)+' pro Monat'+(m.comp&&comp(m.comp)?' · '+esc(comp(m.comp).s):''),act:'met-edit',id:m.id,lp:'met'})}).join('')+'</div>'+
+  sheet('Kennzahlen und Ziele','<p class="muted small" style="margin-bottom:8px">LEM-Produkte (Kredit, Girokonto, Kreditkarte, Versicherungen, One Bank, Geldanlage, Baufinanzierung) laufen in Verkaufspunkten über Abschlüsse und das LEM-Ziel. Hier stehen die weiteren Kennzahlen.</p><div class="lbox">'+manualMets().map(function(m){return li({t:esc(m.n),s:'Standardziel '+num(m.t)+' '+esc(m.unit)+' pro Monat'+(m.comp&&comp(m.comp)?' · '+esc(comp(m.comp).s):''),act:'met-edit',id:m.id,lp:'met'})}).join('')+'</div>'+
     '<button class="btn sm" data-act="met-new" style="margin:10px 0 4px">'+ic('plus',14)+' Kennzahl</button>'+
-    '<form class="form" data-form="set-sales" style="margin-top:12px">'+SW('Ziele anteilig zur Arbeitszeit','prorate',st.prorate!==false,'full','Standardziel gilt bei 39 Stunden')+STP('Überleitungen pro Person und Monat','ref',st.refTarget,0,50,1,'Ziel')+formFoot()+'</form>')}
+    '<form class="form" data-form="set-sales" style="margin-top:12px">'+SW('Weitere Kennzahlen anteilig zur Arbeitszeit','prorate',st.prorate!==false,'full','Verkaufsziele kommen aus der LEM-Zielverteilung')+STP('Überleitungen pro Person und Monat','ref',st.refTarget,0,50,1,'Ziel')+formFoot()+'</form>')}
 function openMetEdit(id){
   var m=id?metric(id):null;m=m||{n:'',unit:'Stück',t:5,comp:''};
   sheet(id?'Kennzahl bearbeiten':'Neue Kennzahl','<form class="form" data-form="met-ed"><input type="hidden" name="id" value="'+esc(id||'')+'">'+
@@ -5665,7 +5672,7 @@ function registerExt5(){
     time:function(){return {menu:[{icon:'clock',label:'Meine Zeit eintragen',fn:function(){openDayForm('me',todayISO())}},{icon:'settings',label:'Beratungs- und Servicezeiten',fn:openSetHrs}]}},
     plan:function(){var p=UI.planTab;return p==='abs'?{add:{label:'Abwesenheit erfassen',fn:function(){openAbsForm()}}}:p==='staff'?{menu:[{icon:'settings',label:'Mindestbesetzung',fn:openSetStaff}]}:{menu:[{icon:'copy',label:'Vorwoche übernehmen',fn:function(){ACTIONS['week-copy']()}},{icon:'settings',label:'Beratungs- und Servicezeiten',fn:openSetHrs}]}},
     kls:function(){return {add:{label:'KLS fotografieren',icon:'camera',fn:function(){openKlsImport(UI.klsDay||todayISO())}},menu:klsMenuItems()}},
-    sales:function(){return {add:{label:'Ergebnisse eintragen',fn:function(){ACTIONS['sales-new']({dataset:{}})}},menu:[{icon:'settings',label:'Kennzahlen und Ziele',fn:openSetMets}]}},
+    sales:function(){return {add:{label:'Abschluss erfassen',fn:function(){openDealForm({})}},menu:[{icon:'tasks',label:'Abschlüsse dieses Monats',fn:function(){openDealList(UI.salesMonth||monthKey(),null)}},{icon:'edit',label:'Weitere Kennzahlen eintragen',fn:function(){openSalesForm('')}},{icon:'users',label:'Zielverteilung',fn:openLemShare},{icon:'target',label:'LEM-Ziele',fn:function(){go('goals')}},{icon:'settings',label:'Kennzahlen',fn:openSetMets}]}},
     goals:function(){return {add:{label:'Neues Ziel',fn:function(){ACTIONS['goal-new']({dataset:{}})}},menu:[{icon:'sparkle',label:'Neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}]}},
     refs:function(){return {add:{label:'Überleitung erfassen',fn:function(){openRefForm('')}},menu:[{icon:'settings',label:'Kanäle und Ansprechpartner',fn:openSetChans}]}},
     reviews:function(){return {add:{label:'Rezension erfassen',fn:function(){openRvForm('')}},menu:rvMenuItems()}},
@@ -5691,6 +5698,7 @@ function refMenu(id){
   return {title:r.topic||'Überleitung',sub:(e?e.name+' · ':'')+(ch?ch.s+' · ':'')+fmt(r.date),items:
     REF_STATUS.filter(function(s){return s.id!==r.status}).map(function(s){return {icon:s.id==='won'?'check':s.id==='lost'?'x':s.id==='appt'?'calendar':'send',label:'Status: '+s.l,fn:function(){refSet(r.id,s.id)}}}).concat([
     r.status==='handed'||r.status==='appt'?{icon:'mail',label:'Beim Kanal nachfassen',fn:function(){refChase(r.id)}}:null,
+    r.status==='won'?{icon:'chart',label:'Verkaufspunkte erfassen (One Bank)',fn:function(){var s=(ch&&ch.s||'').toLowerCase();openDealForm({emp:r.empId,it:/mobil|bzh/.test(s)?'ob_kr':/anlage|vb/.test(s)?'ob_fonds':'ob_cmp',ref:r.ref||''})}}:null,
     {icon:'edit',label:'Bearbeiten',fn:function(){openRefForm(r.id)}},
     e?{icon:'user',label:'Profil von '+e.name.split(' ')[0],fn:function(){go('person/'+e.id)}}:null])};
 }
@@ -5735,7 +5743,7 @@ function WG(){return {
   kls:{t:'Laufkunden-Puffer',icon:'scan',d:'KLS heute: freie Kapazität und Vorschläge',sz:['s','l'],l:wgKlsL,s:function(){var td=todayISO(),day=K().days[td];if(!isWorkday(new Date()))return {v:'–',s:'Heute geschlossen',to:'kls'};if(!day)return {v:'Foto',s:'KLS von heute fehlt',cls:'warn-txt',act:'kls-scan'};var a=klsAnalyze(td,day);return {v:a.kpi.cover===null?'–':a.kpi.cover+' %',s:a.issues.length?a.issues.length+' '+plural(a.issues.length,'Vorschlag','Vorschläge'):'Alles im grünen Bereich',cls:a.kpi.cover===null?'':pctCls(a.kpi.cover,95,80),to:'kls'}}},
   goals:{t:'LEM-Punkte',icon:'target',d:'Qualität, Verkauf und Wachstum im Jahr, mit größtem Hebel',sz:['s','l'],l:wgLemL,s:wgLemS},
   region:{t:'Gebiet',icon:'map',d:'Platz deiner Filiale im Gebietsvergleich',sz:['s','l'],l:wgRegionL,s:function(){var mk=regMonths().slice(-1)[0],k=R_().kpis[0];if(!mk||!k)return {v:'–',s:'Noch keine Werte',to:'region'};var r=ownRank(mk,k.id);return {v:r?r.rank+'. / '+r.of:'–',s:k.n+' · '+monthLabel(mk).split(' ')[0],cls:r?(r.rank<=Math.ceil(r.of/3)?'good-txt':r.rank>r.of*2/3?'bad-txt':''):'',to:'region'}}},
-  sales:{t:'Team-Ergebnisse',icon:'chart',d:'Zielerreichung des Teams im laufenden Monat',sz:['l','s'],l:wgSalesL,s:function(){var rs=teamRes(monthKey());if(!rs.length)return {v:'–',s:'Keine Kennzahlen',to:'sales'};var p=rs.reduce(function(a,x){return a+(x.t>0?Math.min(1.5,x.a/x.t):0)},0)/rs.length;return {v:Math.round(p*100)+' %',s:'Zielerreichung Team',cls:pctTone(p/Math.max(.05,monthPace(monthKey()))),to:'sales'}}},
+  sales:{t:'Team-Ergebnisse',icon:'chart',d:'Zielerreichung des Teams im laufenden Monat',sz:['l','s'],l:wgSalesL,s:function(){var rs=teamRes(monthKey()).filter(function(x){return x.t>0});if(!rs.length)return {v:'–',s:'Keine Kennzahlen',to:'sales'};var p=rs.reduce(function(a,x){return a+(x.t>0?Math.min(1.5,x.a/x.t):0)},0)/rs.length;return {v:Math.round(p*100)+' %',s:'Zielerreichung Team',cls:pctTone(p/Math.max(.05,monthPace(monthKey()))),to:'sales'}}},
   reviews:{t:'Google',icon:'star',d:'Aktuelle Sternebewertung',sz:['s'],s:function(){var l=rvLast(),c=rvOpenCritical().length;return {v:l?dec(l.rating,1)+' ★':'–',s:c?c+' kritisch offen':(l?l.count+' Bewertungen':'Stand eintragen'),cls:c?'bad-txt':'',to:'reviews'}}},
   event:{t:'Nächstes Event',icon:'flag',d:'Das nächste geplante Team-Event',sz:['s'],s:function(){var ev=upcomingEvents(120)[0];return ev?{v:relDays(ev.date),s:ev.t,to:'events'}:{v:'–',s:'Nichts geplant',to:'events'}}},
   wv:{t:'Wiedervorlagen',icon:'inbox',d:'Was heute wieder vorgelegt wird',sz:['s'],s:function(){var d=wvDue().length,o=wvOpen().length;return {v:String(d),s:d?'heute fällig · '+o+' offen':o+' offen, nichts fällig',cls:d?'warn-txt':'',to:'wv'}}},
@@ -5771,7 +5779,7 @@ function wgRegionL(){
     return '<div class="wg-rk"><span class="wg-rn '+(r.rank<=Math.ceil(r.of/3)?'good':r.rank>r.of*2/3?'bad':'')+'">'+r.rank+'.</span><span class="grow"><b>'+esc(k.n)+'</b><small class="muted">'+regFmt(k,r.v)+' · Ø '+regFmt(k,avg)+'</small></span><span class="'+(better?'good-txt':'bad-txt')+'">'+(better?'▲':'▼')+'</span></div>'}).join(''),'<span class="muted small">'+esc((own.nr?own.nr+' · ':'')+monthLabel(mk).split(' ')[0])+'</span>');
 }
 function wgSalesL(){
-  var mk=monthKey(),rs=teamRes(mk),pace=monthPace(mk);
+  var mk=monthKey(),rs=teamRes(mk).filter(function(x){return x.t>0}),pace=monthPace(mk);
   if(!rs.length)return wgCard('Team-Ergebnisse','sales','<p class="muted small">Keine Kennzahlen angelegt.</p>');
   return wgCard('Team-Ergebnisse','sales',rs.slice(0,5).map(function(x){var p=x.t>0?Math.min(100,Math.round(x.a/x.t*100)):0;return '<div class="prow"><div class="l"><span>'+esc(x.m.n)+'</span><span class="muted">'+fmtV(x.m,x.a)+' / '+fmtV(x.m,x.t)+'</span></div><div class="bar"><i class="'+barCls(x.st)+'" data-w="'+p+'"></i>'+(pace>.03&&pace<.97?'<b class="pace" style="left:'+Math.round(pace*100)+'%"></b>':'')+'</div></div>'}).join(''),'<span class="muted small">Monat zu '+Math.round(pace*100)+' %</span>');
 }
@@ -5941,7 +5949,7 @@ var LEM_EXP={q:50,v:60,w:40},LEM_MAX={q:65,v:100,w:50};
 var LEM_CONV=[[140,18],[130,17],[120,16],[110,15],[100,14],[90,12],[80,10],[70,8]];
 var LEM_KUKI=[[1.525,8],[1.465,7],[1.405,6],[1.345,5]];
 var LEM_OB=[[120,6],[110,5],[100,4],[90,3],[80,2],[70,1]];
-var LEM_PRODS=[['kre','Kredit','Volumen & LEM-Punkte','m_kre'],['gk','Girokonto','Verkauf, Prämie (Aktivierung) & Bestand','m_kon'],['kk','Kreditkarte','Verkauf, Prämie (Aktivierung) & Bestand',''],['ver','Versicherungen','Verkauf & Storno','m_ver'],['ob','One Bank','Überleitungen in andere Kanäle','__refs'],['fg','Festgeld','LEM-Punkte',''],['bf','Baufinanzierung','LEM-Punkte','']];
+var LEM_PRODS=[['kre','Kredit','Volumen & LEM-Punkte','m_kre'],['gk','Girokonto','Verkauf, Prämie (Aktivierung) & Bestand','m_kon'],['kk','Kreditkarte','Verkauf, Prämie (Aktivierung) & Bestand',''],['ver','Versicherungen','Verkauf & Storno','m_ver'],['ob','One Bank','Überleitungen in andere Kanäle',''],['fg','Geldanlage','Festgeld, Tagesgeld, Junior-Tagesgeld, Verflechtung',''],['bf','Baufinanzierung','LEM-Punkte','']];
 var LEM_EPS=1e-7;
 function lemPct(ze){return Math.floor(ze*100+LEM_EPS)}
 /* Verkauf: unter 70 % = 0, ab 70 % = 30 Punkte, je 1 % ZE +1, ab 140 % = 100 */
@@ -5961,57 +5969,62 @@ function lemCsPts(v){if(v==null||!isFinite(v))return null;if(v<62-LEM_EPS)return
 function lemWZe(pts){return pts==null?null:pts/LEM_EXP.w}
 
 /* --- Daten --- */
-function lemDef(){return {prods:LEM_PRODS.map(function(p){return {id:p[0],n:p[1],d:p[2],src:p[3],ppu:1}}),mon:{},norm:{v:null,w:null}}}
+function lemDef(){return {prods:LEM_PRODS.map(function(p){return {id:p[0],n:p[1],d:p[2],src:''}}),mon:{},norm:{v:null,w:null},cfg:{bf:'ph',tbol:26,tbolBank:null},share:{}}}
 function lemN(v){if(v===''||v==null)return null;var n=typeof v==='number'?v:parseFloat(String(v).replace(/\s/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.'));return isFinite(n)&&Math.abs(n)<1e9?n:null}
 function lemZI(o){o=o||{};return {z:lemN(o.z),i:lemN(o.i)}}
 function normLem(o){
   var d=lemDef();if(!o||typeof o!=='object')return d;
-  if(Array.isArray(o.prods)){var by={};o.prods.forEach(function(p){if(p&&p.id)by[p.id]=p});d.prods.forEach(function(p){var x=by[p.id];if(x){p.src=str(x.src,40);p.ppu=lemN(x.ppu);if(p.ppu==null||p.ppu<0)p.ppu=1}})}
+  if(Array.isArray(o.prods)){var by={};o.prods.forEach(function(p){if(p&&p.id)by[p.id]=p});d.prods.forEach(function(p){var x=by[p.id];if(x){p.src=str(x.src,40)}})}
   if(o.norm&&typeof o.norm==='object')d.norm={v:lemN(o.norm.v),w:lemN(o.norm.w)};
+  var c=o.cfg||{};d.cfg={bf:['ph','olb1','olb2'].indexOf(c.bf)>-1?c.bf:'ph',tbol:lemN(c.tbol)>0?lemN(c.tbol):26,tbolBank:lemN(c.tbolBank)>0?lemN(c.tbolBank):null};
+  if(o.share&&typeof o.share==='object')Object.keys(o.share).forEach(function(k){var v=lemN(o.share[k]);if(v!=null&&v>=0&&v<=5)d.share[str(k,40)]=v});
   if(o.mon&&typeof o.mon==='object')Object.keys(o.mon).filter(function(k){return /^\d{4}-\d{2}$/.test(k)}).sort().slice(-36).forEach(function(mk){
-    var m=o.mon[mk]||{},v={};Object.keys(m.v||{}).forEach(function(pid){if(LEM_PRODS.some(function(p){return p[0]===pid}))v[pid]=lemZI(m.v[pid])});
-    d.mon[mk]={vz:lemN(m.vz),v:v,tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemN(m.kuki),ob:{n:lemN((m.ob||{}).n),k:lemN((m.ob||{}).k),q:lemN((m.ob||{}).q)},ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs)};
+    var m=o.mon[mk]||{},v={},ob=m.ob||{};Object.keys(m.v||{}).forEach(function(pid){if(LEM_PRODS.some(function(p){return p[0]===pid}))v[pid]=lemZI(m.v[pid])});
+    d.mon[mk]={vz:lemN(m.vz),v:v,tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemN(m.kuki),ob:{n:lemN(ob.n),a:lemN(ob.a),b:lemN(ob.b)},ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs),korr:lemN(m.korr)};
   });
   return d;
 }
 function L(){return S.lem}
 function lemMon(mk,create){var m=L().mon[mk];if(!m&&create)m=L().mon[mk]=lemBlankMon();return m||null}
-function lemBlankMon(){return {vz:null,v:{},tke:{z:null,i:null},tko:{z:null,i:null},kuki:null,ob:{n:null,k:null,q:null},ts:null,tsF:null,bank:null,cs:null}}
+function lemBlankMon(){return {vz:null,v:{},tke:{z:null,i:null},tko:{z:null,i:null},kuki:null,ob:{n:null,a:null,b:null},ts:null,tsF:null,bank:null,cs:null,korr:null}}
 function lemProd(id){return L().prods.filter(function(p){return p.id===id})[0]}
 /* Ist-Verkaufspunkte eines Produkts: Reporting-Wert, sonst aus Ergebnissen (Stück × Punkte je Stück) */
-function lemAutoIst(mk,p){
-  if(p.src==='__refs'){var n=refsOf({month:mk}).length;return n?n*p.ppu:null}
-  if(p.src&&metric(p.src)){var s=teamMetricSum(mk,p.src);return s==null?null:s*p.ppu}
-  return null;
-}
-function lemProdIst(mk,p){var m=lemMon(mk),x=m&&m.v[p.id];if(x&&x.i!=null)return {v:x.i,src:'rep'};var a=lemAutoIst(mk,p);return a==null?{v:null,src:''}:{v:a,src:'auto'}}
+function lemAutoIst(mk,p){return dealSum(mk,{p:p.id})}
+function lemProdIst(mk,p){var m=lemMon(mk),x=m&&m.v[p.id],a=lemAutoIst(mk,p);if(x&&x.i!=null)return {v:x.i,src:'rep',app:a};return a==null?{v:null,src:'',app:null}:{v:a,src:'auto',app:a}}
 function lemMonths(mk,per){if(per==='m')return [mk];var y=mk.slice(0,4),o=[];for(var i=1;i<=+mk.slice(5);i++)o.push(y+'-'+pad(i));return o}
 function lemLast(ms,f){for(var i=ms.length-1;i>=0;i--){var m=lemMon(ms[i]);if(m){var v=f(m);if(v!=null)return v}}return null}
 
 /* --- Berechnung für Monat (per 'm') oder Jahr bis Monat (per 'y') --- */
 function lemCalc(mk,per){
-  var ms=lemMonths(mk,per),R={mk:mk,per:per,months:ms};
-  /* Verkauf */
-  var prods=L().prods.map(function(p){var z=0,zi=false,i=0,ii=false,src={};ms.forEach(function(k){var m=lemMon(k),x=m&&m.v[p.id];if(x&&x.z!=null){z+=x.z;zi=true}var r=lemProdIst(k,p);if(r.v!=null){i+=r.v;ii=true;src[r.src]=1}});
-    return {p:p,z:zi?z:null,i:ii?i:null,ze:zi&&z>0?(ii?i:0)/z:null,src:src.rep&&src.auto?'mix':src.rep?'rep':src.auto?'auto':''}});
-  var zt=0,zh=false,it=0;ms.forEach(function(k){var m=lemMon(k);if(!m)return;if(m.vz!=null){zt+=m.vz;zh=true}else{var s=0,h=false;L().prods.forEach(function(p){var x=m.v[p.id];if(x&&x.z!=null){s+=x.z;h=true}});if(h){zt+=s;zh=true}}});
+  var ms=lemMonths(mk,per),R={mk:mk,per:per,months:ms},pace=monthPace(mk);
+  /* Verkauf: Ist aus Abschlüssen, ein Reporting-Wert hat Vorrang */
+  var prods=L().prods.map(function(p){var z=0,zi=false,i=0,ii=false,app=0,ah=false,src={};ms.forEach(function(k){var m=lemMon(k),x=m&&m.v[p.id];if(x&&x.z!=null){z+=x.z;zi=true}var r=lemProdIst(k,p);if(r.v!=null){i+=r.v;ii=true;src[r.src]=1}if(r.app!=null){app+=r.app;ah=true}});
+    return {p:p,z:zi?z:null,i:ii?i:null,app:ah?Math.round(app):null,ze:zi&&z>0?(ii?i:0)/z:null,src:src.rep&&src.auto?'mix':src.rep?'rep':src.auto?'auto':''}});
+  var zt=0,zh=false,it=0,zc=0;ms.forEach(function(k){var m=lemMon(k);if(!m)return;var s=0,h=false;if(m.vz!=null){s=m.vz;h=true}else{L().prods.forEach(function(p){var x=m.v[p.id];if(x&&x.z!=null){s+=x.z;h=true}})}if(h){zt+=s;zh=true;zc+=k===mk?s*pace:s}});
   prods.forEach(function(x){if(x.i!=null)it+=x.i});
   var vze=zh&&zt>0?it/zt:null,nv=L().norm.v,vzeN=vze!=null&&nv!=null&&nv>0&&nv<100?vze/(nv/100):vze;
-  R.v={prods:prods,ziel:zh?zt:null,ist:it,ze:vze,zeN:vzeN,norm:vzeN!==vze,pts:lemVScore(vzeN)};
+  /* Prognose (ZE FC): laufender Monat hochgerechnet, ratierliche Versicherungspunkte aus Vormonaten nicht hochgerechnet */
+  var fc=null;if(zh&&zt>0&&pace>=.2&&pace<1&&mk===monthKey()){var cur=0,carry=0,mv=lemMon(mk);prods.forEach(function(x){var r=lemProdIst(mk,x.p);if(r.v!=null)cur+=r.v});
+    if(!(mv&&mv.v.ver&&mv.v.ver.i!=null))S.deals.forEach(function(d){var c=cat(d.it);if(c&&(c.u==='beitrag'||c.u==='einmal')&&d.d.slice(0,7)<mk)carry+=dealVP(d,mk)});
+    carry=Math.min(carry,cur);fc=(it-cur+(cur-carry)/pace+carry)/zt*(vzeN!=null&&vze?vzeN/vze:1)}
+  R.v={prods:prods,ziel:zh?zt:null,ist:it,ze:vze,zeN:vzeN,fc:fc,fcPts:lemVScore(fc),norm:vzeN!==vze,pts:lemVScore(vzeN)};
   /* Wachstum */
-  function conv(key){var z=0,i=0,h=false;ms.forEach(function(k){var m=lemMon(k);if(m&&m[key].z!=null){z+=m[key].z;i+=m[key].i||0;h=true}});var ze=h&&z>0?i/z:null;return {z:h?z:null,i:h?i:null,ze:ze,pts:lemConvPts(ze)}}
-  var tke=conv('tke'),tko=conv('tko'),kv=lemLast(ms,function(m){return m.kuki}),n=0,kk=0,oh=false;
-  ms.forEach(function(k){var m=lemMon(k);if(m&&m.ob.n!=null&&m.ob.n>0){n+=m.ob.n;kk+=m.ob.k||0;oh=true}});
-  var q=lemLast(ms,function(m){return m.ob.q}),obq=oh?kk/n:null,obze=obq!=null&&q>0?obq/(q/100):null;
-  var parts=[tke.pts,tko.pts,lemKukiPts(kv),lemObPts(obze)],wh=parts.some(function(x){return x!=null}),wp=parts.reduce(function(a,x){return a+(x||0)},0);
+  function conv(key){var z=0,i=0,h=false,auto=false;ms.forEach(function(k){var m=lemMon(k);if(m&&m[key].z!=null){z+=m[key].z;h=true}var ii=m&&m[key].i!=null?m[key].i:null;if(ii==null){ii=convCount(k,key);if(ii)auto=true}i+=ii});var ze=h&&z>0?i/z:null;return {z:h?z:null,i:i,auto:auto,ze:ze,pts:lemConvPts(ze)}}
+  var tke=conv('tke'),tko=conv('tko'),kv=lemLast(ms,function(m){return m.kuki});
+  /* Online Banking (TBOL): Chancen × 3 = maximale Punkte; 1 Log-in = 1, ab 5 Log-ins = 3 Punkte */
+  var on=lemLast(ms,function(m){return m.ob.n}),oa=lemLast(ms,function(m){return m.ob.a}),obb=lemLast(ms,function(m){return m.ob.b}),tgt=lemTbolTarget();
+  var opts=on>0?(oa||0)+3*(obb||0):null,omax=on>0?3*on:null,oq=opts!=null?opts/omax:null,oze=oq!=null&&tgt>0?oq/(tgt/100):null;
+  var parts=[tke.pts,tko.pts,lemKukiPts(kv),lemObPts(oze)],wh=parts.some(function(x){return x!=null}),wp=parts.reduce(function(a,x){return a+(x||0)},0);
   var nw=L().norm.w,wze=wh?wp/LEM_EXP.w:null,wzeN=wze!=null&&nw!=null&&nw>0&&nw<100?wze/(nw/100):wze;
-  R.w={tke:tke,tko:tko,kuki:{v:kv,pts:lemKukiPts(kv)},ob:{n:oh?n:null,k:oh?kk:null,q:q,quote:obq,ze:obze,pts:lemObPts(obze)},pts:wh?Math.min(LEM_MAX.w,Math.round(wzeN*LEM_EXP.w*10)/10):null,ze:wze,zeN:wzeN,norm:wzeN!==wze,raw:wh?wp:null};
+  R.w={tke:tke,tko:tko,kuki:{v:kv,pts:lemKukiPts(kv)},ob:{n:on,a:oa,b:obb,pts0:opts,max:omax,quote:oq,target:tgt,ze:oze,pts:lemObPts(oze)},pts:wh?Math.min(LEM_MAX.w,Math.round(wzeN*LEM_EXP.w*10)/10):null,ze:wze,zeN:wzeN,norm:wzeN!==wze,raw:wh?wp:null};
   /* Qualität (zählt der Bereichswert; letzter erfasster Stand) */
   var ts=lemLast(ms,function(m){return m.ts}),tsF=lemLast(ms,function(m){return m.tsF}),bank=lemLast(ms,function(m){return m.bank}),cs=lemLast(ms,function(m){return m.cs});
   var kub=lemKubis(ts,bank),csp=lemCsPts(cs),qh=kub!=null||csp!=null;
   R.q={ts:ts,tsF:tsF,bank:bank,cs:cs,kub:kub,cs_pts:csp,pts:qh?(kub?kub.pts:0)+(csp||0):null};
+  /* Korrektur laut LEM-Übersicht */
+  var kr=0,kh=false;ms.forEach(function(k){var m=lemMon(k);if(m&&m.korr!=null){kr+=m.korr;kh=true}});R.korr=kh?kr:null;
   var have=['q','v','w'].filter(function(k){return R[k].pts!=null});
-  R.tot=have.length?have.reduce(function(a,k){return a+R[k].pts},0):null;R.complete=have.length===3;R.exp=150;R.max=215;
+  R.tot=have.length?Math.round((have.reduce(function(a,k){return a+R[k].pts},0)+(kh?kr:0))*10)/10:null;R.complete=have.length===3;R.exp=150;R.max=215;
   return R;
 }
 /* --- Hebel: was bringt der nächste Schritt? --- */
@@ -6025,7 +6038,7 @@ function lemLevers(R){
   }
   [['tke','Conversion TKE'],['tko','Conversion Online-TK']].forEach(function(x){var c=R.w[x[0]];if(!(c.z>0)||c.pts==null)return;var p=lemPct(c.ze),nx=LEM_CONV.slice().reverse().filter(function(t){return t[0]>p})[0];if(!nx)return;var nd=Math.max(1,Math.ceil(nx[0]/100*c.z-c.i-LEM_EPS));o.push({k:'w',g:nx[1]-c.pts,t:x[1]+' auf '+nx[0]+' %',s:'Noch '+nd+' '+plural(nd,'Conversion','Conversions'),u:nd})});
   var ku=R.w.kuki;if(ku.v!=null){var nk=LEM_KUKI.slice().reverse().filter(function(t){return t[0]>ku.v+LEM_EPS})[0];if(nk)o.push({k:'w',g:nk[1]-ku.pts,t:'Werbeeinwilligung (KUKI) auf '+dec(nk[0],3),s:'Aktuell '+dec(ku.v,3)+' · Einwilligung für Telefon, SMS und E-Mail aktiv erfragen',u:nk[0]-ku.v})}
-  var ob=R.w.ob;if(ob.n>0&&ob.q>0&&ob.pts!=null&&ob.pts<6){var p2=ob.ze*100,nb=LEM_OB.slice().reverse().filter(function(t){return t[0]>p2+LEM_EPS||(t[0]===70&&p2<=70)})[0];if(nb){var tgt=(nb[0]===70?70.01:nb[0])/100*ob.q/100*ob.n,nd2=Math.max(1,Math.ceil(tgt-ob.k-LEM_EPS));o.push({k:'w',g:nb[1]-ob.pts,t:'Online Banking nach KLS-Termin',s:'Noch '+nd2+' '+plural(nd2,'Kunde','Kunden')+' mit Online Banking für '+(nb[0]===70?'über 70':nb[0])+' %',u:nd2})}}
+  var ob=R.w.ob;if(ob.n>0&&ob.pts!=null&&ob.pts<6){var p2=ob.ze*100,nb=LEM_OB.slice().reverse().filter(function(t){return t[0]>p2+LEM_EPS||(t[0]===70&&p2<=70)})[0];if(nb){var need=(nb[0]===70?70.01:nb[0])/100*ob.target/100*ob.max-ob.pts0,nd2=Math.max(1,Math.ceil(need/3-LEM_EPS));o.push({k:'w',g:nb[1]-ob.pts,t:'Online Banking (TBOL) auf '+(nb[0]===70?'über 70':nb[0])+' %',s:'Noch '+num(Math.ceil(need))+' Punkte, z. B. '+nd2+' '+plural(nd2,'Kunde','Kunden')+' mit 5 Log-ins',u:nd2})}}
   var q=R.q;if(q.ts!=null&&q.kub&&q.kub.pts<55){var t1=q.ts;for(var s=0;s<200&&lemKubis(t1,q.bank).pts<=q.kub.pts;s++)t1=Math.round((t1+0.1)*10)/10;if(lemKubis(t1,q.bank).pts>q.kub.pts)o.push({k:'q',g:lemKubis(t1,q.bank).pts-q.kub.pts,t:'KuBiS-Teamscore auf '+dec(t1,1),s:'Bereichswert aktuell '+dec(q.ts,1)+(q.bank!=null?' · Bank Ø '+dec(q.bank,1):''),u:t1-q.ts})}
   if(q.cs!=null&&q.cs_pts<10){var nc=q.cs<62?62:62+2*(q.cs_pts);o.push({k:'q',g:1,t:'Cross-Sell auf '+nc+' %',s:'Aktuell '+dec(q.cs,1)+' % ohne Druckverkauf',u:nc-q.cs})}
   return o.filter(function(x){return x.g>0}).sort(function(a,b){return b.g-a.g||a.u-b.u});
@@ -6040,24 +6053,25 @@ function lemPctTxt(z){return z==null?'–':Math.round(z*100)+' %'}
 function lemBar(pts,exp,max,c){var w=pts==null?0:Math.min(100,pts/max*100);return '<div class="lem-bar"><i style="width:'+w.toFixed(1)+'%;background:'+c+'"></i><b style="left:'+(exp/max*100).toFixed(1)+'%" title="Erwartungswert '+exp+'"></b></div>'}
 function lemHero(R){
   var st=lemPillarState(R.tot,R.exp),seg=[['q','Qualität','#0c8599'],['v','Verkauf','#1c7ed6'],['w','Wachstum','#7048e8']];
-  return '<section class="card glass rise lem-hero"><div class="lh-top"><div><small>LEM-Punkte '+(R.per==='y'?R.mk.slice(0,4)+' bis '+monthLabel(R.mk).split(' ')[0]:monthLabel(R.mk))+'</small><b class="lh-v">'+(R.tot==null?'–':dec(R.tot,R.tot%1?1:0))+'<span> / '+R.exp+'</span></b><span class="muted small">Erwartungswert '+R.exp+' · maximal '+R.max+(R.complete?'':' · noch nicht alle Säulen erfasst')+'</span></div>'+chipC(st.l,st.c)+'</div>'+
+  return '<section class="card glass rise lem-hero"><div class="lh-top"><div><small>LEM brutto '+(R.per==='y'?R.mk.slice(0,4)+' bis '+monthLabel(R.mk).split(' ')[0]:monthLabel(R.mk))+'</small><b class="lh-v">'+(R.tot==null?'–':dec(R.tot,R.tot%1?1:0))+'<span> / '+R.exp+'</span></b><span class="muted small">Erwartungswert '+R.exp+' · maximal '+R.max+(R.korr?' · Korrektur '+(R.korr>0?'+':'')+dec(R.korr,R.korr%1?1:0):'')+(R.complete?'':' · noch nicht alle Säulen erfasst')+'</span></div>'+chipC(st.l,st.c)+'</div>'+
     '<div class="lh-stack">'+seg.map(function(s){var p=R[s[0]].pts;return p?'<i style="width:'+(p/R.max*100).toFixed(1)+'%;background:'+s[2]+'" title="'+s[1]+' '+p+'"></i>':''}).join('')+'<b style="left:'+(R.exp/R.max*100).toFixed(1)+'%"></b></div>'+
     '<div class="lh-leg">'+seg.map(function(s){var p=R[s[0]].pts;return '<span><i style="background:'+s[2]+'"></i>'+s[1]+' <b>'+lemF(p)+'</b><small>/'+LEM_EXP[s[0]]+'</small></span>'}).join('')+'</div></section>';
 }
 function lemCardV(R){
   var v=R.v,st=lemPillarState(v.pts,LEM_EXP.v);
-  var rows=v.prods.map(function(x){var w=x.ze==null?0:Math.min(100,x.ze*100);return '<div class="lem-r"><span class="lr-n"><b>'+esc(x.p.n)+'</b><small>'+(x.i==null&&x.z==null?'keine Werte':lemF(x.i)+' / '+lemF(x.z)+' VP'+(x.src==='auto'?' · aus Ergebnissen':x.src==='rep'?' · Reporting':x.src==='mix'?' · gemischt':''))+'</small></span><div class="bar"><i class="'+(x.ze==null?'':x.ze>=1?'good':x.ze>=.7?'':'bad')+'" data-w="'+Math.round(w)+'"></i></div><em>'+lemPctTxt(x.ze)+'</em></div>'}).join('');
-  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="v" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#1c7ed6">'+ic('chart',18)+'</span><div class="grow"><h2>Verkauf</h2><small class="muted">Zielerreichung Verkaufspunkte '+lemPctTxt(v.zeN)+(v.norm?' (normiert)':'')+'</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(v.pts)+'<span>/'+LEM_EXP.v+'</span></b></div>'+lemBar(v.pts,LEM_EXP.v,LEM_MAX.v,st.c)+
-    '<p class="muted small lp-s">'+(v.ziel?lemF(v.ist)+' von '+lemF(v.ziel)+' Verkaufspunkten · ab 70 % = 30, je 1 % +1, ab 140 % = 100':'Noch kein Verkaufsziel erfasst. Antippen zum Eintragen.')+'</p>'+rows+'</section>';
+  var rows=v.prods.map(function(x){var w=x.ze==null?0:Math.min(100,x.ze*100),diff=x.src==='rep'&&x.app!=null&&Math.abs(x.app-x.i)>=1?' · App '+num(x.app):'';
+    return '<div class="lem-r"><span class="lr-n"><b>'+esc(x.p.n)+'</b><small>'+(x.i==null&&x.z==null?'keine Werte':(x.i==null?'–':num(Math.round(x.i)))+' / '+(x.z==null?'–':num(Math.round(x.z)))+' VP'+(x.src==='auto'?' · aus Abschlüssen':x.src==='rep'?' · Reporting':x.src==='mix'?' · gemischt':'')+diff)+'</small></span><div class="bar"><i class="'+(x.ze==null?'':x.ze>=1?'good':x.ze>=.7?'':'bad')+'" data-w="'+Math.round(w)+'"></i></div><em>'+lemPctTxt(x.ze)+'</em></div>'}).join('');
+  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="v" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#1c7ed6">'+ic('chart',18)+'</span><div class="grow"><h2>Verkauf</h2><small class="muted">Zielerreichung '+lemPctTxt(v.zeN)+(v.norm?' (normiert)':'')+(v.fc!=null&&R.mk===monthKey()?' · Prognose '+lemPctTxt(v.fc):'')+'</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(v.pts)+'<span>/'+LEM_EXP.v+'</span></b></div>'+lemBar(v.pts,LEM_EXP.v,LEM_MAX.v,st.c)+
+    '<p class="muted small lp-s">'+(v.ziel?num(Math.round(v.ist))+' von '+num(Math.round(v.ziel))+' Verkaufspunkten'+(v.fc!=null&&R.mk===monthKey()&&v.fcPts!=null?' · bei gleichem Tempo '+v.fcPts+' Punkte':''):'Noch kein Verkaufsziel erfasst. Antippen zum Eintragen.')+'</p>'+rows+'</section>';
 }
 function lemCardW(R){
-  var w=R.w,st=lemPillarState(w.pts,LEM_EXP.w);
-  function row(n,sub,pts,max,ze){return '<div class="lem-r"><span class="lr-n"><b>'+n+'</b><small>'+sub+'</small></span><div class="bar"><i class="'+(pts==null?'':pts>=max*.75?'good':pts>0?'':'bad')+'" data-w="'+(pts==null?0:Math.round(pts/max*100))+'"></i></div><em>'+lemF(pts)+'<small>/'+max+'</small></em></div>'}
+  var w=R.w,st=lemPillarState(w.pts,LEM_EXP.w),ob=w.ob;
+  function row(n,sub,pts,max){return '<div class="lem-r"><span class="lr-n"><b>'+n+'</b><small>'+sub+'</small></span><div class="bar"><i class="'+(pts==null?'':pts>=max*.75?'good':pts>0?'':'bad')+'" data-w="'+(pts==null?0:Math.round(pts/max*100))+'"></i></div><em>'+lemF(pts)+'<small>/'+max+'</small></em></div>'}
   return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="w" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#7048e8">'+ic('trend',18)+'</span><div class="grow"><h2>Wachstum</h2><small class="muted">Zielerreichung '+lemPctTxt(w.zeN)+(w.norm?' (normiert)':'')+' · 40 Punkte = 100 %</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(w.pts)+'<span>/'+LEM_EXP.w+'</span></b></div>'+lemBar(w.pts,LEM_EXP.w,LEM_MAX.w,st.c)+
-    row('Conversion TKE',w.tke.z?lemF(w.tke.i)+' / '+lemF(w.tke.z)+' · '+lemPctTxt(w.tke.ze):'kein Ziel',w.tke.pts,18)+
-    row('Conversion Online-TK',w.tko.z?lemF(w.tko.i)+' / '+lemF(w.tko.z)+' · '+lemPctTxt(w.tko.ze):'kein Ziel',w.tko.pts,18)+
+    row('Conversion TKE',w.tke.z?lemF(w.tke.i)+' / '+lemF(w.tke.z)+' · '+lemPctTxt(w.tke.ze)+(w.tke.auto?' · aus Abschlüssen':''):'kein Ziel',w.tke.pts,18)+
+    row('Conversion Online-TK',w.tko.z?lemF(w.tko.i)+' / '+lemF(w.tko.z)+' · '+lemPctTxt(w.tko.ze)+(w.tko.auto?' · aus Abschlüssen':''):'kein Ziel',w.tko.pts,18)+
     row('Werbeeinwilligung (KUKI)',w.kuki.v==null?'kein Wert':'Wert '+dec(w.kuki.v,3)+' · Erwartung 1,525',w.kuki.pts,8)+
-    row('Online Banking nach KLS-Termin',w.ob.n?Math.round(w.ob.quote*100)+' % von '+lemF(w.ob.n)+' Kunden'+(w.ob.q?' · Ziel '+lemF(w.ob.q)+' % · ZE '+lemPctTxt(w.ob.ze):''):'keine Werte',w.ob.pts,6)+'</section>';
+    row('Online Banking (TBOL)',ob.n?num(ob.pts0)+' von '+num(ob.max)+' Punkten = '+dec(ob.quote*100,1)+' % · Ziel '+lemF(ob.target)+' % · ZE '+lemPctTxt(ob.ze):'keine Werte',ob.pts,6)+'</section>';
 }
 function lemCardQ(R){
   var q=R.q,st=lemPillarState(q.pts,LEM_EXP.q),k=q.kub;
@@ -6074,14 +6088,14 @@ function lemLeverCard(R){
 }
 function lemOwnGoals(){
   if(!S.goals.length)return '';
-  return '<section class="card glass rise s12"><div class="card-h"><h2>Eigene Monatsziele</h2><span class="sub">zusätzlich zur LEM</span></div>'+S.goals.map(function(g){var p=goalPct(g),st=goalState(g);return '<div class="prow click" data-act="goal-open" data-id="'+esc(g.id)+'"><div class="l"><span>'+esc(g.name)+'</span><span class="muted">'+num(goalActual(g))+' / '+num(g.target)+' '+esc(g.unit)+' · '+chipC(st.l,st.c)+'</span></div><div class="bar"><i style="background:'+st.c+'" data-w="'+Math.min(100,Math.round(p*100))+'"></i></div></div>'}).join('')+'</section>';
+  return '<section class="card glass rise s12"><div class="card-h"><h2>Eigene Monatsziele</h2><span class="sub">zusätzlich zur LEM</span></div>'+S.goals.map(function(g){var p=goalPct(g),st=goalState(g);return '<div class="prow click" data-act="goal-open" data-id="'+esc(g.id)+'"><div class="l"><span>'+esc(g.name)+'</span><span class="muted">'+num(goalActual(g))+' / '+num(goalTarget(g))+' '+esc(g.unit)+' · '+chipC(st.l,st.c)+'</span></div><div class="bar"><i style="background:'+st.c+'" data-w="'+Math.min(100,Math.round(p*100))+'"></i></div></div>'}).join('')+'</section>';
 }
 function viewLem(){
   var mk=lemMk(),per=lemPer(),R=lemCalc(mk,per);
   var top='<div class="toolbar rise lem-tb"><div class="seg"><button type="button" class="'+(per==='y'?'on':'')+'" data-act="lem-per" data-v="y">Jahr</button><button type="button" class="'+(per==='m'?'on':'')+'" data-act="lem-per" data-v="m">Monat</button></div>'+'<div class="mnav"><button class="btn icon sm" data-act="lem-m" data-k="-1" aria-label="Vorheriger Monat">'+ic('left',16)+'</button><b>'+esc(new Date(+mk.slice(0,4),+mk.slice(5)-1,1).toLocaleDateString('de-DE',{month:'short',year:'numeric'}))+'</b><button class="btn icon sm" data-act="lem-m" data-k="1" aria-label="Nächster Monat">'+ic('right',16)+'</button></div></div>';
   var miss=!lemMon(mk)?'<div class="nb rise">'+ic('edit',16)+'<span class="grow">Für '+esc(monthLabel(mk))+' sind noch keine LEM-Werte erfasst.</span><button class="btn sm primary" data-act="lem-add">Eintragen</button></div>':'';
   var norm=(R.v.norm||R.w.norm)?'<p class="muted small s12" style="padding:0 4px">Normiert mit Bank-Zielerreichung (Verkauf '+lemF(L().norm.v)+' %, Wachstum '+lemF(L().norm.w)+' %). Liegt die Bank über 100 %, wird nicht nach unten angepasst.</p>':'';
-  return top+miss+'<div class="grid">'+'<div class="s12">'+lemHero(R)+'</div>'+lemCardV(R)+lemCardW(R)+lemCardQ(R)+lemLeverCard(R)+lemOwnGoals()+norm+
+  return top+miss+'<div class="grid">'+'<div class="s12">'+lemHero(R)+'</div>'+lemCardV(R)+lemCardW(R)+lemCardQ(R)+lemLeverCard(R)+lemCheckCard(mk)+lemOwnGoals()+norm+
     '<p class="muted small s12" style="padding:0 4px">Berechnet nach der LEM-Systematik 2026 (Folien Vertriebssteuerung). Verbindlich ist das Reporting der Bank; die Gesamt-LEM wird am Jahresende noch mit dem Mittelwert der Bereiche normiert.</p></div>';
 }
 
@@ -6091,25 +6105,26 @@ function lemSheetHead(mk,t){return t+' · '+esc(monthLabel(mk))}
 function openLemV(mk){
   mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon();
   var rows=L().prods.map(function(p){var x=m.v[p.id]||{},a=lemAutoIst(mk,p);
-    return '<div class="lem-in"><span><b>'+esc(p.n)+'</b><small>'+(a!=null?'aus Ergebnissen: '+lemF(a)+' VP':p.src?'verknüpft, noch keine Ergebnisse':'nur aus Reporting')+'</small></span>'+lemIn('z_'+p.id,x.z,'Ziel',p.n+' Ziel')+lemIn('i_'+p.id,x.i,a!=null?lemF(a):'Ist',p.n+' Ist')+'</div>'}).join('');
+    return '<div class="lem-in"><span><b>'+esc(p.n)+'</b><small>'+(a!=null?'aus Abschlüssen: '+num(Math.round(a))+' VP':'noch keine Abschlüsse')+'</small></span>'+lemIn('z_'+p.id,x.z,'Ziel',p.n+' Ziel')+lemIn('i_'+p.id,x.i,a!=null?num(Math.round(a)):'Ist',p.n+' Ist laut Reporting')+'</div>'}).join('');
   sheet(lemSheetHead(mk,'Verkauf'),'<form class="lemf" data-form="lem-v"><input type="hidden" name="mk" value="'+mk+'">'+
     '<div class="lem-in tot"><span><b>Ziel gesamt</b><small>Verkaufspunkte laut Scorecard, optional</small></span>'+lemIn('vz',m.vz,'Summe','Ziel gesamt')+'<span></span></div>'+
-    '<div class="lem-ih"><span></span><small>Ziel VP</small><small>Ist VP</small></div>'+rows+
-    '<p class="muted small" style="margin:10px 0">Ist leer lassen, dann rechnet die App aus euren Ergebnissen (Stück × Verkaufspunkte je Stück) bzw. bei One Bank aus den Überleitungen. Ein eingetragener Ist-Wert aus dem Reporting hat Vorrang.</p>'+
-    formFoot('<button type="button" class="btn left" data-act="lem-prods">'+ic('settings',15)+' Verknüpfung</button>')+'</form>');
+    '<div class="lem-ih"><span></span><small>Ziel VP</small><small>Ist Reporting</small></div>'+rows+
+    '<p class="muted small" style="margin:10px 0">Die Ziele je Produkt sind die eine Quelle für alle Ziele der App: Sie werden nach der Zielverteilung auf das Team verteilt. Ist leer lassen, dann zählt die App die erfassten Abschlüsse. Ein Ist aus dem Monatsreport hat Vorrang.</p>'+
+    formFoot('<button type="button" class="btn left" data-act="lem-cat">'+ic('tasks',15)+' Katalog</button>')+'</form>');
 }
 function lemKlsAppts(mk){var n=0;Object.keys(K().days).forEach(function(ds){if(ds.slice(0,7)===mk)n+=klsAnalyze(ds).kpi.appts});return n}
 function openLemW(mk){
-  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),kc=lemKlsAppts(mk);
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),kc=lemKlsAppts(mk),ce=convCount(mk,'tke'),co=convCount(mk,'tko'),tg=lemTbolTarget();
   sheet(lemSheetHead(mk,'Wachstum'),'<form class="lemf" data-form="lem-w"><input type="hidden" name="mk" value="'+mk+'">'+
     '<div class="lem-ih"><span></span><small>Ziel</small><small>Ist</small></div>'+
-    '<div class="lem-in"><span><b>Conversion TKE</b><small>Kunde erreicht Status „strategisch“</small></span>'+lemIn('tke_z',m.tke.z,'Ziel')+lemIn('tke_i',m.tke.i,'Ist')+'</div>'+
-    '<div class="lem-in"><span><b>Conversion Online-TK</b><small>POS-Zusatzkredit, GK mit Limit oder Gehaltseingang · kein LiA</small></span>'+lemIn('tko_z',m.tko.z,'Ziel')+lemIn('tko_i',m.tko.i,'Ist')+'</div>'+
+    '<div class="lem-in"><span><b>Conversion TKE</b><small>Kunde erreicht Status „strategisch“'+(ce?' · aus Abschlüssen: '+ce:'')+'</small></span>'+lemIn('tke_z',m.tke.z,'Ziel')+lemIn('tke_i',m.tke.i,ce?String(ce):'Ist')+'</div>'+
+    '<div class="lem-in"><span><b>Conversion Online-TK</b><small>POS-Zusatzkredit, GK mit Limit oder Gehaltseingang · kein LiA'+(co?' · aus Abschlüssen: '+co:'')+'</small></span>'+lemIn('tko_z',m.tko.z,'Ziel')+lemIn('tko_i',m.tko.i,co?String(co):'Ist')+'</div>'+
     '<div class="lem-in one"><span><b>Werbeeinwilligung (KUKI)</b><small>Telefon, SMS, E-Mail · Wert laut Reporting (1,345 = 5 … 1,525 = 8 Punkte)</small></span>'+lemIn('kuki',m.kuki,'z. B. 1,48')+'</div>'+
-    '<h6 class="ml-h">Zugang Online Banking</h6>'+
-    '<div class="lem-in"><span><b>Kunden mit KLS-Termin</b><small>'+(kc?'Laut übernommenen KLS-Tagen: '+kc+' Termine':'Basis für die Quote')+'</small></span>'+lemIn('ob_n',m.ob.n,kc?String(kc):'Anzahl')+'<span></span></div>'+
-    '<div class="lem-in"><span><b>davon nutzen Online Banking</b><small>nach dem Termin</small></span>'+lemIn('ob_k',m.ob.k,'Anzahl')+'<span></span></div>'+
-    '<div class="lem-in"><span><b>Zielquote</b><small>in %, Zielerreichung = Ist-Quote ÷ Zielquote</small></span>'+lemIn('ob_q',m.ob.q,'%')+'<span></span></div>'+
+    '<h6 class="ml-h">Online Banking (TBOL) · Stand im Jahr</h6>'+
+    '<div class="lem-in one"><span><b>Chancen</b><small>Kunden 18–69 ohne Online Banking mit eingehaltenem KLS-Termin'+(kc?' · KLS-Termine in der App: '+kc:'')+'</small></span>'+lemIn('ob_n',m.ob.n,'Anzahl')+'</div>'+
+    '<div class="lem-in one"><span><b>davon 1 bis 4 Log-ins</b><small>je 1 Punkt</small></span>'+lemIn('ob_a',m.ob.a,'Anzahl')+'</div>'+
+    '<div class="lem-in one"><span><b>davon 5 und mehr Log-ins</b><small>je 3 Punkte (Log-ins an verschiedenen Tagen)</small></span>'+lemIn('ob_b',m.ob.b,'Anzahl')+'</div>'+
+    '<p class="muted small" style="margin:10px 0">Ziel für 100 %: '+lemF(tg)+' % der maximalen Punkte (Chancen × 3)'+(lemCfg().tbolBank!=null&&lemCfg().tbolBank<lemCfg().tbol?', durch den Sicherheitsschirm auf den Bank-Mittelwert gesenkt':'')+'. Ändern unter ⋯ → Zielverteilung.</p>'+
     formFoot()+'</form>');
 }
 function openLemQ(mk){
@@ -6121,10 +6136,11 @@ function openLemQ(mk){
     '<div class="lem-in one"><span><b>Cross-Sell gesamt</b><small>ohne Druckverkauf, in % · ab 62 % = 1, je 2 %-Punkte +1</small></span>'+lemIn('cs',m.cs,'z. B. 74')+'</div>'+
     formFoot()+'</form>');
 }
-function openLemProds(){
-  var opts=[['','Nur Reporting'],['__refs','Überleitungen']].concat(S.metrics.map(function(m){return [m.id,m.n]}));
-  sheet('Verkaufspunkte verknüpfen','<form class="form" data-form="lem-prods"><p class="full muted small">Je Produkt: aus welchen Ergebnissen die App die Ist-Verkaufspunkte schätzt und wie viele Verkaufspunkte ein Abschluss bringt (laut Scorecard). „Nur Reporting“: Ist von Hand eintragen.</p>'+
-    L().prods.map(function(p){return '<div class="full lem-pp">'+SEL(p.n,'src_'+p.id,opts,p.src)+'<label class="fld"><span>VP je Stück</span><input name="ppu_'+p.id+'" type="text" inputmode="decimal" value="'+esc(String(p.ppu).replace('.',','))+'"></label></div>'}).join('')+formFoot()+'</form>');
+function openLemProds(){openLemShare()}
+function openLemK(mk){
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon();
+  sheet(lemSheetHead(mk,'Korrektur'),'<form class="lemf" data-form="lem-k"><input type="hidden" name="mk" value="'+mk+'">'+
+    '<div class="lem-in one"><span><b>Korrektur in LEM-Punkten</b><small>Spalte „aus KORR.“ der LEM-Übersicht, mit Minus bei Abzug</small></span>'+lemIn('korr',m.korr,'z. B. −2')+'</div>'+formFoot()+'</form>');
 }
 function openLemNorm(){var n=L().norm;
   sheet('Normierung','<form class="form" data-form="lem-norm"><p class="full muted small">Liegt die Bank in Verkauf oder Wachstum unter 100 %, wird die Zielerreichung aller Einheiten angehoben. Über 100 % wird nicht nach unten angepasst. Leer lassen, solange nichts bekannt ist.</p>'+
@@ -6134,43 +6150,56 @@ function openLemRules(){
   sheet('LEM 2026 · Regeln',
     '<p class="small">Drei Säulen: <b>Qualität</b> (Erwartung 50, max. 65), <b>Verkauf</b> (100 % = 60, max. 100), <b>Wachstum</b> (100 % = 40, max. 50). Erwartung gesamt 150.</p>'+
     '<h6 class="ml-h">Verkauf · Scorecard</h6>'+tb(['Zielerreichung','Punkte'],[['unter 70 %','0'],['70 %','30'],['80 %','40'],['90 %','50'],['100 %','60'],['110 %','70'],['120 %','80'],['130 %','90'],['ab 140 %','100']])+'<p class="muted small">Dazwischen je 1 % +1 Punkt. Produkte: Kredit, Girokonto, Kreditkarte, Versicherungen, One Bank, Festgeld, Baufinanzierung.</p>'+
-    '<h6 class="ml-h">Wachstum</h6>'+tb(['ZE Conversion TKE / Online-TK','Punkte'],LEM_CONV.slice().reverse().map(function(x){return ['ab '+x[0]+' %',x[1]]}))+tb(['KUKI-Wert','Punkte'],LEM_KUKI.slice().reverse().map(function(x){return [dec(x[0],3),x[1]]}))+tb(['ZE Online Banking','Punkte'],[['bis 70 %','0'],['70–80 %','1'],['80–90 %','2'],['90–100 %','3'],['100–110 %','4'],['110–120 %','5'],['über 120 %','6']])+'<p class="muted small">Wachstum gesamt: 40 Punkte = 100 %, 50 Punkte = 125 %.</p>'+
+    '<h6 class="ml-h">Verkaufspunkte</h6><p class="muted small">Alle Punktwerte je Abschluss stehen im Verkaufspunkte-Katalog.</p><button type="button" class="btn sm" data-act="lem-cat">'+ic('tasks',14)+' Katalog öffnen</button>'+
+    '<h6 class="ml-h">Wachstum</h6>'+tb(['ZE Conversion TKE / Online-TK','Punkte'],LEM_CONV.slice().reverse().map(function(x){return ['ab '+x[0]+' %',x[1]]}))+tb(['KUKI-Wert','Punkte'],LEM_KUKI.slice().reverse().map(function(x){return [dec(x[0],3),x[1]]}))+'<p class="muted small">Online Banking (TBOL): Chance = Kunde 18–69 ohne Online Banking mit eingehaltenem KLS-Termin. 1 Log-in im Jahr = 1 Punkt, ab 5 Log-ins = 3 Punkte, maximal 3 je Chance. Ziel für 100 % = 26 % der maximalen Punkte (Beispiel: 2.000 möglich → 520 nötig). Liegt der Bank-Mittelwert darunter, wird das Ziel darauf gesenkt.</p>'+tb(['ZE Online Banking','Punkte'],[['bis 70 %','0'],['70–80 %','1'],['80–90 %','2'],['90–100 %','3'],['100–110 %','4'],['110–120 %','5'],['über 120 %','6']])+'<p class="muted small">Wachstum gesamt: 40 Punkte = 100 %, 50 Punkte = 125 %.</p>'+
     '<h6 class="ml-h">Qualität</h6>'+tb(['KuBiS-Teamscore','Punkte'],[['ab 78,0','55'],['ab 77,6','54'],['ab 76,0','50'],['70,0–74,0','45'],['ab 68,0','40'],['ab 60,0','20'],['unter 52,4','0']])+'<p class="muted small">Je 0,4 Teamscore ± 1 Punkt. Best of 2: absoluter Teamscore oder Punkte zum Bankdurchschnitt (74,0 ≙ −2,5). Schwellen für den Durchschnittsweg: über 50 Punkte nur ab Teamscore 70, unter 65 max. 35, unter 60 = 0. Es zählt der Bereichswert.</p>'+
-    tb(['Cross-Sell (ohne Druckverkauf)','Punkte'],[['unter 62','0'],['ab 62','1'],['ab 70','5'],['ab 74','7'],['ab 80','10']])+'<p class="muted small">Je 2 %-Punkte +1.</p>',
+    tb(['Cross-Sell (ohne Druckverkauf)','Punkte'],[['unter 62','0'],['ab 62','1'],['ab 70','5'],['ab 74','7'],['ab 80','10']])+'<p class="muted small">Je 2 %-Punkte +1.</p><h6 class="ml-h">Normierung</h6><p class="muted small">Verkauf und Wachstum werden nur angepasst, wenn die Bank unter 100 % liegt; darüber wird nicht nach unten angepasst. Die Gesamt-LEM (Summe der 3 Säulen) wird am Ende mit dem Mittelwert der Bereiche normiert; das Bonusbudget ändert sich nur durch den Bankfaktor.</p>',
     '<div class="m-foot"><button class="btn primary" data-act="modal-close">Fertig</button></div>');
 }
 function lemSaveForm(kind,f,d){
   var mk=d.get('mk')||lemMk(),m=lemMon(mk,true),g=function(n){return lemN(d.get(n))};
   if(kind==='v'){m.vz=g('vz');L().prods.forEach(function(p){var z=g('z_'+p.id),i=g('i_'+p.id);if(z==null&&i==null)delete m.v[p.id];else m.v[p.id]={z:z,i:i}})}
-  if(kind==='w'){m.tke={z:g('tke_z'),i:g('tke_i')};m.tko={z:g('tko_z'),i:g('tko_i')};m.kuki=g('kuki');m.ob={n:g('ob_n'),k:g('ob_k'),q:g('ob_q')};
-    if(m.ob.n!=null&&m.ob.k!=null&&m.ob.k>m.ob.n){toast('„davon“ ist größer als die Basis','err');return}}
+  if(kind==='w'){m.tke={z:g('tke_z'),i:g('tke_i')};m.tko={z:g('tko_z'),i:g('tko_i')};m.kuki=g('kuki');m.ob={n:g('ob_n'),a:g('ob_a'),b:g('ob_b')};
+    if(m.ob.n!=null&&(m.ob.a||0)+(m.ob.b||0)>m.ob.n){toast('Mehr Kunden mit Log-in als Chancen','err');return}}
+  if(kind==='k'){m.korr=g('korr')}
   if(kind==='q'){m.ts=g('ts');m.bank=g('bank');m.tsF=g('tsF');m.cs=g('cs');
     if(m.ts!=null&&(m.ts<0||m.ts>100)||m.cs!=null&&(m.cs<0||m.cs>100)){toast('Teamscore und Cross-Sell liegen zwischen 0 und 100','err');return}}
   UI.lemMk=mk;save();closeModal();if(UI.route!=='goals')go('goals');else rerender();
-  var R=lemCalc(mk,lemPer());toast({v:'Verkauf',w:'Wachstum',q:'Qualität'}[kind]+': '+lemF(R[kind].pts)+' LEM-Punkte');
+  var R=lemCalc(mk,lemPer());toast(kind==='k'?'Korrektur gespeichert':{v:'Verkauf',w:'Wachstum',q:'Qualität'}[kind]+': '+lemF(R[kind].pts)+' LEM-Punkte');
 }
 /* Verkaufspunkte je Person (aus Ergebnissen) */
-function lemPersonVP(e,mk){var a=0,t=0,any=false;L().prods.forEach(function(p){if(!p.src||p.src==='__refs')return;var m=metric(p.src);if(!m)return;var x=metAct(mk,e,m);if(x!=null){a+=x*p.ppu;any=true}t+=metTarget(e,m).v*p.ppu});
-  var r=refsOf({emp:e.id,month:mk}).length,ob=lemProd('ob');if(ob&&ob.src==='__refs'&&r){a+=r*ob.ppu;any=true}
-  return {a:any?a:null,t:t}}
+function lemPersonVP(e,mk){var r=personRes(e,mk);return {a:r.vp.a||null,t:r.vp.t}}
 function lemRegionVal(mk,id){var R=lemCalc(mk,'m');if(id==='__lem')return R.complete?R.tot:null;if(id==='__lemv')return R.v.zeN==null?null:Math.round(R.v.zeN*100);if(id==='__lemw')return R.w.pts;if(id==='__lemq')return R.q.pts;if(id==='__kubis')return R.q.ts;return null}
-var LEM_REG_OPTS=[['__lem','LEM-Punkte gesamt'],['__lemv','LEM Verkauf: Zielerreichung %'],['__lemw','LEM Wachstum: Punkte'],['__lemq','LEM Qualität: Punkte'],['__kubis','KuBiS-Teamscore Bereich']];
+var LEM_REG_OPTS=[['__cnt:kre','Kredite (Stück aus Abschlüssen)'],['__cnt:gk','Girokonten (Stück aus Abschlüssen)'],['__cnt:kk','Kreditkarten (Stück aus Abschlüssen)'],['__cnt:ver','Versicherungen (Stück aus Abschlüssen)'],['__lem','LEM-Punkte gesamt'],['__lemv','LEM Verkauf: Zielerreichung %'],['__lemw','LEM Wachstum: Punkte'],['__lemq','LEM Qualität: Punkte'],['__kubis','KuBiS-Teamscore Bereich']];
 function lemAttention(){
   var o=[],mk=monthKey(),d=new Date();if(!S.employees.length)return o;
   if(!lemMon(mk)&&d.getDate()>=3)o.push({sev:1,icon:'target',c:'#1c7ed6',t:'LEM-Werte für '+monthLabel(mk).split(' ')[0]+' fehlen',s:'Ziele und Stand aus dem Reporting eintragen',act:'go',to:'goals'});
   var R=lemCalc(mk,'y');if(R.v.ziel&&R.v.zeN!=null&&R.v.zeN<.7)o.push({sev:2,icon:'chart',c:'#c92a3a',t:'Verkauf unter 70 %: 0 LEM-Punkte',s:'Jahr bis heute '+lemPctTxt(R.v.zeN)+' · ab 70 % gibt es 30 Punkte',act:'go',to:'goals'});
   return o;
 }
-function seedLem(st){
-  var d=lemDef(),y=new Date().getFullYear(),cm=new Date().getMonth()+1;st.lem=d;
-  d.prods.forEach(function(p){p.ppu={kre:12,gk:8,ver:10,ob:4}[p.id]||1});
-  var zp={kre:120,gk:80,kk:30,ver:60,ob:20,fg:15,bf:40};
-  for(var i=1;i<=cm;i++){var mk=y+'-'+pad(i),r=function(k){return (hseed(mk+k)%31-15)/100},m=lemBlankMon(),cur=i===cm;
-    Object.keys(zp).forEach(function(k){var z=zp[k],iv=Math.round(z*(1.0+r(k)));m.v[k]={z:z,i:cur&&['kre','gk','ver','ob'].indexOf(k)>-1?null:(cur?Math.round(iv*0.1):iv)}});
-    m.tke={z:12,i:cur?2:Math.round(12*(1.03+r('t')/2))};m.tko={z:8,i:cur?1:Math.round(8*(1.02+r('o')/2))};m.kuki=Math.round((1.49+r('k')/6)*1000)/1000;
-    m.ob={n:cur?8:60,k:cur?5:Math.round(60*(0.58+r('b')/4)),q:55};
-    m.ts=Math.round((75.2+r('q')*3)*10)/10;m.tsF=Math.round((m.ts+1.4)*10)/10;m.bank=76.6;m.cs=Math.round(73+r('c')*10);
-    d.mon[mk]=m}
+function seedLem(st,by){
+  var d=lemDef(),now=new Date(),y=now.getFullYear(),cm=now.getMonth()+1,td=todayISO();st.lem=d;st.deals=[];
+  d.share={};if(by.Lena)d.share[by.Lena]=0.4;if(by.Tim)d.share[by.Tim]=0.5;
+  var W=[['Sandra',.9],['Jonas',1],['Aylin',1.2],['Markus',1],['Lena',.25],['Tim',.35],['Katarina',1],['me',.3]].filter(function(x){return x[0]==='me'||by[x[0]]});
+  var tw=W.reduce(function(a,x){return a+x[1]},0);
+  function rnd(k){return (hseed(k)%1000)/1000}
+  function who(k){var r=rnd(k)*tw;for(var i=0;i<W.length;i++){r-=W[i][1];if(r<=0)return W[i][0]==='me'?'me':by[W[i][0]]}return by.Jonas}
+  function day(mk,k){var days=[],last=new Date(+mk.slice(0,4),+mk.slice(5),0).getDate();for(var i=1;i<=last;i++){var ds=mk+'-'+pad(i);if(isWorkday(parse(ds))&&ds<=td)days.push(ds)}return days.length?days[Math.floor(rnd(k)*days.length)]:null}
+  function add(mk,k,o){var ds=day(mk,k+'d');if(!ds)return;if(mk===monthKey()&&rnd(k+'pace')>monthPace(mk))return;o.id=uid();o.d=ds;if(o.emp==null)o.emp=o.kred?by.Markus:who(k+'w');delete o.kred;st.deals.push(o)}
+  for(var i=1;i<=cm;i++){var mk=y+'-'+pad(i),m=lemBlankMon(),k=0;
+    m.v={kre:{z:11000,i:null},gk:{z:9000,i:null},kk:{z:3000,i:null},ver:{z:400+220*(i-1),i:null},ob:{z:1200,i:null},fg:{z:1600,i:null},bf:{z:1200,i:null}};
+    m.tke={z:3,i:null};m.tko={z:3,i:null};m.kuki=Math.round((1.49+(rnd(mk+'ku')-.5)/12)*1000)/1000;
+    var n=55*i;m.ob={n:n,a:Math.round(n*(.3+rnd(mk+'oa')*.06)),b:Math.round(n*(.11+rnd(mk+'ob')*.04))};
+    m.ts=Math.round((75.2+(rnd(mk+'ts')-.5)*3)*10)/10;m.tsF=Math.round((m.ts+1.4)*10)/10;m.bank=76.6;m.cs=Math.round(73+(rnd(mk+'cs')-.5)*8);
+    d.mon[mk]=m;
+    var nk=8+Math.floor(rnd(mk+'nk')*4);for(var j=0;j<nk;j++)add(mk,mk+'k'+j,{it:j<6?'kr_neu':'kr_zus',a:Math.round(1200+rnd(mk+'z'+j)*2000),pgf:Math.round((.85+rnd(mk+'p'+j)*.4)*100)/100,vol:Math.round(8000+rnd(mk+'v'+j)*14000),ch:j===7?'ds':'fil',conv:j<6&&j%2===0?'tke':(j>=6&&j<9?'tko':'')});
+    [['gk_std',13],['gk_prem',2],['gk_gel',3],['gk_ge',1],['gk_bge',1],['gk_blim',1],['gk_u18',1],['kk_cl',5],['kk_gold',1],['kk_use',3],['kk_rev',1],['kk_zus',1],['fg_fest',4],['fg_tg',2],['fg_jtg',1],['fg_gk',1],['bf_tipp',4],['bf_plan',1]].forEach(function(x){var c=x[1]+(rnd(mk+x[0])<.3?-1:rnd(mk+x[0])>.75?1:0);for(var j=0;j<c;j++)add(mk,mk+x[0]+j,{it:x[0],a:1})});
+    if(i%2===0)add(mk,mk+'bfg',{it:'bf_geb',a:1,kred:true});
+    for(var j2=0;j2<5;j2++)add(mk,mk+'ve'+j2,{it:j2===4?'v_rsv':'v_lfd',a:Math.round((18+rnd(mk+'b'+j2)*30)*100)/100,zw:'m',rec:j2===1?Math.round((30+rnd(mk+'r'+j2)*20)*100)/100:null,rate:j2===4?220:null});
+    add(mk,mk+'obk',{it:'ob_kr',a:Math.round(1500+rnd(mk+'obz')*800),pgf:1});add(mk,mk+'obf',{it:'ob_fonds',a:20000});if(i%3===0)add(mk,mk+'obt',{it:'ob_tav',a:1000});
+  }
+  st.deals.forEach(function(x){var c=cat(x.it);if(c&&(c.u==='beitrag'||c.u==='einmal')&&x.rec!=null&&x.rec<x.a)x.rec=x.a+5});
+  if(cm>2)d.mon[y+'-'+pad(cm-1)].korr=-1;
 }
 function registerLem(){
   ROUTES.goals.t='LEM-Ziele';ROUTES.goals.icon='target';ROUTES.goals.fn=function(){return viewLem()};ROUTES.goals.sub=function(){return 'Qualität, Verkauf und Wachstum nach LEM 2026'};
@@ -6179,26 +6208,25 @@ function registerLem(){
     'lem-per':function(t){UI.lemPer=t.dataset.v;rerender()},
     'lem-m':function(t){var k=+t.dataset.k;UI.lemMk=k===0?monthKey():shiftMonth(lemMk(),k);rerender()},
     'lem-edit':function(t){var k=t.dataset.v;(k==='v'?openLemV:k==='w'?openLemW:openLemQ)(lemMk())},
-    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'trend',label:'Wachstum: Conversions, KUKI, Online Banking',fn:function(){openLemW(lemMk())}},{icon:'star',label:'Qualität: KuBiS und Cross-Sell',fn:function(){openLemQ(lemMk())}}]})},
+    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'trend',label:'Wachstum: Conversions, KUKI, Online Banking',fn:function(){openLemW(lemMk())}},{icon:'star',label:'Qualität: KuBiS und Cross-Sell',fn:function(){openLemQ(lemMk())}},{icon:'edit',label:'Korrektur laut LEM-Übersicht',fn:function(){openLemK(lemMk())}}]})},
     'lem-prods':openLemProds,'lem-norm':openLemNorm,'lem-rules':openLemRules,
     'lem-lev-all':function(){UI.lemAllLev=!UI.lemAllLev;rerender()}
   });
   Object.assign(FORMS,{
-    'lem-v':function(f,d){lemSaveForm('v',f,d)},'lem-w':function(f,d){lemSaveForm('w',f,d)},'lem-q':function(f,d){lemSaveForm('q',f,d)},
+    'lem-v':function(f,d){lemSaveForm('v',f,d)},'lem-k':function(f,d){lemSaveForm('k',f,d)},'lem-w':function(f,d){lemSaveForm('w',f,d)},'lem-q':function(f,d){lemSaveForm('q',f,d)},
     'lem-prods':function(f,d){L().prods.forEach(function(p){var s=d.get('src_'+p.id)||'';p.src=s==='__refs'||metric(s)?s:'';var n=lemN(d.get('ppu_'+p.id));p.ppu=n!=null&&n>=0?n:1});save();rerender();openLemV(lemMk());toast('Verknüpfung gespeichert')},
     'lem-norm':function(f,d){var v=lemN(d.get('v')),w=lemN(d.get('w'));L().norm={v:v!=null&&v>0&&v<300?v:null,w:w!=null&&w>0&&w<300?w:null};save();closeModal();rerender();toast('Normierung gespeichert')}
   });
   QA_ALL.lem=['target','LEM-Werte'];
 }
-function lemVpRow(e,mk){var x=lemPersonVP(e,mk);if(x.a==null&&!x.t)return '';var p=x.t>0?Math.min(100,Math.round((x.a||0)/x.t*100)):0;
-  return '<div class="prow lem-vp"><div class="l"><span>'+ic('target',14)+' LEM-Verkaufspunkte</span><span class="muted">'+lemF(x.a)+' / '+lemF(Math.round(x.t))+'</span></div><div class="bar"><i class="'+(p>=100?'good':p<70?'bad':'')+'" data-w="'+p+'"></i></div></div>'}
+function lemVpRow(e,mk){return ''}
 function wgLemS(){var R=lemCalc(monthKey(),'y');if(R.tot==null)return {v:'–',s:'LEM-Werte eintragen',act:'lem-add'};var st=lemPillarState(R.tot,R.exp);return {v:dec(R.tot,R.tot%1?1:0),s:'von 150 · '+(R.complete?st.l:'unvollständig'),cls:R.tot>=R.exp?'good-txt':R.tot>=135?'warn-txt':'bad-txt',to:'goals'}}
 function wgLemL(){var R=lemCalc(monthKey(),'y'),c={q:'#0c8599',v:'#1c7ed6',w:'#7048e8'},n={q:'Qualität',v:'Verkauf',w:'Wachstum'};
   return '<section class="card glass"><a class="card-h wg-lh" href="#/goals"><h2>LEM-Punkte '+monthKey().slice(0,4)+'</h2><span class="muted small">'+(R.tot==null?'–':dec(R.tot,R.tot%1?1:0))+' / 150</span>'+ic('right',16)+'</a>'+
     ['q','v','w'].map(function(k){var p=R[k].pts,st=lemPillarState(p,LEM_EXP[k]);return '<div class="prow"><div class="l"><span>'+n[k]+'</span><span class="muted">'+lemF(p)+' / '+LEM_EXP[k]+'</span></div>'+lemBar(p,LEM_EXP[k],LEM_MAX[k],st.c)+'</div>'}).join('')+
     (lemLevers(R)[0]?'<p class="muted small" style="margin-top:8px">Größter Hebel: '+esc(lemLevers(R)[0].t)+' (+'+lemLevers(R)[0].g+')</p>':'')+'</section>'}
 function registerLemPage(){
-  PAGE_ACTS.goals=function(){return {add:{label:'LEM-Werte erfassen',fn:function(){ACTIONS['lem-add']()}},menu:[{icon:'settings',label:'Verkaufspunkte verknüpfen',fn:openLemProds},{icon:'swap',label:'Normierung (Bank-Zielerreichung)',fn:openLemNorm},{icon:'tasks',label:'LEM-Regeln und Tabellen',fn:openLemRules},{icon:'plus',label:'Eigenes Monatsziel',fn:function(){openGoalForm()}},S.goals.length?{icon:'sparkle',label:'Eigene Ziele: neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}:null]}};
+  PAGE_ACTS.goals=function(){return {add:{label:'LEM-Werte erfassen',fn:function(){ACTIONS['lem-add']()}},menu:[{icon:'users',label:'Zielverteilung, Baufi-Phase, TBOL-Ziel',fn:openLemShare},{icon:'tasks',label:'Verkaufspunkte-Katalog',fn:openLemCatalog},{icon:'chart',label:'Abschlüsse dieses Monats',fn:function(){openDealList(lemMk(),null)}},{icon:'swap',label:'Normierung (Bank-Zielerreichung)',fn:openLemNorm},{icon:'tasks',label:'LEM-Regeln und Tabellen',fn:openLemRules},{icon:'plus',label:'Eigenes Monatsziel',fn:function(){openGoalForm()}},S.goals.length?{icon:'sparkle',label:'Eigene Ziele: neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}:null]}};
 }
 /* ===================== Filialleiter im KLS ===================== */
 /* Eigene Spalte vorbelegen: Arbeitszeit, Mittag, Termine aus dem App-Kalender */
@@ -6243,6 +6271,295 @@ function klsMeAppts(ds){
 function registerKlsMe(){
   ACTIONS['kls-open']=function(t){UI.klsDay=t.dataset.v||todayISO();go('kls')};
 }
+/* ===================== Verkaufspunkte-Katalog und Abschlüsse (LEM 2026) ===================== */
+/* u: stk = je Stück · zins = Kreditformel · beitrag = ratierlich mtl. Beitrag · einmal = Einmalbeitrag/Laufzeit · tsd = je 1.000 € · vp = Punkte laut Reporting · cmp = wie vergleichbarer Filialabschluss */
+var LEM_CAT=[
+  {id:'kr_neu',p:'kre',g:'Kredit',n:'Neukredit',u:'zins',bonus:500,conv:'tke',d:'320 VP je 1.000 € Zinsen × Preisgewichtungsfaktor + 500 Bonus'},
+  {id:'kr_zus',p:'kre',g:'Kredit',n:'Zusatzkredit (neuer Anteil)',u:'zins',bonus:0,conv:'tko',d:'320 VP je 1.000 € Zinsen × Faktor; TKO-Conversion +500'},
+  {id:'kr_lia',p:'kre',g:'Kredit',n:'Loan in App',u:'zins',bonus:0,d:'Preisgewichtungsfaktor LiA · KLS-Termin der letzten 7 Tage nötig · keine Conversion'},
+  {id:'gk_std',p:'gk',g:'Girokonto',n:'Plus/Vorteil/Komfort/Starter',u:'stk',vp:150,conv:'tko'},
+  {id:'gk_prem',p:'gk',g:'Girokonto',n:'Premiumkonto',u:'stk',vp:250,conv:'tko'},
+  {id:'gk_u18',p:'gk',g:'Girokonto',n:'Starterkonto unter 18',u:'stk',vp:500},
+  {id:'gk_zweit',p:'gk',g:'Girokonto',n:'Zweit-, Verrechnungs-, Basiskonto',u:'stk',vp:0},
+  {id:'gk_up',p:'gk',g:'Girokonto',n:'Kontoswitch in Komfort/Premium',u:'stk',vp:100},
+  {id:'gk_down',p:'gk',g:'Girokonto',n:'Kontoswitch zurück',u:'stk',vp:-100},
+  {id:'gk_del1',p:'gk',g:'Girokonto',n:'Konto-/Limitlöschung −150',u:'stk',vp:-150},
+  {id:'gk_del2',p:'gk',g:'Girokonto',n:'Konto-/Limitlöschung −250',u:'stk',vp:-250},
+  {id:'gk_gel',p:'gk',g:'Girokonto · 6. Monat',n:'Gehaltseingang + Limit ≥ 500 €',u:'stk',vp:1500,conv:'tko'},
+  {id:'gk_ge',p:'gk',g:'Girokonto · 6. Monat',n:'Gehaltseingang ohne Limit',u:'stk',vp:1000,conv:'tko'},
+  {id:'gk_klv',p:'gk',g:'Girokonto · 6. Monat',n:'KLV (Eingang + Limit)',u:'stk',vp:150},
+  {id:'gk_bge',p:'gk',g:'Girokonto · Bestand',n:'Bestand: neuer Gehaltseingang',u:'stk',vp:400},
+  {id:'gk_blim',p:'gk',g:'Girokonto · Bestand',n:'Bestand: Limit ≥ 500 €',u:'stk',vp:400},
+  {id:'kk_cl',p:'kk',g:'Kreditkarte',n:'Classic-Karte',u:'stk',vp:300},
+  {id:'kk_gold',p:'kk',g:'Kreditkarte',n:'Gold- oder Premiumkarte',u:'stk',vp:400},
+  {id:'kk_extra',p:'kk',g:'Kreditkarte',n:'Extra-Karte',u:'stk',vp:200},
+  {id:'kk_pre',p:'kk',g:'Kreditkarte',n:'Prepaid-Karte',u:'stk',vp:0},
+  {id:'kk_del1',p:'kk',g:'Kreditkarte',n:'Löschung Classic −200',u:'stk',vp:-200},
+  {id:'kk_del2',p:'kk',g:'Kreditkarte',n:'Löschung Gold/Premium −300',u:'stk',vp:-300},
+  {id:'kk_zus',p:'kk',g:'Kreditkarte · 6. Monat',n:'Zusatzkarte',u:'stk',vp:150},
+  {id:'kk_use',p:'kk',g:'Kreditkarte · 6. Monat',n:'Nutzung (3× Händlereinsatz)',u:'stk',vp:150},
+  {id:'kk_rev',p:'kk',g:'Kreditkarte · 6. Monat',n:'Revolver-Nutzung (Zinsen)',u:'stk',vp:300},
+  {id:'kk_klv',p:'kk',g:'Kreditkarte · 6. Monat',n:'KLV Revolver oder Vollzahler',u:'stk',vp:50},
+  {id:'v_lfd',p:'ver',g:'Versicherung',n:'Laufender Beitrag',u:'beitrag',d:'1 VP je 1 € Monatsbeitrag, jeden Monat solange der Vertrag läuft'},
+  {id:'v_einm',p:'ver',g:'Versicherung',n:'Einmalbeitrag',u:'einmal',d:'1 VP je 1 € (Beitrag ÷ Laufzeit) pro Monat'},
+  {id:'v_rsv',p:'ver',g:'Versicherung',n:'Kredit-RSV',u:'beitrag',rsv:true,d:'Ratierlich, höchstens 34 % der monatlichen Kreditrate'},
+  {id:'v_rsvgk',p:'ver',g:'Versicherung',n:'RSV zu Girokonto/Karte',u:'vp',d:'Einmalige Abschlusspunkte laut Reporting, Prüfung nach 6 Monaten'},
+  {id:'fg_fest',p:'fg',g:'Geldanlage',n:'Festgeld neu (≥ 10.000 €)',d:'Neueröffnung, mindestens 10.000 € am Monatsende',u:'stk',vp:200},
+  {id:'fg_tg',p:'fg',g:'Geldanlage',n:'Tagesgeld, nur POS (≥ 10.000 €)',d:'Prüfung fortlaufend im Jahr, bis das Volumen erstmals erreicht ist',u:'stk',vp:200},
+  {id:'fg_jtg',p:'fg',g:'Geldanlage',n:'Junior-Tagesgeld (≥ 500 €)',u:'stk',vp:200},
+  {id:'fg_jsp',p:'fg',g:'Geldanlage',n:'Junior-TG +50 € nach 4 Monaten',u:'stk',vp:200},
+  {id:'fg_gk',p:'fg',g:'Geldanlage',n:'Verflechtung GK zu FG/TG',d:'Girokonto innerhalb von 2 Monaten zu Fest- oder Tagesgeld',u:'stk',vp:200},
+  {id:'fg_spar',p:'fg',g:'Geldanlage',n:'Sparkonto',u:'stk',vp:0},
+  {id:'fg_vb',p:'fg',g:'Geldanlage',n:'Liabilities VB, eigener Kunde',u:'stk',vp:200,d:'One Bank: die kontoführende Filiale erhält die Punkte'},
+  {id:'bf_tipp',p:'bf',g:'Baufinanzierung',n:'Tippgeberanfrage (Planet Home)',d:'Bausparen, Immobilien, Baufinanzierung',u:'stk',vp:100,mode:'ph'},
+  {id:'bf_plan',p:'bf',g:'Baufinanzierung',n:'Baufi-Planer: Antrag komplett',u:'stk',vp:500,mode:'ph'},
+  {id:'bf_geb',p:'bf',g:'Baufinanzierung',n:'Baufi-Planer: Antrag gebucht',u:'stk',vp:1000,mode:'ph'},
+  {id:'bf_olb',p:'bf',g:'Baufinanzierung',n:'OLB: gebuchter Kredit',d:'Nach Überleitung an den Baufi-Hub, gebucht von qualifizierten Beratern',u:'stk',vp:0,mode:'olb'},
+  {id:'ob_kr',p:'ob',g:'Überleitung',n:'Kredit über BzH/LbP',u:'zins',bonus:500,f:0.75,d:'Nach KLS-Überleitung: 75 % der Punkte eines vergleichbaren Filialkredits'},
+  {id:'ob_cmp',p:'ob',g:'Überleitung',n:'GK, Karte, Vers. über BzH/LbP',u:'cmp',d:'100 % eines vergleichbaren Filialabschlusses'},
+  {id:'ob_tav',p:'ob',g:'Überleitung',n:'AB/VB: TAV CNR',d:'500 VP je 1.000 €, Überleitungsquartal + 2 Folgequartale',u:'tsd',vp:500},
+  {id:'ob_fonds',p:'ob',g:'Überleitung',n:'AB/VB: Fondsvolumen',d:'10 VP je 1.000 €, Überleitungsquartal + 2 Folgequartale',u:'tsd',vp:10}
+];
+var LEM_ZW=[['m','monatlich',1],['q','vierteljährlich',3],['h','halbjährlich',6],['j','jährlich',12]];
+var LEM_CH=[['fil','Filiale (Selbstbuchung)',1],['ds','Direct Sales (Filial-Telefonkredit)',1],['onl','An Online übergeleitet',0]];
+function cat(id){for(var i=0;i<LEM_CAT.length;i++)if(LEM_CAT[i].id===id)return LEM_CAT[i];return null}
+function lemCfg(){return L().cfg}
+function lemBfVp(){var m=lemCfg().bf;return m==='olb2'?1000:m==='olb1'?750:0}
+function catVisible(c){if(c.mode==='ph')return lemCfg().bf==='ph';if(c.mode==='olb')return lemCfg().bf!=='ph';return true}
+function lemZwF(zw){var z=LEM_ZW.filter(function(x){return x[0]===zw})[0];return z?z[2]:1}
+/* Kreditformel: Zinsen/1.000 × 320 × Preisgewichtungsfaktor + Bonus; × Kanal */
+function lemKreditVP(d,c){
+  if(d.kons)return 0;var z=Math.max(0,d.a||0),pgf=d.pgf==null?1:d.pgf,ch=LEM_CH.filter(function(x){return x[0]===(d.ch||'fil')})[0],chf=ch?ch[2]:1;
+  var bonus=c.bonus||0;if(c.id==='kr_zus'&&d.conv==='tko')bonus=500;if(c.id==='kr_zus'&&d.conv==='tke')bonus=500;if(c.id==='kr_lia')bonus=0;
+  var v=z/1000*320*pgf+bonus;if(c.f)v*=c.f;if(c.id!=='ob_kr')v*=chf;return v;
+}
+/* Monatlicher Versicherungsbeitrag und Faktor (Empfehlung, Beratung, RSV-Deckel, KIM) */
+function lemVerMonthly(d,c){
+  var m=c.u==='einmal'?(d.lz>0?(d.a||0)/d.lz:0):(d.a||0)/lemZwF(d.zw);if(m<0)m=0;
+  if(c.rsv&&d.rate>0)m=Math.min(m,0.34*d.rate);
+  var f=1;if(d.noBer||d.kim)f=0;else if(d.rec>0){var r=c.u==='einmal'?(d.lz>0?d.rec/d.lz:0):d.rec/lemZwF(d.zw);if(m>r+0.005)f=0;else if(m<r-0.005)f=0.75}
+  return {m:m,f:f,vp:m*f};
+}
+function mkIdx(mk){return (+mk.slice(0,4))*12+(+mk.slice(5))-1}
+/* Verkaufspunkte eines Abschlusses in einem Monat */
+function dealVP(d,mk){
+  var c=cat(d.it);if(!c)return 0;var dm=d.d.slice(0,7);
+  if(c.u==='beitrag'||c.u==='einmal'){
+    var i=mkIdx(mk),s=mkIdx(dm);if(i<s)return 0;if(d.end&&/^\d{4}-\d{2}$/.test(d.end)&&i>=mkIdx(d.end))return 0;if(c.u==='einmal'&&d.lz>0&&i>=s+d.lz)return 0;
+    return lemVerMonthly(d,c).vp;
+  }
+  if(dm!==mk)return 0;
+  if(c.u==='zins')return lemKreditVP(d,c);
+  if(c.u==='stk')return (c.id==='bf_olb'?lemBfVp():c.vp)*(d.a==null?1:d.a);
+  if(c.u==='tsd')return (d.a||0)/1000*c.vp;
+  if(c.u==='vp')return d.a||0;
+  if(c.u==='cmp'){var x=cat(d.cmp);return x&&x.u==='stk'?x.vp*(d.n||1):0}
+  return 0;
+}
+function dealOnce(d){var c=cat(d.it);if(!c)return 0;if(c.u==='beitrag'||c.u==='einmal')return lemVerMonthly(d,c).vp;return dealVP(d,d.d.slice(0,7))}
+function dealsIn(mk,f){f=f||{};return S.deals.filter(function(d){var c=cat(d.it);if(!c)return false;if(f.p&&c.p!==f.p)return false;if(f.emp!=null&&d.emp!==f.emp)return false;if(c.u==='beitrag'||c.u==='einmal')return dealVP(d,mk)!==0||d.d.slice(0,7)===mk;return d.d.slice(0,7)===mk})}
+function dealSum(mk,f){var s=0,any=false;dealsIn(mk,f).forEach(function(d){s+=dealVP(d,mk);any=true});return any?Math.round(s*10)/10:null}
+function dealCount(mk,f){return dealsIn(mk,f).filter(function(d){return d.d.slice(0,7)===mk&&dealOnce(d)>0}).reduce(function(a,d){var c=cat(d.it);return a+(c.u==='stk'?(d.a==null?1:d.a):1)},0)}
+function convCount(mk,k){return S.deals.filter(function(d){return d.d.slice(0,7)===mk&&d.conv===k&&d.it!=='kr_lia'}).length}
+function normDeals(a){return (Array.isArray(a)?a:[]).filter(function(x){return x&&cat(x.it)&&validISO(x.d)}).slice(-4000).map(function(x){var n=function(v){var r=lemN(v);return r};return {id:str(x.id||uid(),40),d:x.d,emp:str(x.emp,40),it:x.it,a:n(x.a),pgf:n(x.pgf),ch:['fil','ds','onl'].indexOf(x.ch)>-1?x.ch:'fil',conv:['tke','tko'].indexOf(x.conv)>-1?x.conv:'',kons:!!x.kons,vol:n(x.vol),zw:['m','q','h','j'].indexOf(x.zw)>-1?x.zw:'m',lz:n(x.lz),rec:n(x.rec),rate:n(x.rate),noBer:!!x.noBer,kim:!!x.kim,cmp:str(x.cmp,20),n:n(x.n),end:/^\d{4}-\d{2}$/.test(x.end||'')?x.end:'',ref:str(x.ref,30),note:str(x.note,200)}})}
+
+/* ---------- Kennzahlen: LEM-Produkte sind Kennzahlen in Verkaufspunkten ---------- */
+var LEM_MET=[['kre','Kredit','Kredit','#BC123D','kre'],['gk','Girokonto','Giro','#1c7ed6','kon'],['kk','Kreditkarte','Karte','#0c8599','kon'],['ver','Versicherungen','Vers.','#7048e8','vor'],['ob','One Bank (Überleitungen)','One Bank','#d9780a','zusatz'],['fg','Geldanlage','Anlage','#1f9d55','bed'],['bf','Baufinanzierung','Baufi','#3d5a80','kre']];
+function lemMetrics(){return LEM_MET.map(function(x){return {id:'m_lp_'+x[0],n:x[1],s:x[2],unit:'VP',t:0,c:x[3],comp:x[4],lem:x[0]}})}
+function isLemMet(m){return !!(m&&m.lem)}
+function manualMets(){return S.metrics.filter(function(m){return !m.lem})}
+/* Zielverteilung: Anteil je Person am Filialziel (Standard Wochenstunden / 39) */
+function lemWeight(id){var s=L().share||{};if(s[id]!=null)return s[id];if(id==='me')return 0;var e=emp(id);return e?Math.max(0,(e.hours||39)/39):0}
+function lemShareSum(){var t=lemWeight('me');S.employees.forEach(function(e){t+=lemWeight(e.id)});return t}
+function lemShareOf(id){var t=lemShareSum();return t>0?lemWeight(id)/t:0}
+function lemProdZiel(mk,pid){var m=lemMon(mk),x=m&&m.v[pid];if(x&&x.z!=null)return x.z;if(m&&m.vz!=null){var s=0;L().prods.forEach(function(p){var y=m.v[p.id];if(y&&y.z!=null)s+=y.z});return s?null:null}return null}
+
+/* Ersetzt: Ziel, Ist und Ergebnis je Person (eine Zielquelle für die ganze App) */
+function metTarget(e,m,mk){
+  mk=mk||UI.salesMonth||monthKey();var o=(S.sales.targets[e.id]||{})[m.id];
+  if(o!=null)return {v:o,own:true};
+  if(isLemMet(m)){var z=lemProdZiel(mk,m.lem);return {v:z==null?0:Math.round(z*lemShareOf(e.id)),own:false,lem:true}}
+  var v=m.t;if(S.settings.prorate!==false&&e.hours>0&&e.hours<39)v=v*e.hours/39;
+  v=m.unit==='Punkte'?Math.round(v*10)/10:Math.round(v);if(m.t>0&&v<1&&m.unit==='Stück')v=1;
+  return {v:v,own:false};
+}
+function metAct(mk,e,m){
+  if(isLemMet(m))return dealSum(mk,{p:m.lem,emp:e.id});
+  var x=((S.sales.actual[mk]||{})[e.id]||{})[m.id];return x==null?null:x;
+}
+function personRes(e,mk){
+  var pace=monthPace(mk),rows=S.metrics.map(function(m){var t=metTarget(e,m,mk),a=metAct(mk,e,m);return {m:m,t:t,a:a,st:metState(a||0,t.v,pace)}});
+  var wt=rows.filter(function(r){return r.t.v>0});
+  var lr=rows.filter(function(r){return r.m.lem}),va=lr.reduce(function(s,r){return s+(r.a||0)},0),vt=lr.reduce(function(s,r){return s+r.t.v},0);
+  var avg=vt>0?Math.min(1.5,va/vt):(wt.length?wt.reduce(function(s,r){return s+Math.min(1.2,(r.a||0)/r.t.v)},0)/wt.length:0);
+  return {rows:rows,pace:pace,entered:rows.some(function(r){return r.a!=null}),avg:avg,vp:{a:va,t:vt},st:metState(avg,1,pace)};
+}
+function teamRes(mk){
+  var pace=monthPace(mk);
+  return S.metrics.map(function(m){var a=0,t=0;S.employees.forEach(function(e){a+=metAct(mk,e,m)||0;t+=metTarget(e,m,mk).v});return {m:m,a:a,t:t,st:metState(a,t,pace)}});
+}
+function hasSales(mk){var x=S.sales.actual[mk];return (!!x&&Object.keys(x).some(function(id){return Object.keys(x[id]||{}).length>0}))||S.deals.some(function(d){return d.d.slice(0,7)===mk})}
+function fmtV(m,v){v=m.unit==='VP'&&Math.abs(v||0)>=10?Math.round(v||0):Math.round((v||0)*10)/10;return num(v)+(m.unit==='Stück'?'':' '+m.unit)}
+function goalActual(g){
+  if(g.metric&&String(g.metric).indexOf('__lp:')===0){var r=lemCalc(monthKey(),'m').v.prods.filter(function(x){return x.p.id===g.metric.slice(5)})[0];return r&&r.i!=null?Math.round(r.i):0}
+  var m=g.metric&&metric(g.metric);if(!m)return g.actual;
+  var mk=monthKey(),a=0;S.employees.forEach(function(e){a+=metAct(mk,e,m)||0});return a;
+}
+function goalTarget(g){if(g.metric&&String(g.metric).indexOf('__lp:')===0){var z=lemProdZiel(monthKey(),g.metric.slice(5));return z==null?g.target:z}return g.target}
+function goalPct(g){var t=goalTarget(g);return t>0?goalActual(g)/t:0}
+function salesInc(empId,mid){
+  var m=metric(mid);if(m&&m.lem){openDealForm({emp:empId,p:m.lem});return}
+  var mk=monthKey(),e=emp(empId);if(!e||!m)return;
+  if(!S.sales.actual[mk])S.sales.actual[mk]={};if(!S.sales.actual[mk][e.id])S.sales.actual[mk][e.id]={};
+  var v=(S.sales.actual[mk][e.id][m.id]||0)+1;S.sales.actual[mk][e.id][m.id]=v;
+  save();rerender();toast(e.name.split(' ')[0]+': '+m.n+' '+fmtV(m,v)+' von '+fmtV(m,metTarget(e,m).v));
+}
+function teamMetricSum(mk,mid){
+  if(mid&&String(mid).indexOf('__cnt:')===0)return dealCount(mk,{p:mid.slice(6)})||null;
+  if(mid&&String(mid).indexOf('__')===0)return lemRegionVal(mk,mid);
+  var m=metric(mid);if(m&&m.lem)return dealSum(mk,{p:m.lem});
+  var a=S.sales.actual[mk];if(!a)return null;var s=0,any=false;Object.keys(a).forEach(function(e){var v=a[e]&&a[e][mid];if(typeof v==='number'){s+=v;any=true}});return any?s:null;
+}
+
+/* ---------- Abschluss erfassen ---------- */
+function dealWho(id){return id==='me'?'Ich (Filialleitung)':emp(id)?emp(id).name:'Nicht zugeordnet'}
+function catOptions(sel,p){
+  var gs=[];LEM_CAT.forEach(function(c){if(!catVisible(c)||(p&&c.p!==p))return;if(gs.indexOf(c.g)<0)gs.push(c.g)});
+  return gs.map(function(g){return '<optgroup label="'+esc(g)+'">'+LEM_CAT.filter(function(c){return c.g===g&&catVisible(c)&&(!p||c.p===p)}).map(function(c){return '<option value="'+c.id+'"'+(c.id===sel?' selected':'')+'>'+esc(c.n)+(c.u==='stk'?' · '+num(c.id==='bf_olb'?lemBfVp():c.vp)+' VP':'')+'</option>'}).join('')+'</optgroup>'}).join('');
+}
+function dIn(name,val,lbl,ph,cls,extra){return '<label class="fld '+(cls||'')+'"><span>'+esc(lbl)+'</span><input name="'+name+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':esc(String(val).replace('.',',')))+'" placeholder="'+esc(ph||'')+'" data-input="deal-calc" '+(extra||'')+'></label>'}
+function dSel(name,opts,val,lbl,cls){return '<label class="fld '+(cls||'')+'"><span>'+esc(lbl)+'</span><select name="'+name+'" data-change="deal-calc">'+opts.map(function(o){return '<option value="'+esc(o[0])+'"'+(String(o[0])===String(val)?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'}
+function dChk(name,on,lbl,cls){return '<label class="fld sw-l '+(cls||'full')+'"><span class="sw-t"><b>'+esc(lbl)+'</b></span><input type="checkbox" class="sw" name="'+name+'" value="1"'+(on?' checked':'')+' data-change="deal-calc"></label>'}
+function openDealForm(pre,id){
+  var d=id?byId(S.deals,id):null;pre=pre||{};
+  var it=pre.it||(d&&d.it)||(pre.p?LEM_CAT.filter(function(c){return c.p===pre.p&&catVisible(c)})[0].id:'gk_std');
+  d=d?Object.assign({},d):{d:pre.d||todayISO(),emp:pre.emp!=null?pre.emp:'',it:it,a:null,pgf:1,ch:'fil',conv:'',zw:'m',ref:pre.ref||'',note:''};
+  if(pre.it)d.it=pre.it;UI.dealDraft=d;UI.dealId=id||'';renderDealForm();
+}
+function renderDealForm(){
+  var d=UI.dealDraft,c=cat(d.it)||cat('gk_std'),id=UI.dealId;
+  var who=[['','Nicht zugeordnet'],['me','Ich (Filialleitung)']].concat(S.employees.map(function(e){return [e.id,e.name]}));
+  var f='';
+  if(c.u==='stk')f=dIn('a',d.a==null?1:d.a,'Anzahl','1','');
+  if(c.u==='zins')f=dIn('a',d.a,'Zinsen gesamt (€)','z. B. 1.850','')+dIn('pgf',d.pgf==null?1:d.pgf,'Preisgewichtungsfaktor','1,0 (0,2–1,825)','')+dIn('vol',d.vol,'Herauslage (€, für TK-Volumen)','optional','')+
+    (c.id==='ob_kr'?'':dSel('ch',LEM_CH.map(function(x){return [x[0],x[1]+(x[2]?'':' · 0 VP')]}),d.ch,'Kanal','full'))+
+    (c.id==='kr_lia'?'':dSel('conv',[['','keine Conversion']].concat(c.id==='kr_neu'||c.id==='ob_kr'?[['tke','Conversion TKE (zählt als Neukredit)']]:[]).concat(c.id==='kr_zus'?[['tko','Conversion TKO (+500 Bonus)'],['tke','Conversion TKE (zählt als Neukredit)']]:[]),d.conv,'Wachstum','full'))+
+    dChk('kons',d.kons,'Konsolidierung (zählt nicht)');
+  if(c.u==='beitrag')f=dIn('a',d.a,'Beitrag (€)','z. B. 29,90','')+dSel('zw',LEM_ZW.map(function(z){return [z[0],z[1]]}),d.zw,'Zahlweise','')+dIn('rec',d.rec,'Empfehlung aus dem System (€, gleiche Zahlweise)','optional','full')+
+    (c.rsv?dIn('rate',d.rate,'Monatliche Kreditrate (€)','Deckel 34 %','full'):'')+dChk('noBer',d.noBer,'Ohne Beratung (keine Punkte)')+dChk('kim',d.kim,'Kapitalbildend und KIM-Kreditablehnung in den letzten 3 Monaten')+
+    '<label class="fld full"><span>Storno ab Monat (optional)</span><input name="end" type="month" value="'+esc(d.end||'')+'" data-change="deal-calc"></label>';
+  if(c.u==='einmal')f=dIn('a',d.a,'Einmalbeitrag (€)','','')+dIn('lz',d.lz,'Laufzeit (Monate)','z. B. 60','')+dIn('rec',d.rec,'Empfehlung aus dem System (€)','optional','full')+dChk('noBer',d.noBer,'Ohne Beratung (keine Punkte)')+dChk('kim',d.kim,'Kapitalbildend und KIM-Kreditablehnung in den letzten 3 Monaten');
+  if(c.u==='tsd')f=dIn('a',d.a,'Volumen (€)','z. B. 25.000','full');
+  if(c.u==='vp')f=dIn('a',d.a,'Verkaufspunkte laut Reporting','','full');
+  if(c.u==='cmp')f='<label class="fld full"><span>Vergleichbarer Filialabschluss</span><select name="cmp" data-change="deal-calc">'+LEM_CAT.filter(function(x){return (x.p==='gk'||x.p==='kk')&&x.vp>0}).map(function(x){return '<option value="'+x.id+'"'+(x.id===d.cmp?' selected':'')+'>'+esc(x.g+': '+x.n)+' · '+x.vp+' VP</option>'}).join('')+'</select></label>'+dIn('n',d.n==null?1:d.n,'Anzahl','1','');
+  var vp=dealPreview();
+  openModal('<div class="m-head"><div><h3>'+(id?'Abschluss bearbeiten':'Abschluss erfassen')+'</h3><span class="muted small">Verkaufspunkte nach LEM 2026</span></div>'+X()+'</div><form class="form dealf" data-form="deal">'+
+    '<label class="fld full"><span>Produkt</span><select name="it" data-change="deal-it">'+catOptions(d.it)+'</select></label>'+(c.d?'<p class="full muted small" style="margin-top:-6px">'+esc(c.d)+'</p>':'')+
+    dSel('emp',who,d.emp,'Wer','')+'<label class="fld"><span>Datum</span><input name="d" type="date" value="'+esc(d.d)+'" required data-change="deal-calc"></label>'+f+
+    '<label class="fld"><span>Interne Referenz</span><input name="ref" value="'+esc(d.ref||'')+'" maxlength="30" placeholder="z. B. A-112" autocomplete="off"></label><label class="fld"><span>Notiz</span><input name="note" value="'+esc(d.note||'')+'" maxlength="200" autocomplete="off"></label>'+
+    '<p class="full muted small">Keine Kundennamen oder Kundennummern erfassen.</p>'+
+    '<div class="full deal-vp" id="dealVp">'+vp+'</div>'+
+    formFoot((id?'<button type="button" class="btn danger left" data-act="deal-del" data-id="'+esc(id)+'" aria-label="Löschen">'+ic('trash',15)+'</button>':'')+'<button type="button" class="btn" data-act="modal-close">Abbrechen</button>')+'</form>','sm');
+}
+function dealFromForm(){
+  var f=$('#modal-root form[data-form=deal]');if(!f)return UI.dealDraft;var d=Object.assign({},UI.dealDraft),g=function(n){var el=f.elements[n];return el?el.value:undefined},b=function(n){var el=f.elements[n];return el?el.checked:false};
+  ['a','pgf','vol','rec','rate','lz','n'].forEach(function(k){var v=g(k);if(v!==undefined)d[k]=lemN(v)});
+  ['emp','ch','conv','zw','cmp','ref','note','it','end'].forEach(function(k){var v=g(k);if(v!==undefined)d[k]=v});
+  var dv=g('d');if(dv)d.d=dv;['kons','noBer','kim'].forEach(function(k){if(f.elements[k])d[k]=b(k)});
+  return d;
+}
+function dealPreview(){
+  var d=UI.dealDraft,c=cat(d.it);if(!c)return '';
+  if(c.u==='beitrag'||c.u==='einmal'){var x=lemVerMonthly(d,c),y=+d.d.slice(0,4),months=12-(+d.d.slice(5,7))+1;
+    return '<b>'+dec(x.vp,2)+' VP je Monat</b><span>'+(x.f===0?'Keine Punkte (Empfehlung überschritten, ohne Beratung oder KIM-Ablehnung)':x.f<1?'75 %, weil unter der Empfehlung':'Beitrag im Rahmen der Empfehlung')+(c.rsv&&d.rate>0&&(d.a||0)/lemZwF(d.zw)>0.34*d.rate?' · auf 34 % der Rate gedeckelt':'')+' · bis Dezember '+y+' ca. '+num(Math.round(x.vp*Math.min(months,c.u==='einmal'&&d.lz>0?d.lz:99)))+' VP</span>'}
+  var v=dealVP(d,d.d.slice(0,7));
+  return '<b>'+num(Math.round(v))+' VP</b><span>'+esc(c.g)+' · zählt im '+esc(monthLabel(d.d.slice(0,7)))+(d.conv?' · Conversion '+d.conv.toUpperCase()+' für Wachstum':'')+'</span>';
+}
+function saveDeal(){
+  var d=dealFromForm();if(!validISO(d.d)){toast('Bitte ein Datum wählen','err');return}
+  var c=cat(d.it);if(!c){toast('Bitte ein Produkt wählen','err');return}
+  if((c.u==='zins'||c.u==='beitrag'||c.u==='einmal'||c.u==='tsd')&&!(d.a>0)){toast('Bitte den Betrag eintragen','err');return}
+  if(c.u==='einmal'&&!(d.lz>0)){toast('Bitte die Laufzeit in Monaten eintragen','err');return}
+  if(c.u==='zins'&&(d.pgf==null||d.pgf<0.2||d.pgf>1.825)){toast('Der Preisgewichtungsfaktor liegt zwischen 0,2 und 1,825','err');return}
+  d=normDeals([d])[0];
+  if(UI.dealId){var o=byId(S.deals,UI.dealId);if(o)Object.assign(o,d,{id:o.id})}else{d.id=uid();S.deals.push(d)}
+  UI.dealDraft=null;save();closeModal();UI.sheet=false;rerender();toast(c.n.split(' (')[0]+': '+(c.u==='beitrag'||c.u==='einmal'?dec(dealOnce(d),2)+' VP je Monat':num(Math.round(dealOnce(d)))+' VP')+' · '+dealWho(d.emp).split(' ')[0]);
+}
+function openDealList(mk,empId){
+  mk=mk||UI.salesMonth||monthKey();var l=S.deals.filter(function(d){return d.d.slice(0,7)===mk&&(empId==null||d.emp===empId)}).sort(function(a,b){return b.d.localeCompare(a.d)});
+  var rat=S.deals.filter(function(d){var c=cat(d.it);return (c.u==='beitrag'||c.u==='einmal')&&d.d.slice(0,7)<mk&&dealVP(d,mk)>0&&(empId==null||d.emp===empId)});
+  var sum=l.concat(rat).reduce(function(a,d){return a+dealVP(d,mk)},0);
+  sheet('Abschlüsse · '+esc(monthLabel(mk)),'<p class="muted small" style="margin-bottom:10px">'+(empId!=null?esc(dealWho(empId))+' · ':'')+num(Math.round(sum))+' VP in diesem Monat'+(rat.length?' · davon '+num(Math.round(rat.reduce(function(a,d){return a+dealVP(d,mk)},0)))+' VP ratierlich aus früheren Versicherungen':'')+'</p>'+
+    (l.length?lgroup('',l.slice(0,80).map(function(d){var c=cat(d.it);return li({t:esc(c.n),s:esc(fmt(d.d,{day:'2-digit',month:'2-digit'})+' · '+dealWho(d.emp)+(d.ref?' · '+d.ref:'')),v:'<b>'+(c.u==='beitrag'||c.u==='einmal'?dec(dealVP(d,mk),2):num(Math.round(dealVP(d,mk))))+'</b> VP',act:'deal-open',id:d.id})})):'<p class="muted">Noch keine Abschlüsse in diesem Monat.</p>'),
+    '<div class="m-foot"><button class="btn" data-act="modal-close">Schließen</button><button class="btn primary" data-act="deal-new" data-emp="'+(empId||'')+'">'+ic('plus',15)+' Abschluss</button></div>');
+}
+function openLemCatalog(){
+  var gs=[];LEM_CAT.forEach(function(c){if(gs.indexOf(c.g)<0)gs.push(c.g)});
+  sheet('Verkaufspunkte-Katalog',gs.map(function(g){return '<h6 class="ml-h">'+esc(g)+'</h6><table class="lem-t"><tbody>'+LEM_CAT.filter(function(c){return c.g===g}).map(function(c){var v=c.u==='stk'?num(c.id==='bf_olb'?lemBfVp():c.vp)+' VP':c.u==='zins'?(c.f?'75 %':'Formel'):c.u==='tsd'?num(c.vp)+' VP / 1.000 €':c.u==='beitrag'||c.u==='einmal'?'1 VP / 1 € mtl.':c.u==='cmp'?'100 %':'Reporting';return '<tr'+(catVisible(c)?'':' class="muted"')+'><td>'+esc(c.n)+(c.d?'<small class="muted" style="display:block">'+esc(c.d)+'</small>':'')+'</td><td>'+v+'</td></tr>'}).join('')+'</tbody></table>'}).join('')+
+    '<h6 class="ml-h">Kredit-Wertung</h6><p class="muted small">Es zählen Filial- und BzH-Kredite, keine Konsolidierungen. Filial-Telefonkredite über Direct Sales 100 %. Überleitung an Online: keine Punkte. BzH- oder LbP-Kredit nach KLS-Überleitung: 75 % (Ausnahme: stark verflochtene Kunden direkt bei LbP). Zusatzkredite nur mit dem neuen Anteil. 500 Bonus je Neukredit, TKE-Conversions zählen als Neukredit, TKO-Conversions erhalten den Bonus ebenfalls.</p>'+
+    '<h6 class="ml-h">Versicherungen</h6><p class="muted small">Punkte auf die Prämie je Zahlweise, ratierlich jeden Monat. Stand-alone: Punkte für Empfehlungen aus dem System; über der Empfehlung keine Punkte, darunter 75 %. Ohne Beratung im 1. und 2. Jahr keine Punkte, ab dem 3. Jahr auf die tatsächliche Prämie. Kredit-RSV höchstens 34 % der Monatsrate, fließt nicht in die Bestandskomponente. Keine Punkte für kapitalbildende Versicherungen nach KIM-Kreditablehnung (3 Monate).</p>'+
+    '<h6 class="ml-h">Baufinanzierung</h6><p class="muted small">Vor der Umstellung über Planet Home (Punkte wie 2025). Nach der Umstellung nur noch Überleitung an OLB über die Baufi-Hubs, gebucht von qualifizierten Beratern: Erprobungsphase 750, Roll-Out 1.000 Punkte je gebuchtem Kredit für die überleitende Filiale. Einstellung unter ⋯ → Zielverteilung.</p>',
+    '<div class="m-foot"><button class="btn primary" data-act="modal-close">Fertig</button></div>');
+}
+/* Zielverteilung, Baufi-Phase, Online-Banking-Ziel */
+function openLemShare(){
+  var c=lemCfg(),ppl=[{id:'me',n:'Ich (Filialleitung)'}].concat(S.employees.map(function(e){return {id:e.id,n:e.name,h:e.hours}}));
+  sheet('Zielverteilung','<form class="form" data-form="lem-share"><p class="full muted small">Das Filialziel je Produkt wird nach diesen Anteilen auf das Team verteilt. Standard: Wochenstunden ÷ 39. Leer = Standard, 0 = kein persönliches Verkaufsziel.</p>'+
+    ppl.map(function(p){var s=(L().share||{})[p.id];return '<div class="full lem-sh"><span><b>'+esc(p.n)+'</b><small>'+(p.id==='me'?'Standard 0':'Standard '+dec((p.h||39)/39,2))+' · aktuell '+Math.round(lemShareOf(p.id)*100)+' %</small></span><input name="s_'+esc(p.id)+'" type="text" inputmode="decimal" value="'+(s==null?'':String(s).replace('.',','))+'" placeholder="'+(p.id==='me'?'0':dec((p.h||39)/39,2))+'" aria-label="Anteil '+esc(p.n)+'"></div>'}).join('')+
+    '<h6 class="full ml-h">Baufinanzierung</h6>'+SEL('Stand im Bereich','bf',[['ph','Vor Umstellung (Planet Home)'],['olb1','OLB Erprobungsphase (750 je Kredit, ohne Ziele)'],['olb2','OLB Roll-Out (1.000 je Kredit, mit Zielen)']],c.bf,'full')+
+    '<h6 class="full ml-h">Online Banking (TBOL)</h6>'+F('Ziel für 100 % (% der maximalen Punkte)','tbol',String(c.tbol).replace('.',','),'text','inputmode="decimal"')+F('Bankweiter Mittelwert (Sicherheitsschirm, %)','tbolBank',c.tbolBank==null?'':String(c.tbolBank).replace('.',','),'text','inputmode="decimal" placeholder="falls bekannt"')+
+    '<p class="full muted small">Liegt der bankweite Mittelwert unter dem Ziel, gilt der Mittelwert als Ziel (Beispiel: Mittelwert 20 % → Ziel 20 %; Mittelwert 35 % → Ziel bleibt 26 %).</p>'+formFoot()+'</form>');
+}
+function saveLemShare(f,d){
+  var s={};[{id:'me'}].concat(S.employees).forEach(function(p){var v=lemN(d.get('s_'+p.id));if(v!=null&&v>=0&&v<=5)s[p.id]=v});L().share=s;
+  var c=lemCfg();c.bf=['ph','olb1','olb2'].indexOf(d.get('bf'))>-1?d.get('bf'):'ph';var t=lemN(d.get('tbol'));c.tbol=t!=null&&t>0&&t<=100?t:26;var tb=lemN(d.get('tbolBank'));c.tbolBank=tb!=null&&tb>0&&tb<=100?tb:null;
+  save();closeModal();rerender();toast('Zielverteilung gespeichert');
+}
+function lemTbolTarget(){var c=lemCfg();return c.tbolBank!=null&&c.tbolBank<c.tbol?c.tbolBank:c.tbol}
+
+/* ---------- Migration: LEM-Kennzahlen, alte Doppelungen auflösen ---------- */
+function migrateLemMetrics(b){
+  if(!Array.isArray(b.metrics))b.metrics=[];
+  var seen={};b.metrics=b.metrics.filter(function(m){if(!m.lem)return true;if(seen[m.lem])return false;seen[m.lem]=1;return true});
+  var have={};b.metrics.forEach(function(m){if(m.lem)have[m.lem]=1});
+  var add=lemMetrics().filter(function(m){return !have[m.lem]});
+  if(add.length)b.metrics=add.concat(b.metrics);
+  var dup={m_kre:'kre',m_kon:'gk',m_ver:'ver'};
+  if(!b.lemMig){
+    b.metrics=b.metrics.filter(function(m){return !dup[m.id]});
+    (b.goals||[]).forEach(function(g){if(dup[g.metric]){g.metric='__lp:'+dup[g.metric];g.unit='VP'}});
+    if(b.region&&b.region.kpis)b.region.kpis.forEach(function(k){if(dup[k.metric])k.metric='__cnt:'+dup[k.metric]});
+    b.lemMig=1;
+  }
+}
+function registerVp(){
+  Object.assign(ACTIONS,{
+    'deal-new':function(t){closeModal();openDealForm({emp:t&&t.dataset?t.dataset.emp||'':'',p:t&&t.dataset?t.dataset.p:''})},
+    'deal-open':function(t){openDealForm(null,t.dataset.id)},
+    'deal-del':function(t){var id=t.dataset.id;confirmBox('Abschluss löschen?','Die Verkaufspunkte werden wieder abgezogen.','Löschen',function(){S.deals=S.deals.filter(function(x){return x.id!==id});save();closeModal();rerender();toast('Abschluss gelöscht')})},
+    'deal-list':function(t){openDealList(UI.salesMonth||monthKey(),t&&t.dataset&&t.dataset.emp!=null&&t.dataset.emp!==''?t.dataset.emp:null)},
+    'lem-cat':openLemCatalog,'lem-share':openLemShare
+  });
+  Object.assign(CHANGES,{
+    'deal-it':function(v){UI.dealDraft=dealFromForm();UI.dealDraft.it=v;var c=cat(v);if(c&&c.u==='stk'&&UI.dealDraft.a==null)UI.dealDraft.a=1;keepScroll(renderDealForm)},
+    'deal-calc':function(){UI.dealDraft=dealFromForm();var el=$('#dealVp');if(el)el.innerHTML=dealPreview()}
+  });
+  INPUTS['deal-calc']=function(){UI.dealDraft=dealFromForm();var el=$('#dealVp');if(el)el.innerHTML=dealPreview()};
+  Object.assign(FORMS,{deal:saveDeal,'lem-share':saveLemShare});
+  QA_ALL.sales=['chart','Abschluss (VP)'];
+}
+/* ---------- Datenabgleich: eine Zielquelle, Abweichungen sichtbar machen ---------- */
+function lemCheck(mk){
+  var o=[],m=lemMon(mk),hasDeals=S.deals.some(function(d){return d.d.slice(0,7)===mk});
+  if(hasDeals&&(!m||!L().prods.some(function(p){return m.v[p.id]&&m.v[p.id].z!=null})))o.push({c:'#c92a3a',t:'LEM-Ziele für '+monthLabel(mk).split(' ')[0]+' fehlen',s:'Abschlüsse sind erfasst, aber ohne Filialziel haben Team und Personen kein Verkaufsziel.',act:'lem-edit',v:'v'});
+  if(m)L().prods.forEach(function(p){var x=m.v[p.id];if(!x||x.i==null)return;var a=dealSum(mk,{p:p.id});if(a!=null&&Math.abs(a-x.i)>=Math.max(50,x.i*.05))o.push({c:'#d9780a',t:p.n+': Reporting '+num(Math.round(x.i))+' VP, App '+num(Math.round(a))+' VP',s:'Abweichung '+(a>x.i?'+':'')+num(Math.round(a-x.i))+' VP. Für die LEM zählt das Reporting; fehlende oder doppelte Abschlüsse prüfen.',act:'deal-list'})});
+  var un=S.deals.filter(function(d){return d.d.slice(0,7)===mk&&!d.emp}).length;if(un)o.push({c:'#7b8794',t:un+' '+plural(un,'Abschluss','Abschlüsse')+' ohne Person',s:'Zählen für die Filiale, aber für niemanden im Team.',act:'deal-list'});
+  if(S.employees.length&&lemShareSum()<=0)o.push({c:'#c92a3a',t:'Zielverteilung ergibt 0',s:'Niemand hat einen Anteil am Filialziel.',act:'lem-share'});
+  var tot=0;S.employees.forEach(function(e){tot+=lemShareOf(e.id)});var me=lemShareOf('me');if(me>0)o.push({c:'#1c7ed6',t:'Du trägst '+Math.round(me*100)+' % des Filialziels',s:'Das Teamziel ist entsprechend kleiner.',act:'lem-share'});
+  return o;
+}
+function lemCheckCard(mk){var l=lemCheck(mk);if(!l.length)return '';
+  return '<section class="card glass rise s12"><div class="card-h"><div><h2>Datenabgleich</h2><span class="sub">Ziele und Ist-Werte aus einer Quelle · '+esc(monthLabel(mk))+'</span></div></div>'+l.map(function(x){return '<div class="row click hint" data-act="'+x.act+'"'+(x.v?' data-v="'+x.v+'"':'')+' tabindex="0"><div class="badge" style="--c-rgb:'+rgbOf(x.c)+'">'+ic('alert',16)+'</div><div class="grow"><b>'+esc(x.t)+'</b><span class="muted small">'+esc(x.s)+'</span></div>'+ic('right',15)+'</div>'}).join('')+'</section>'}
 
 /* ============ Formulare (Modals) ============ */
 function X(){return '<button type="button" class="btn icon" data-act="modal-close" aria-label="Schließen">'+ic('x')+'</button>'}
@@ -6326,7 +6643,7 @@ function openGoalForm(id){
   var g=id?S.goals.filter(function(x){return x.id===id})[0]:null;g=g||{name:'',unit:'Stück',target:0,actual:0};
   openModal('<div class="m-head"><h3>'+(id?'Ziel bearbeiten':'Neues Ziel')+'</h3>'+X()+'</div><form data-form="goal" class="form"><input type="hidden" name="id" value="'+esc(id||'')+'">'+
     F('Bezeichnung','name',g.name,'text','required','full')+F('Zielwert (Monat)','target',g.target,'number','min="0" step="any" required')+F('Aktueller Stand','actual',g.actual,'number','min="0" step="any" required')+
-    SEL('Aktueller Stand automatisch aus Ergebnissen','metric',[['','– manuell eintragen –']].concat(S.metrics.map(function(m){return [m.id,m.n+' (Summe des Teams, laufender Monat)']})),g.metric||'','full')+
+    SEL('Stand und Ziel automatisch','metric',[['','– manuell eintragen –']].concat(LEM_MET.map(function(x){return ['__lp:'+x[0],'LEM '+x[1]+' (VP, Ziel aus LEM)']})).concat(manualMets().map(function(m){return [m.id,m.n+' (Summe des Teams)']})),g.metric||'','full')+
     F('Einheit','unit',g.unit,'text','list="unitList"','full')+'<datalist id="unitList"><option value="Stück"><option value="€"><option value="Punkte"><option value="%"></datalist>'+
     '<div class="full m-foot" style="margin-top:6px">'+(id?'<button type="button" class="btn danger left" data-act="goal-del" data-id="'+esc(id)+'">'+ic('trash',15)+' Löschen</button>':'')+'<button type="button" class="btn" data-act="modal-close">Abbrechen</button><button class="btn primary" type="submit">'+ic('check',15)+' Speichern</button></div></form>');
 }
@@ -6562,7 +6879,7 @@ var FORMS={
   goal:function(f,d){
     var name=(d.get('name')||'').trim();if(!name){toast('Bitte eine Bezeichnung eingeben','err');return}
     var id=d.get('id'),g=id?byId(S.goals,id):null;
-    var o={name:name,unit:(d.get('unit')||'').trim(),target:clampNum(d.get('target'),0,0,1e9),actual:clampNum(d.get('actual'),0,0,1e9),metric:metric(d.get('metric')||'')?d.get('metric'):''};
+    var o={name:name,unit:(d.get('unit')||'').trim(),target:clampNum(d.get('target'),0,0,1e9),actual:clampNum(d.get('actual'),0,0,1e9),metric:metric(d.get('metric')||'')||/^__lp:(kre|gk|kk|ver|ob|fg|bf)$/.test(d.get('metric')||'')?d.get('metric'):''};if(/^__lp:/.test(o.metric))o.unit='VP';
     if(g)Object.assign(g,o);else{o.id=uid();S.goals.push(o)}
     save();closeModal();rerender();toast('Ziel gespeichert');
   }
@@ -6588,7 +6905,8 @@ var CHANGES={
 /* ============ Neue Module: Aktionen, Formulare, Eingaben ============ */
 function setMet(t,fn){var m=metric(t.dataset.id);if(m){fn(m);save()}}
 Object.assign(ACTIONS,{
-  'sales-new':function(t){openSalesForm(t.dataset.emp||'')},
+  'sales-new':function(t){openDealForm({emp:t.dataset.emp||''})},
+  'sales-manual':function(t){openSalesForm(t&&t.dataset?t.dataset.emp||'':'')},
   'sales-m':function(t){var k=+t.dataset.k;UI.salesMonth=k===0?monthKey():shiftMonth(UI.salesMonth||monthKey(),k);rerender()},
   'sales-inc':function(t){salesInc(t.dataset.emp,t.dataset.m)},
   'sales-targets':function(t){openSalesTargets(t.dataset.emp)},
@@ -6635,7 +6953,7 @@ Object.assign(CHANGES,{
   'staff-me':function(v,t){S.staff.me=!!t.checked;save();rerender()}
 });
 
-registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();
+registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();registerVp();
 /* ============ Events ============ */
 document.addEventListener('click',function(e){
   var el=e.target;if(!el||!el.closest)return;

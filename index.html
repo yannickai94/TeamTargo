@@ -1152,6 +1152,40 @@ p,.li-t small,.kv span{hyphens:auto;-webkit-hyphens:auto}
 form.quick[data-form=qtask]{display:flex;gap:10px;flex-wrap:nowrap;align-items:center}form.quick[data-form=qtask] input{flex:1;min-width:0}
 .wg-lh{min-height:34px}
 .wg-x{width:32px;height:32px;top:-10px;left:-10px}
+/* ===== LEM 2026 ===== */
+.lem-tb{flex-wrap:wrap;gap:10px}.lem-tb .mnav{margin-left:auto}
+.lem-hero{padding:18px 18px 16px}
+.lh-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.lh-top small{display:block;font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.lh-v{display:block;font-size:46px;font-weight:800;letter-spacing:-.04em;line-height:1.05;margin:2px 0}.lh-v span{font-size:20px;color:var(--muted);font-weight:700;letter-spacing:0}
+.lh-stack{position:relative;display:flex;height:14px;border-radius:8px;background:rgba(127,127,127,.14);overflow:visible;margin:14px 0 10px}
+.lh-stack i{display:block;height:100%}.lh-stack i:first-child{border-radius:8px 0 0 8px}
+.lh-stack b,.lem-bar b{position:absolute;top:-4px;bottom:-4px;width:2.5px;border-radius:2px;background:var(--text);opacity:.75;transform:translateX(-1px)}
+.lh-leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px}.lh-leg span{display:inline-flex;align-items:center;gap:6px}.lh-leg i{width:10px;height:10px;border-radius:3px}.lh-leg small{color:var(--muted)}
+.lem-p{cursor:pointer}
+.lp-h{display:flex;align-items:center;gap:12px;margin-bottom:10px}.lp-h h2{font-size:19px}.lp-h .grow{min-width:0}.lp-h small{display:block;font-size:12.5px}
+.lp-ic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c)}
+.lp-v{font-size:28px;font-weight:800;letter-spacing:-.03em;flex:none}.lp-v span{font-size:15px;color:var(--muted);font-weight:700}
+.lem-bar{position:relative;height:10px;border-radius:6px;background:rgba(127,127,127,.14);margin:0 0 8px}.lem-bar i{display:block;height:100%;border-radius:6px;transition:width .6s}
+.lp-s{margin:4px 0 6px}
+.lem-r{display:grid;grid-template-columns:minmax(0,1fr) 72px 54px;align-items:center;gap:10px;padding:8px 0;border-top:.5px solid var(--line)}
+.lr-n{display:flex;flex-direction:column;min-width:0}.lr-n b{font-size:14.5px;font-weight:650}.lr-n small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lem-r em{font-style:normal;font-weight:750;text-align:right;font-variant-numeric:tabular-nums}.lem-r em small{color:var(--muted);font-weight:600}
+.lev-g{flex:none;min-width:44px;height:30px;padding:0 8px;border-radius:10px;display:grid;place-items:center;font-weight:800;background:rgba(31,157,85,.15);color:var(--good)}
+.lemf .lem-in{display:grid;grid-template-columns:minmax(0,1fr) 84px 84px;gap:8px;align-items:center;padding:8px 0;border-bottom:.5px solid var(--line)}
+.lemf .lem-in.one{grid-template-columns:minmax(0,1fr) 120px}
+.lemf .lem-in>span:first-child{display:flex;flex-direction:column;min-width:0}.lemf .lem-in small{font-size:12px;color:var(--muted);line-height:1.3}
+.lemf .lem-in input{width:100%;min-width:0;text-align:right;font-variant-numeric:tabular-nums;padding:10px}
+.lemf .lem-in.tot{border-bottom:1px solid var(--line);margin-bottom:4px}
+.lem-ih{display:grid;grid-template-columns:minmax(0,1fr) 84px 84px;gap:8px;font-size:12px;font-weight:700;color:var(--muted);text-align:right;padding-top:6px}
+.lemf .m-foot{grid-column:auto}
+.lem-pp{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:10px;align-items:end}
+.lem-t{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0}.lem-t th,.lem-t td{padding:6px 8px;text-align:left;border-bottom:.5px solid var(--line)}.lem-t th{color:var(--muted);font-size:12px;font-weight:700}.lem-t td:last-child,.lem-t th:last-child{text-align:right}
+.lem-vp .l span:first-child{display:inline-flex;align-items:center;gap:6px;font-weight:650}
+.kg-h.me b{color:var(--accent)}
+@media (max-width:900px){.lem-tb .mnav{margin-left:0}.lh-v{font-size:42px}}
+.lem-tb .mnav b{white-space:nowrap;min-width:84px;text-align:center}.lem-tb{flex-wrap:nowrap}.lem-tb .seg{flex:none}
+.lem-tb{flex-wrap:wrap!important}.lem-tb .mnav{margin-left:auto!important}
 
 </style>
 </head>
@@ -1745,7 +1779,7 @@ var DEF_ROUTINES=[
   {id:'r3',t:'Wochenplanung und Besetzung prüfen',f:'w'},{id:'r4',t:'Offene Überleitungen nachfassen',f:'w'},{id:'r5',t:'Mindestens ein 1:1-Gespräch führen',f:'w'},
   {id:'r6',t:'Monatsergebnisse auswerten und Ziele setzen',f:'m'},{id:'r7',t:'Nachweise und Fristen prüfen',f:'m'},{id:'r8',t:'Backup von myTeamz sichern',f:'m'}
 ];
-var DEF_KPIS=[{id:'k_kred',n:'Kredit-Neugeschäft',unit:'T€',hi:true,metric:''},{id:'k_nk',n:'Neukunden',unit:'Stück',hi:true,metric:''},{id:'k_gk',n:'Girokonten',unit:'Stück',hi:true,metric:'m_kon'},{id:'k_vers',n:'Versicherungen',unit:'Stück',hi:true,metric:'m_ver'},{id:'k_ze',n:'Zielerreichung',unit:'%',hi:true,metric:''}];
+var DEF_KPIS=[{id:'k_kred',n:'Kredit-Neugeschäft',unit:'T€',hi:true,metric:''},{id:'k_nk',n:'Neukunden',unit:'Stück',hi:true,metric:''},{id:'k_gk',n:'Girokonten',unit:'Stück',hi:true,metric:'m_kon'},{id:'k_vers',n:'Versicherungen',unit:'Stück',hi:true,metric:'m_ver'},{id:'k_ze',n:'Zielerreichung',unit:'%',hi:true,metric:''},{id:'k_lem',n:'LEM-Punkte',unit:'Punkte',hi:true,metric:'__lem'}];
 function defReviews(st){return {cfg:{name:'TARGOBANK '+((st&&st.branch)||'Lünen'),query:'TARGOBANK Münsterstraße 23, 44534 Lünen',placeId:'',url:''},snaps:[],list:[]}}
 function defRegion(st){return {name:'Mein Gebiet',branches:[{id:'b_own',n:(st&&st.branch)||'Lünen',lead:(st&&st.manager)||'',phone:'',mail:'',own:true}],kpis:DEF_KPIS.map(function(k){return Object.assign({},k)}),data:{},imports:[]}}
 function str(v,n){return String(v==null?'':v).slice(0,n||200)}
@@ -1782,7 +1816,7 @@ function normRegion(r,st){
 function normExtra(b,o){
   b.todos=normTodos(o.todos);b.routines=normRoutines(o.routines);b.wv=normWv(o.wv);b.events=normEvents(o.events);
   b.media=normMediaMeta(o.media);b.appts=normAppts(o.appts);
-  b.kls=normKls(o.kls);b.settings.home=normHome(b.settings.home);
+  b.kls=normKls(o.kls);b.lem=normLem(o.lem);b.settings.home=normHome(b.settings.home);
   var hadH=!!(b.settings.hrs&&typeof b.settings.hrs==='object');b.settings.hrs=normHrs(b.settings.hrs);if(!hadH)syncStaffRange(b);b.reviews=normReviews(o.reviews,b.settings);b.region=normRegion(o.region,b.settings);
 }
 function seedExtra(st,by,td){
@@ -1825,7 +1859,7 @@ function seedExtra(st,by,td){
     {t:'Gebietsrunde Filialleitungen',date:W[3],start:'13:00',end:'16:30',cat:'gebiet',loc:'Dortmund'},
     {t:'Zahnarzt',date:W[4],start:'17:30',end:'18:30',cat:'privat'}
   ]);
-  seedKls(st,by);
+  seedKls(st,by);seedLem(st);
   st.reviews=defReviews(st.settings);
   st.reviews.snaps=[[-170,4.1,61],[-140,4.1,64],[-110,4.2,68],[-80,4.2,71],[-50,4.3,75],[-20,4.3,79]].map(function(x){return {date:td(x[0]),rating:x[1],count:x[2]}});
   st.reviews.list=[
@@ -1842,7 +1876,7 @@ function seedExtra(st,by,td){
   st.region.branches=st.region.branches.concat([
     ['Dortmund-City','Petra Lange'],['Unna','Michael Brandt'],['Kamen','Julia Hoffmann'],['Hamm','Stefan Krüger'],['Castrop-Rauxel','Anna Wolff'],['Dortmund-Hörde','Daniel Schulz']
   ].map(function(b,i){return {id:'b'+i,nr:['3104','3135','3121','3142','3118','3109'][i],n:b[0],lead:b[1],phone:'0231 000 2'+pad(i)+'0',mail:b[1].toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(' ','.')+'@example.de',own:false}}));
-  var base={b_own:[1850,34,52,21,96],b0:[3100,58,81,30,104],b1:[1620,29,47,18,88],b2:[1240,25,40,17,92],b3:[2050,38,55,24,99],b4:[1380,22,38,14,81],b5:[1710,31,49,20,94]};
+  var base={b_own:[1850,34,52,21,96,146],b0:[3100,58,81,30,104,171],b1:[1620,29,47,18,88,138],b2:[1240,25,40,17,92,129],b3:[2050,38,55,24,99,157],b4:[1380,22,38,14,81,118],b5:[1710,31,49,20,94,142]};
   [-4,-3,-2,-1].forEach(function(o){
     var m=shiftMonth(mk,o),f=1;st.region.data[m]={};
     Object.keys(base).forEach(function(bid){st.region.data[m][bid]={};st.region.kpis.forEach(function(k,i){
@@ -2144,6 +2178,7 @@ function attention(){
   extraAttention().forEach(function(i){items.push(i)});
   attentionExt().forEach(function(i){items.push(i)});
   klsAttention().forEach(function(i){items.push(i)});
+  lemAttention().forEach(function(i){items.push(i)});
   return items.sort(function(a,b){return b.sev-a.sev});
 }
 function viewDashboard(){
@@ -2942,6 +2977,7 @@ function openQuickAdd(){
 function quickAct(k,pid){
   closeModal();UI.sheet=false;
   if(k==='kls')openKlsImport(todayISO());
+  else if(k==='lem')ACTIONS['lem-add']();
   else if(k==='appt')openApptForm('',{emp:pid,cat:pid?'ma':''});
   else if(k==='todo')openTodoForm('',{due:todayISO()});
   else if(k==='wv')openWvForm('',{emp:pid});
@@ -3046,7 +3082,7 @@ function monthNav(mk,act){
 }
 function salesPersonCard(e,mk,i){
   var res=personRes(e,mk),cur=mk===monthKey();
-  return '<section class="card glass rise s6 spc click" data-act="sales-new" data-emp="'+esc(e.id)+'" data-lp="emp" data-id="'+esc(e.id)+'" style="--i:'+Math.min(i,10)+'"><div class="card-h"><div class="sp-who">'+avatar(e.name,'sm')+'<div style="min-width:0"><b>'+esc(e.name)+'</b><span class="muted small">'+esc(e.role)+'</span></div></div><div class="ch-r">'+(res.entered?chipC(pctTxt(res.avg),res.st.c):chipC('offen','#7b8794'))+ic('edit',16)+'</div></div>'+
+  return '<section class="card glass rise s6 spc click" data-act="sales-new" data-emp="'+esc(e.id)+'" data-lp="emp" data-id="'+esc(e.id)+'" style="--i:'+Math.min(i,10)+'"><div class="card-h"><div class="sp-who">'+avatar(e.name,'sm')+'<div style="min-width:0"><b>'+esc(e.name)+'</b><span class="muted small">'+esc(e.role)+'</span></div></div><div class="ch-r">'+(res.entered?chipC(pctTxt(res.avg),res.st.c):chipC('offen','#7b8794'))+ic('edit',16)+'</div></div>'+lemVpRow(e,mk)+
     (res.entered||cur?res.rows.map(function(r){return metRow(r,e,res.pace,false)}).join(''):'<p class="muted small">Für diesen Monat wurde noch nichts erfasst.</p>')+'</section>';
 }
 function viewSales(){
@@ -3070,7 +3106,7 @@ function tabSales(e){
   var rn=refsOf({emp:e.id,month:mk}).length,rt=S.settings.refTarget||0;
   var refRow2=rt>0?'<div class="prow"><div class="l"><span>Überleitungen (automatisch)</span><span class="muted">'+rn+' / '+rt+'</span></div><div class="bar-wrap"><div class="bar"><i class="'+(rn>=rt?'good':'')+'" data-w="'+Math.min(100,Math.round(rn/rt*100))+'"></i></div></div></div>':'';
   var main='<section class="card glass rise s7"><div class="card-h"><h2>Ergebnisse</h2>'+(res.entered?chipC(pctTxt(res.avg)+' · '+res.st.l,res.st.c):'')+'</div>'+monthNav(mk,'sales-m')+'<div style="height:10px"></div>'+
-    (res.entered||cur?res.rows.map(function(r){return metRow(r,e,pace,cur)}).join(''):'<p class="muted small">Für diesen Monat wurde noch nichts erfasst.</p>')+refRow2+
+    (res.entered||cur?res.rows.map(function(r){return metRow(r,e,pace,cur)}).join(''):'<p class="muted small">Für diesen Monat wurde noch nichts erfasst.</p>')+refRow2+lemVpRow(e,mk)+
     '<div class="btn-row" style="margin-top:14px"><button class="btn primary" data-act="sales-new" data-emp="'+esc(e.id)+'">'+ic('edit',15)+' Eintragen</button><button class="btn" data-act="sales-targets" data-emp="'+esc(e.id)+'">'+ic('target',15)+' Ziele anpassen</button></div></section>';
   var months=[];for(var k=-5;k<=0;k++)months.push(shiftMonth(monthKey(),k));
   var hist=months.map(function(m){var r=personRes(e,m);return {m:m,r:r}}).filter(function(x){return x.r.entered});
@@ -4083,7 +4119,7 @@ function regRank(mk,kid){
 function regAvg(mk,kid){var l=regRank(mk,kid);return l.length?l.reduce(function(a,x){return a+x.v},0)/l.length:null}
 function regFmt(k,v){if(v===null||v===undefined)return '–';var s=Math.abs(v)>=100||v%1===0?num(Math.round(v*10)/10):dec(v,1);return k.unit==='%'?s+' %':k.unit==='€'?s+' €':k.unit==='T€'?s+' T€':k.unit==='Punkte'?s+' P.':s}
 function ownRank(mk,kid){var o=regOwn(),l=regRank(mk,kid);for(var i=0;i<l.length;i++)if(l[i].b.id===o.id)return {rank:l[i].rank,of:l.length,v:l[i].v};return null}
-function teamMetricSum(mk,mid){var a=S.sales.actual[mk];if(!a)return null;var s=0,any=false;Object.keys(a).forEach(function(e){var v=a[e]&&a[e][mid];if(typeof v==='number'){s+=v;any=true}});return any?s:null}
+function teamMetricSum(mk,mid){if(mid&&String(mid).indexOf('__')===0)return lemRegionVal(mk,mid);var a=S.sales.actual[mk];if(!a)return null;var s=0,any=false;Object.keys(a).forEach(function(e){var v=a[e]&&a[e][mid];if(typeof v==='number'){s+=v;any=true}});return any?s:null}
 function regTrend(mk,kid){
   var k=regKpi(kid),ms=[];for(var i=5;i>=0;i--)ms.push(shiftMonth(mk,-i));
   var own=regOwn(),ov=ms.map(function(m){return regVal(m,own.id,kid)}),av=ms.map(function(m){return regAvg(m,kid)});
@@ -4181,7 +4217,7 @@ function impFromText(text,src){
   var map={},cnt={},nc=0;
   rows.forEach(function(r){if(r.bid)cnt[r.nums.length]=(cnt[r.nums.length]||0)+1});
   Object.keys(cnt).forEach(function(k){if(!nc||cnt[k]>cnt[nc])nc=+k});
-  if(header&&(header.length===R.kpis.length||nc!==R.kpis.length)){R.kpis.forEach(function(k){map[k.id]=-1});header.forEach(function(h,i){map[h.k.id]=i})}
+  if(header&&(header.length===R.kpis.length||header.length===nc)){R.kpis.forEach(function(k){map[k.id]=-1});header.forEach(function(h,i){map[h.k.id]=i})}
   else{header=null;R.kpis.forEach(function(k,i){map[k.id]=i})}
   rows.forEach(function(r){r.vals={};R.kpis.forEach(function(k){var c=map[k.id];r.vals[k.id]=c>-1&&r.nums[c]!==undefined?r.nums[c]:null})});
   if(src!=='ocr')impPhotoFree();
@@ -4508,13 +4544,13 @@ function layoutDay(list){
   return items;
 }
 function viewCal(){
-  var sel=calSel(),list=apptsOn(sel),ex=calExtras(sel),d=parse(sel);
+  var sel=calSel(),list=apptsOn(sel).concat(klsMeAppts(sel)),ex=calExtras(sel),d=parse(sel);
   var sp=hrsSpan(wdi(sel)),h0=sp?Math.min(Math.floor(sp.a/60)-1,8):8,h1=sp?Math.max(Math.ceil(sp.b/60)+1,18):18;
   list.forEach(function(a){if(!a.all){h0=Math.min(h0,Math.floor(toMin(a.start)/60));h1=Math.max(h1,Math.ceil(toMin(apptEnd(a))/60))}});
   h0=Math.max(0,h0);h1=Math.min(24,h1);
   var HH=56,slots='';for(var h=h0;h<h1;h++)slots+='<div class="cg-s" data-act="cal-new" data-d="'+sel+'" data-h="'+h+'" data-lp="slot"><span>'+pad(h)+':00</span></div>';
   var blocks=layoutDay(list).map(function(it){var a=it.a,c=calCat(a.cat),top=(it.s-h0*60)/60*HH,ht=Math.max(26,(it.e-it.s)/60*HH-3),w=100/it.n,e=emp(a.empId);
-    return '<button type="button" class="cg-b'+(ht<44?' sm':'')+'" style="top:'+top.toFixed(1)+'px;height:'+ht.toFixed(1)+'px;left:calc(54px + (100% - 58px) * '+(it.col*w/100).toFixed(4)+');width:calc((100% - 58px) * '+(w/100).toFixed(4)+' - 3px);--c:'+c[2]+'" data-act="appt-open" data-id="'+esc(a.id)+'" data-lp="appt"><b>'+esc(a.t)+'</b><small>'+a.start+'–'+apptEnd(a)+(a.loc?' · '+esc(a.loc):'')+(e?' · '+esc(e.name.split(' ')[0]):'')+'</small></button>'}).join('');
+    return '<button type="button" class="cg-b'+(ht<44?' sm':'')+'" style="top:'+top.toFixed(1)+'px;height:'+ht.toFixed(1)+'px;left:calc(54px + (100% - 58px) * '+(it.col*w/100).toFixed(4)+');width:calc((100% - 58px) * '+(w/100).toFixed(4)+' - 3px);--c:'+c[2]+'" '+(a.kls?'data-act="kls-open" data-v="'+sel+'"':'data-act="appt-open" data-id="'+esc(a.id)+'" data-lp="appt"')+'><b>'+(a.kls?ic('scan',12)+' ':'')+esc(a.t)+'</b><small>'+a.start+'–'+apptEnd(a)+(a.loc?' · '+esc(a.loc):'')+(e?' · '+esc(e.name.split(' ')[0]):'')+'</small></button>'}).join('');
   var now='';if(sel===todayISO()){var n=new Date(),nm=n.getHours()*60+n.getMinutes();if(nm>=h0*60&&nm<=h1*60)now='<div class="cg-now" style="top:'+((nm-h0*60)/60*HH).toFixed(1)+'px"></div>'}
   var allDay=list.filter(function(a){return a.all}).map(function(a){var c=calCat(a.cat);return '<button type="button" class="cx" style="--c:'+c[2]+'" data-act="appt-open" data-id="'+esc(a.id)+'" data-lp="appt">'+ic('calendar',13)+'<span>'+esc(a.t)+'</span></button>'}).join('')+
     ex.map(function(x){return '<button type="button" class="cx" style="--c:'+x.c+'"'+(x.act?' data-act="'+x.act+'"':'')+(x.id?' data-id="'+esc(x.id)+'"':'')+(x.lp?' data-lp="'+x.lp+'"':'')+'>'+ic(x.icon,13)+'<span>'+esc(x.t)+'</span></button>'}).join('');
@@ -4601,7 +4637,7 @@ function calMore(){openActions({title:'Kalender',sub:S.appts.length+' eigene Ter
   {icon:'upload',label:'Termine importieren (.ics)',fn:function(){var i=$('#icsFile');if(i)i.click()}},
   {icon:'download',label:'Kommende Termine exportieren (.ics)',fn:function(){var td=todayISO(),l=S.appts.filter(function(a){return a.date>=td||a.rep});if(!l.length){toast('Keine kommenden Termine','warn');return}apptIcs(l,'myteamz-termine')}},
   {icon:'flag',label:'Team-Events',fn:function(){go('events')}}]})}
-function todayAppts(){return apptsOn(todayISO())}
+function todayAppts(){var td=todayISO();return apptsOn(td).concat(klsMeAppts(td)).sort(function(a,b){return (a.all?'00':a.start).localeCompare(b.all?'00':b.start)})}
 /* ===================== Startseite (reduziert) ===================== */
 function attRow(i){return '<div class="row click" data-act="'+i.act+'"'+(i.id?' data-id="'+esc(i.id)+'" data-emp="'+esc(i.id)+'"':'')+(i.to?' data-to="'+i.to+'"':'')+' tabindex="0"><div class="badge" style="--c-rgb:'+rgbOf(i.c)+'">'+ic(i.icon,17)+'</div><div class="grow"><b>'+esc(i.t)+'</b><span class="muted small">'+esc(i.s||'')+'</span></div>'+ic('right',15)+'</div>'}
 function openAttAll(){var a=attention();UI.sheet=true;openModal('<div class="m-head"><h3>Braucht deine Aufmerksamkeit</h3>'+X()+'</div>'+(a.map(attRow).join('')||'<p class="muted">Alles erledigt.</p>'),'sm')}
@@ -4609,7 +4645,7 @@ function homeAgenda(){
   var td=todayISO(),l=todayAppts(),nm=new Date().getHours()*60+new Date().getMinutes();
   var next=l.filter(function(a){return !a.all&&toMin(apptEnd(a))>nm})[0];
   var rows=l.map(function(a){var c=calCat(a.cat),past=!a.all&&toMin(apptEnd(a))<=nm,isNow=!a.all&&toMin(a.start)<=nm&&toMin(apptEnd(a))>nm;
-    return '<div class="ag'+(past?' past':'')+(isNow?' now':'')+'" data-act="appt-open" data-id="'+esc(a.id)+'" data-lp="appt" tabindex="0" style="--c:'+c[2]+'"><span class="ag-t">'+(a.all?'ganzt.':a.start)+'</span><i></i><span class="ag-n"><b>'+esc(a.t)+'</b>'+(a.loc||isNow?'<small>'+(isNow?'läuft gerade':'')+(isNow&&a.loc?' · ':'')+esc(a.loc)+'</small>':'')+'</span></div>'}).join('');
+    return '<div class="ag'+(past?' past':'')+(isNow?' now':'')+'" '+(a.kls?'data-act="kls-open" data-v="'+td+'"':'data-act="appt-open" data-id="'+esc(a.id)+'" data-lp="appt"')+' tabindex="0" style="--c:'+c[2]+'"><span class="ag-t">'+(a.all?'ganzt.':a.start)+'</span><i></i><span class="ag-n"><b>'+esc(a.t)+'</b>'+(a.loc||isNow?'<small>'+(isNow?'läuft gerade':'')+(isNow&&a.loc?' · ':'')+esc(a.loc)+'</small>':'')+'</span></div>'}).join('');
   var ex=calExtras(td).filter(function(x){return x.k==='hol'||x.k==='bd'||x.k==='ev'});
   return '<section class="card glass rise s7 home-ag"><a class="card-h wg-lh" href="#/cal"><h2>Termine heute</h2>'+ic('right',16)+'</a>'+
     (ex.length?'<div class="cx-row" style="margin:0 0 8px">'+ex.map(function(x){return '<button type="button" class="cx" style="--c:'+x.c+'"'+(x.act?' data-act="'+x.act+'"':'')+(x.id?' data-id="'+esc(x.id)+'"':'')+'>'+ic(x.icon,13)+'<span>'+esc(x.t)+'</span></button>'}).join('')+'</div>':'')+
@@ -4668,6 +4704,7 @@ function viewSettings2(){
       li({icon:'tasks',c:'#7048e8',t:'Führungsroutinen',s:S.routines.length+' Routinen',act:'rout-edit'}),
       li({icon:'shield',c:'#7048e8',t:'Nachweise und Pflichtschulungen',s:S.quals.length+' im Katalog',act:'qual-cat'})])+
     lgroup('Vertrieb',[
+      li({icon:'target',c:'#1c7ed6',t:'LEM-Zielsystem',s:'Verkaufspunkte verknüpfen · Normierung',act:'lem-prods'}),
       li({icon:'chart',c:'#1c7ed6',t:'Kennzahlen und Ziele',s:S.metrics.map(function(m){return m.s||m.n}).slice(0,3).join(', ')+(S.metrics.length>3?' …':''),act:'set-mets'}),
       li({icon:'send',c:'#1c7ed6',t:'Kanäle und Ansprechpartner',s:S.channels.map(function(c){return c.s||c.n}).join(', '),act:'set-chans'})])+
     lgroup('Darstellung',[li({icon:'moon',c:'#3d5a80',t:'Design',s:{auto:'Automatisch',light:'Hell',dark:'Dunkel'}[st.theme]+' · Hausfarben',act:'set-design'})])+
@@ -4817,7 +4854,7 @@ function openRegManage(){
   var R=R_();UI.rbRet='manage';
   sheet('Gebiet verwalten',lgroup('',[li({t:esc(R.name),s:'Name des Gebiets',act:'reg-name-ed'})])+
     lgroup('Filialen',R.branches.map(function(b){return li({lead:avatar(b.lead||b.n,'sm'),t:brName(b)+(b.own?' <em class="own-b">meine</em>':''),s:esc(b.lead||'Leitung offen'),act:'rb-open',id:b.id})}).concat(['<button type="button" class="li add" data-act="rb-new">'+ic('plus',16)+'<span class="li-t"><b>Filiale hinzufügen</b></span></button>']))+
-    lgroup('Kennzahlen',R.kpis.map(function(k){var m=k.metric&&metric(k.metric);return li({t:esc(k.n),s:esc(k.unit)+' · '+(k.hi?'höher ist besser':'niedriger ist besser')+(m?' · aus Team: '+esc(m.s||m.n):''),act:'rk-open',id:k.id})}).concat(['<button type="button" class="li add" data-act="rk-new">'+ic('plus',16)+'<span class="li-t"><b>Kennzahl hinzufügen</b></span></button>']),'Reihenfolge wie auf euren Ergebnislisten, dann passt die Zuordnung beim Scannen.'),
+    lgroup('Kennzahlen',R.kpis.map(function(k){var m=k.metric&&(metric(k.metric)||(LEM_REG_OPTS.filter(function(o){return o[0]===k.metric})[0]?{n:LEM_REG_OPTS.filter(function(o){return o[0]===k.metric})[0][1]}:null));return li({t:esc(k.n),s:esc(k.unit)+' · '+(k.hi?'höher ist besser':'niedriger ist besser')+(m?' · aus Team: '+esc(m.s||m.n):''),act:'rk-open',id:k.id})}).concat(['<button type="button" class="li add" data-act="rk-new">'+ic('plus',16)+'<span class="li-t"><b>Kennzahl hinzufügen</b></span></button>']),'Reihenfolge wie auf euren Ergebnislisten, dann passt die Zuordnung beim Scannen.'),
     '<div class="m-foot"><button class="btn primary" data-act="reg-manage-done">Fertig</button></div>');
 }
 function openRbEdit(id){
@@ -4829,7 +4866,7 @@ function openRbEdit(id){
 function openRkEdit(id){
   var k=id?regKpi(id):null;k=k||{n:'',unit:'Stück',hi:true,metric:''};
   sheet(id?esc(k.n):'Neue Kennzahl','<form class="form" data-form="rk-ed"><input type="hidden" name="id" value="'+esc(id||'')+'">'+F('Kennzahl','n',k.n,'text','required maxlength="50"','full')+SEGR('Einheit','unit',REG_UNITS,k.unit)+
-    SEGR('Bewertung','hi',[['1','Höher ist besser'],['0','Niedriger ist besser']],k.hi?'1':'0')+SEL('Eigene Filiale aus Team-Ergebnissen','metric',[['','– nicht verknüpft –']].concat(S.metrics.map(function(m){return [m.id,m.n]})),k.metric,'full')+
+    SEGR('Bewertung','hi',[['1','Höher ist besser'],['0','Niedriger ist besser']],k.hi?'1':'0')+SEL('Eigene Filiale automatisch aus','metric',[['','– nicht verknüpft –']].concat(LEM_REG_OPTS).concat(S.metrics.map(function(m){return [m.id,'Ergebnisse: '+m.n]})),k.metric,'full')+
     formFoot((id?'<button type="button" class="btn danger left" data-act="rk-del" data-id="'+esc(id)+'" aria-label="Kennzahl löschen">'+ic('trash',15)+'</button>':'')+backBtn('reg-manage'))+'</form>');
 }
 function openRegEntry(mk){
@@ -4872,7 +4909,7 @@ function renderImp(){
     var nc=Math.max(1,Math.max.apply(null,im.rows.map(function(r){return r.nums.length}).concat([0])));
     var matched=im.rows.filter(function(r){return r.bid&&r.bid!=='__new'}).length;
     var first=im.rows.filter(function(r){return r.bid})[0]||im.rows[0];
-    var cols=R.kpis.map(function(k){var c=im.map[k.id],o='<option value="-1"'+(c===-1?' selected':'')+'>nicht übernehmen</option>';for(var j=0;j<nc;j++)o+='<option value="'+j+'"'+(c===j?' selected':'')+'>Zahl '+(j+1)+'</option>';
+    var cols=R.kpis.map(function(k){var c=im.map[k.id],o='<option value="-1"'+(c===-1?' selected':'')+'>überspringen</option>';for(var j=0;j<nc;j++)o+='<option value="'+j+'"'+(c===j?' selected':'')+'>Zahl '+(j+1)+'</option>';
       return '<label class="ent"><span>'+esc(k.n)+(first&&c>-1&&first.nums[c]!==undefined?'<small class="muted" style="display:block;font-weight:500">z. B. '+num(first.nums[c])+'</small>':'')+'</span><select class="colsel2" data-change="imp-map" data-k="'+esc(k.id)+'" aria-label="Spalte für '+esc(k.n)+'">'+o+'</select></label>'}).join('');
     var rows=im.rows.map(function(r,i){var b=r.bid==='__new'?null:regBranch(r.bid),vals=R.kpis.map(function(k){var v=r.vals[k.id];return v===null||v===undefined?'–':num(v)}).join(' · ');
       return li({lead:'<i class="dot '+(r.bid?'ok':'no')+'"></i>',t:b?brName(b)+(r.byNr?' <small class="muted">per Nummer</small>':''):r.bid==='__new'?'Neue Filiale':'<span class="muted">Nicht zugeordnet</span>',s:b||r.bid?vals:esc(shortT(r.raw,60)),act:'imp-edit',data:' data-i="'+i+'"'})}).join('');
@@ -4936,7 +4973,7 @@ function registerExt2(){
       if(b)Object.assign(b,rec);else{b=Object.assign({id:'b'+uid(),own:false},rec);R.branches.push(b)}
       if(d.get('own')==='1')R.branches.forEach(function(x){x.own=x.id===b.id});else if(b.own&&R.branches.length>1){toast('Eine Filiale muss deine sein','warn')}
       save();rerender();if(UI.route==='region'&&UI.regTab==='col'&&!id){closeModal();toast('Filiale angelegt')}else openRegManage()},
-    'rk-ed':function(f,d){var n=(d.get('n')||'').trim();if(!n){toast('Bitte einen Namen eingeben','err');return}var R=R_(),id=d.get('id'),k=id?regKpi(id):null,rec={n:n.slice(0,50),unit:REG_UNITS.indexOf(d.get('unit'))>-1?d.get('unit'):'Stück',hi:d.get('hi')!=='0',metric:metric(d.get('metric'))?d.get('metric'):''};
+    'rk-ed':function(f,d){var n=(d.get('n')||'').trim();if(!n){toast('Bitte einen Namen eingeben','err');return}var R=R_(),id=d.get('id'),k=id?regKpi(id):null,rec={n:n.slice(0,50),unit:REG_UNITS.indexOf(d.get('unit'))>-1?d.get('unit'):'Stück',hi:d.get('hi')!=='0',metric:metric(d.get('metric'))||LEM_REG_OPTS.some(function(o){return o[0]===d.get('metric')})?d.get('metric'):''};
       if(k)Object.assign(k,rec);else R.kpis.push(Object.assign({id:'k'+uid()},rec));save();rerender();openRegManage()}
   });
   Object.assign(CHANGES,{
@@ -5160,10 +5197,10 @@ function klsParse(words,W,H,sample,heads,opt){
   return {fit:{a:fit.a,b:fit.b,n:fit.n},cols:res};
 }
 /* ===================== KLS: Tagesplan aus dem Kundenleitsystem ===================== */
-function klsDef(){return {cfg:{freeMin:1,quote:50,fFrom:16,fTo:18,smBuffer:false},map:{},order:[],days:{}}}
+function klsDef(){return {cfg:{freeMin:1,quote:50,fFrom:16,fTo:18,smBuffer:false,me:true,meQuote:20,meBuf:false,meName:''},map:{},order:[],days:{}}}
 function normKls(k){
   var d=klsDef();if(!k||typeof k!=='object')return d;
-  var c=k.cfg||{};d.cfg={freeMin:clamp(parseInt(c.freeMin,10)||1,0,10),quote:clamp(parseInt(c.quote,10)||50,5,100),fFrom:clamp(parseInt(c.fFrom,10)||16,7,20),fTo:clamp(parseInt(c.fTo,10)||18,8,21),smBuffer:!!c.smBuffer};if(d.cfg.fTo<=d.cfg.fFrom)d.cfg.fTo=d.cfg.fFrom+2;
+  var c=k.cfg||{};d.cfg={freeMin:clamp(parseInt(c.freeMin,10)||1,0,10),quote:clamp(parseInt(c.quote,10)||50,5,100),fFrom:clamp(parseInt(c.fFrom,10)||16,7,20),fTo:clamp(parseInt(c.fTo,10)||18,8,21),smBuffer:!!c.smBuffer,me:c.me!==false,meQuote:clamp(parseInt(c.meQuote,10)||20,0,100),meBuf:!!c.meBuf,meName:str(c.meName,40)};if(d.cfg.fTo<=d.cfg.fFrom)d.cfg.fTo=d.cfg.fFrom+2;
   if(k.map&&typeof k.map==='object')Object.keys(k.map).forEach(function(key){var m=k.map[key];if(m&&typeof m==='object')d.map[str(key,60)]={emp:str(m.emp,40),kind:['emp','inv','ign'].indexOf(m.kind)>-1?m.kind:'emp'}});
   if(Array.isArray(k.order))d.order=k.order.slice(0,16).map(function(m){m=m||{};return {emp:str(m.emp,40),kind:['emp','inv','ign'].indexOf(m.kind)>-1?m.kind:'emp'}});
   var keys=k.days&&typeof k.days==='object'?Object.keys(k.days).filter(validISO).sort().slice(-150):[];
@@ -5177,19 +5214,21 @@ function slotT(i){return KLS_START+i*30}
 function slotLbl(i){return fromMin(slotT(i))}
 function rangeTxt(a,b){return fromMin(slotT(a))+'–'+fromMin(slotT(b+1))}
 function ivHas(iv,i){var a=slotT(i),b=a+30;return iv.some(function(x){return Math.min(x[1],b)-Math.max(x[0],a)>=15})}
-function klsColName(c){var e=emp(c.emp);return e?e.name:(c.label||'Spalte')}
-function klsShort(c){var e=emp(c.emp);if(e){var p=e.name.split(' ');return p[0]}return (c.label||'?').split(/[ ,]/)[0]}
+function klsOk(c){return c.emp==='me'||!!emp(c.emp)}
+function klsColName(c){if(c.emp==='me')return 'Ich (Filialleitung)';var e=emp(c.emp);return e?e.name:(c.label||'Spalte')}
+function klsShort(c){if(c.emp==='me')return 'Ich';var e=emp(c.emp);if(e){var p=e.name.split(' ');return p[0]}return (c.label||'?').split(/[ ,]/)[0]}
 function klsNameOf(txt){var m=/([A-ZÄÖÜ][a-zäöüß]{2,}(?:-[A-ZÄÖÜ][a-zäöüß]+)?)\s*,\s*([A-ZÄÖÜ])?/.exec(String(txt||''));return m?m[1]+(m[2]?', '+m[2]+'.':''):''}
 function klsKey(txt){var nm=klsNameOf(txt);if(nm)return normTxt(nm.split(',')[0]);var t=normTxt(String(txt||'').replace(/\((sme|swe|inv|nv)\)/ig,' ')).split(' ').filter(function(w){return w.length>=3&&!/^(sme|swe|sne|inv|lnv|ny)$/.test(w)});return t[0]||''}
 function klsMatchEmp(txt){
   var ws=normTxt(txt).split(' ').filter(function(w){return w.length>=3});if(!ws.length)return '';
+  var mn=normTxt(K().cfg.meName||'').split(' ').filter(function(w){return w.length>=3});if(mn.length&&ws.some(function(w){return mn.some(function(t){return tokMatch(w,t)})}))return 'me';
   var hit=S.employees.filter(function(e){var p=normTxt(e.name).split(' '),last=p[p.length-1],first=p[0];return ws.some(function(w){return tokMatch(w,last)||(w.indexOf(last)===0&&w.length-last.length<=1)})});
   return hit.length===1?hit[0].id:'';
 }
 function lunchSlots(ds){var x=hrs().s[wdi(ds)],o=[];if(!x||!x.on||!x.pf)return o;for(var i=0;i<KLS_N;i++){var a=slotT(i);if(a>=toMin(x.pf)&&a+30<=toMin(x.pt))o.push(i)}return o}
 function planSpan(empId,ds){var d=tDay(empId,ds);if(d.kind==='abs'||d.kind==='off'||d.kind==='hol'||d.kind==='free')return null;var p=d.rec&&d.rec.mode==='dev'?d.rec:d.plan;if(!p||!tm(p.from)||!tm(p.to))return null;return {a:toMin(p.from),b:toMin(p.to)}}
 function applyPlan(col,ds,labels){
-  if(col.kind!=='emp'||!emp(col.emp))return;var sp=planSpan(col.emp,ds);
+  if(col.kind!=='emp'||!klsOk(col))return;var sp=planSpan(col.emp,ds);
   for(var i=0;i<KLS_N;i++){var a=slotT(i);if(labels&&labels[i])continue;if(!sp||a+30<=sp.a||a>=sp.b){col.s[i]='abw';col.g[i]=''}}
 }
 /* ---------- Import ---------- */
@@ -5279,6 +5318,7 @@ function klsManualDraft(ds){
   var cols=S.employees.map(function(e){var c={emp:e.id,label:e.name,key:'',kind:'emp',sme:false,s:[],g:[]};
     for(var i=0;i<KLS_N;i++){c.s.push(/service manager/i.test(e.role)&&ivHas(sIv,i)?'sm':'frei');c.g.push('')}
     lunch.forEach(function(i){c.s[i]='abw'});applyPlan(c,ds);return c});
+  if(K().cfg.me)cols.unshift(klsMeCol(ds));
   return {ds:ds,src:'manual',cols:cols};
 }
 /* ---------- Editor (Prüfen & Korrigieren) ---------- */
@@ -5287,10 +5327,10 @@ function klsGridHtml(cols,ds,edit){
   var wd=wdi(ds),sIv=hrsIv('s',wd),bIv=hrsIv('b',wd),cfg=K().cfg,n=cols.length;
   var h='<div class="kg'+(edit?' ed':'')+'" style="--n:'+n+'"><div class="kg-h kg-t"></div>';
   cols.forEach(function(c,ci){
-    if(edit){var opts='<option value="">Wer?</option>'+S.employees.map(function(e){var p=e.name.split(' ');return '<option value="'+esc(e.id)+'"'+(c.kind==='emp'&&c.emp===e.id?' selected':'')+'>'+esc(p[0]+(p[1]?' '+p[1][0]+'.':''))+'</option>'}).join('')+'<option value="__inv"'+(c.kind==='inv'?' selected':'')+'>Anlage (Info)</option><option value="__ign">ignorieren</option>';
-      var cur=c.kind==='inv'?'Anlage':c.kind==='ign'?'ignoriert':emp(c.emp)?klsShort(c):'Wer?';
-      h+='<div class="kg-h"><label class="kh-sel'+(c.kind==='emp'&&!emp(c.emp)?' todo':'')+'"><span>'+esc(cur)+'</span>'+ic('down',12)+'<select class="ovl" data-change="kls-col" data-c="'+ci+'" aria-label="Spalte '+(ci+1)+' zuordnen">'+opts+'</select></label>'+(c.label&&!emp(c.emp)?'<small>'+esc(c.label)+'</small>':'')+'</div>'}
-    else h+='<div class="kg-h'+(c.kind==='inv'?' inv':'')+'"><b>'+esc(klsShort(c))+'</b>'+(c.kind==='inv'?'<small>INV</small>':c.sme?'<small>SME</small>':'')+'</div>';
+    if(edit){var opts='<option value="">Wer?</option>'+S.employees.map(function(e){var p=e.name.split(' ');return '<option value="'+esc(e.id)+'"'+(c.kind==='emp'&&c.emp===e.id?' selected':'')+'>'+esc(p[0]+(p[1]?' '+p[1][0]+'.':''))+'</option>'}).join('')+'<option value="me"'+(c.kind==='emp'&&c.emp==='me'?' selected':'')+'>Ich (Filialleitung)</option><option value="me"'+(c.kind==='emp'&&c.emp==='me'?' selected':'')+'>Ich (Filialleitung)</option><option value="__inv"'+(c.kind==='inv'?' selected':'')+'>Anlage (Info)</option><option value="__ign">ignorieren</option>';
+      var cur=c.kind==='inv'?'Anlage':c.kind==='ign'?'ignoriert':klsOk(c)?klsShort(c):'Wer?';
+      h+='<div class="kg-h"><label class="kh-sel'+(c.kind==='emp'&&!klsOk(c)?' todo':'')+'"><span>'+esc(cur)+'</span>'+ic('down',12)+'<select class="ovl" data-change="kls-col" data-c="'+ci+'" aria-label="Spalte '+(ci+1)+' zuordnen">'+opts+'</select></label>'+(c.label&&!klsOk(c)?'<small>'+esc(c.label)+'</small>':'')+'</div>'}
+    else h+='<div class="kg-h'+(c.kind==='inv'?' inv':'')+(c.emp==='me'?' me':'')+'"><b>'+esc(klsShort(c))+'</b>'+(c.kind==='inv'?'<small>INV</small>':c.emp==='me'?'<small>FL</small>':c.sme?'<small>SME</small>':'')+'</div>';
   });
   if(!edit)h+='<div class="kg-h kg-f"><b>Frei</b></div>';
   for(var i=0;i<KLS_N;i++){
@@ -5326,9 +5366,9 @@ function klsPaint(ci,i){
 }
 function klsSave(){
   var d=UI.klsDraft;if(!d)return;
-  var cols=d.cols.filter(function(c){return c.kind!=='ign'&&(c.kind==='inv'||emp(c.emp))});
+  var cols=d.cols.filter(function(c){return c.kind!=='ign'&&(c.kind==='inv'||klsOk(c))});
   if(!cols.length){toast('Bitte mindestens eine Spalte einem Mitarbeiter zuordnen','err');return}
-  if(d.cols.some(function(c){return c.kind==='emp'&&!emp(c.emp)})){toast('Nicht zugeordnete Spalten werden ignoriert','warn')}
+  if(d.cols.some(function(c){return c.kind==='emp'&&!klsOk(c)})){toast('Nicht zugeordnete Spalten werden ignoriert','warn')}
   d.cols.forEach(function(c){if(c.key)K().map[c.key]={emp:c.emp,kind:c.kind}});
   if(d.src==='ocr')K().order=d.cols.map(function(c){return {emp:c.emp,kind:c.kind}});
   K().days[d.ds]={src:d.src,at:new Date().toISOString().slice(0,16),cols:cols.map(function(c){return {emp:c.kind==='inv'?'':c.emp,label:c.kind==='inv'?(c.label||'Anlageberatung'):'',kind:c.kind,sme:c.sme,s:c.s.slice(),g:c.g.slice()}})};
@@ -5338,7 +5378,7 @@ function klsSave(){
   toast(a.kpi.appts+' Kundentermine übernommen'+(a.issues.length?' · '+a.issues.length+' '+plural(a.issues.length,'Vorschlag','Vorschläge'):''));
 }
 /* ---------- Analyse ---------- */
-function klsFreeAt(cols,i){var cfg=K().cfg;return cols.filter(function(c){return c.kind==='emp'&&(c.s[i]==='frei'||(cfg.smBuffer&&c.s[i]==='sm'))}).length}
+function klsFreeAt(cols,i){var cfg=K().cfg;return cols.filter(function(c){return c.kind==='emp'&&(c.emp!=='me'||cfg.meBuf)&&(c.s[i]==='frei'||(cfg.smBuffer&&c.s[i]==='sm'))}).length}
 function runsOf(arr){var o=[],st=-1;for(var i=0;i<=arr.length;i++){if(i<arr.length&&arr[i]){if(st<0)st=i}else if(st>=0){o.push([st,i-1]);st=-1}}return o}
 function klsAnalyze(ds,day){
   day=day||K().days[ds];var out={kpi:{appts:0,quote:null,cover:null,focus:null},issues:[],people:[],inv:[]};if(!day)return out;
@@ -5347,13 +5387,13 @@ function klsAnalyze(ds,day){
   var svc=[],ok=0,need=0;for(var i=0;i<KLS_N;i++){svc.push(ivHas(sIv,i))}
   var gap=[];for(i=0;i<KLS_N;i++){var nd=svc[i];if(nd){need++;var f=klsFreeAt(day.cols,i);if(f>=cfg.freeMin)ok++;gap.push(f<cfg.freeMin)}else gap.push(false)}
   out.kpi.cover=need?Math.round(ok/need*100):null;
-  var kSl=0,pres=0,fzOk=0,fzAll=0;
+  var kSl=0,pres=0,fzOk=0,fzAll=0,me=cols.filter(function(c){return c.emp==='me'})[0];
   cols.forEach(function(c){
-    var k=0,p=0,blocks=0;
+    var k=0,p=0,blocks=0,isMe=c.emp==='me';
     for(var i=0;i<KLS_N;i++){var t=c.s[i];if(t==='kunde'){k++;if(i===0||c.s[i-1]!=='kunde'||c.g[i-1]!==c.g[i])blocks++}if(t!=='abw'&&t!=='sm')p++;
-      if(fz(i)&&t!=='abw'&&t!=='sm'){fzAll++;if(t==='kunde'||t==='frei')fzOk++}}
-    kSl+=k;pres+=p;out.kpi.appts+=blocks;
-    out.people.push({c:c,name:klsColName(c),k:k,p:p,blocks:blocks,q:p>=4?Math.round(k/p*100):null,sm:c.s.filter(function(x){return x==='sm'}).length});
+      if(!isMe&&fz(i)&&t!=='abw'&&t!=='sm'){fzAll++;if(t==='kunde'||t==='frei')fzOk++}}
+    if(!isMe){kSl+=k;pres+=p}out.kpi.appts+=blocks;
+    out.people.push({c:c,me:isMe,name:klsColName(c),k:k,p:p,blocks:blocks,q:p>=4?Math.round(k/p*100):null,sm:c.s.filter(function(x){return x==='sm'}).length});
   });
   out.kpi.quote=pres?Math.round(kSl/pres*100):null;out.kpi.focus=fzAll?Math.round(fzOk/fzAll*100):null;
   function future(r){return nowS<0||r[1]>=nowS}
@@ -5363,14 +5403,17 @@ function klsAnalyze(ds,day){
   }
   /* 1 Laufkunden-Puffer */
   runsOf(gap).forEach(function(r){
-    var mov=[];cols.forEach(function(c){for(var i=r[0];i<=r[1];i++)if(['admin','tel','intern'].indexOf(c.s[i])>-1){mov.push({c:c,i:i});break}});
+    var mov=[];cols.forEach(function(c){if(c.emp==='me')return;for(var i=r[0];i<=r[1];i++)if(['admin','tel','intern'].indexOf(c.s[i])>-1){mov.push({c:c,i:i});break}});
+    var meFree=me&&!K().cfg.meBuf;if(meFree)for(var j=r[0];j<=r[1];j++)if(me.s[j]!=='frei')meFree=false;
     var sug='';
     if(mov.length){var m=mov[0],rg=[m.i,m.i];while(rg[1]+1<KLS_N&&m.c.s[rg[1]+1]===m.c.s[m.i])rg[1]++;var q=quietSlotFor(m.c,[]);sug=KLS_T[m.c.s[m.i]].l+' von '+klsColName(m.c).split(' ')[0]+' ('+rangeTxt(rg[0],rg[1])+') '+(q>=0?'auf '+slotLbl(q)+' verlegen':'verlegen')+', dann ist jemand für Laufkunden frei.'}
     else sug='In diesem Fenster keine weiteren Termine vergeben, damit jemand für Laufkunden frei bleibt.';
-    out.issues.push({sev:future(r)?3:2,icon:'users',c:'#c92a3a',t:'Kein Laufkunden-Puffer '+rangeTxt(r[0],r[1]),s:sug,i:r[0]});
+    if(meFree)out.issues.push({sev:2,icon:'users',c:'#d9780a',t:'Laufkunden-Puffer '+rangeTxt(r[0],r[1])+' nur über dich',s:'Alle anderen sind belegt, du bist frei. Wenn du nicht einspringen willst: '+sug,i:r[0]});
+    else out.issues.push({sev:future(r)?3:2,icon:'users',c:'#c92a3a',t:'Kein Laufkunden-Puffer '+rangeTxt(r[0],r[1]),s:sug,i:r[0]});
   });
   /* 2 Beratungsfokus 16–18 Uhr */
   cols.forEach(function(c){
+    if(c.emp==='me')return;
     var bad=[];for(var i=0;i<KLS_N;i++)bad.push(fz(i)&&['admin','tel','intern'].indexOf(c.s[i])>-1);
     runsOf(bad).forEach(function(r){var q=quietSlotFor(c,[]);out.issues.push({sev:2,icon:'target',c:'#d9780a',t:'Beratungsfokus: '+KLS_T[c.s[r[0]]].l+' von '+klsColName(c).split(' ')[0]+' '+rangeTxt(r[0],r[1]),s:'Zwischen '+cfg.fFrom+' und '+cfg.fTo+' Uhr hat Beratung Vorrang. '+(q>=0?'Besser um '+slotLbl(q)+' erledigen.':'Vormittags erledigen.'),i:r[0]})});
   });
@@ -5378,18 +5421,20 @@ function klsAnalyze(ds,day){
   if(fzFree>=2)out.issues.push({sev:1,icon:'calendar',c:'#1c7ed6',t:fzFree+' freie Beratungsslots zwischen '+cfg.fFrom+' und '+cfg.fTo+' Uhr',s:'Über den Laufkunden-Puffer hinaus frei: aktiv mit Terminen füllen, z. B. aus einem Telefonie-Block am Vormittag.',i:(cfg.fFrom*60-KLS_START)/30});
   /* 3 Service Manager in den Servicezeiten */
   var noSm=[];for(i=0;i<KLS_N;i++)noSm.push(svc[i]&&!cols.some(function(c){return c.s[i]==='sm'}));
-  runsOf(noSm).forEach(function(r){var cand=cols.filter(function(c){return c.s[r[0]]==='frei'})[0];out.issues.push({sev:future(r)?3:2,icon:'shield',c:'#0c8599',t:'Kein Service Manager '+rangeTxt(r[0],r[1]),s:cand?klsColName(cand).split(' ')[0]+' ist frei und könnte übernehmen.':'Während der Servicezeiten sollte immer jemand den Service übernehmen.',i:r[0]})});
+  runsOf(noSm).forEach(function(r){var cand=cols.filter(function(c){return c.s[r[0]]==='frei'})[0];out.issues.push({sev:future(r)?3:2,icon:'shield',c:'#0c8599',t:'Kein Service Manager '+rangeTxt(r[0],r[1]),s:cand?(cand.emp==='me'?'Du bist frei und könntest übernehmen.':klsColName(cand).split(' ')[0]+' ist frei und könnte übernehmen.'):'Während der Servicezeiten sollte immer jemand den Service übernehmen.',i:r[0]})});
   /* 4 Admin/Telefonie in Stoßzeiten (Kundenfrequenz) */
   if(wd<5)cols.forEach(function(c){
+    if(c.emp==='me')return;
     var bad=[];for(var i=0;i<KLS_N;i++){var lv=S.staff.freq[wd]?S.staff.freq[wd][Math.floor(slotT(i)/60)]:1;bad.push(!fz(i)&&lv>=2&&['admin','intern'].indexOf(c.s[i])>-1)}
     runsOf(bad).forEach(function(r){var q=quietSlotFor(c,[]);out.issues.push({sev:1,icon:'zap',c:'#7048e8',t:KLS_T[c.s[r[0]]].l+' von '+klsColName(c).split(' ')[0]+' in Stoßzeit '+rangeTxt(r[0],r[1]),s:'Laut Kundenfrequenz viel los. '+(q>=0?'Ruhiger wäre '+slotLbl(q)+'.':''),i:r[0]})});
   });
   /* 5 Kundenzeit-Quote */
-  out.people.filter(function(p){return p.q!==null&&p.q<cfg.quote&&p.sm<p.p}).sort(function(a,b){return a.q-b.q}).slice(0,2).forEach(function(p){
+  out.people.filter(function(p){return !p.me&&p.q!==null&&p.q<cfg.quote&&p.sm<p.p}).sort(function(a,b){return a.q-b.q}).slice(0,2).forEach(function(p){
     var fr=[];for(var i=0;i<KLS_N;i++)fr.push(p.c.s[i]==='frei'&&svc[i]?klsFreeAt(day.cols,i)>cfg.freeMin:p.c.s[i]==='frei');
     var rr=runsOf(fr).filter(function(r){return r[1]-r[0]>=1});
     out.issues.push({sev:1,icon:'chart',c:'#1c7ed6',t:p.name.split(' ')[0]+': '+p.q+' % Kundenzeit (Ziel '+cfg.quote+' %)',s:rr.length?'Frei ohne Puffer zu gefährden: '+rr.slice(0,2).map(function(r){return rangeTxt(r[0],r[1])}).join(', ')+'. Für Telefonie-Block oder Termine nutzen.':'Kaum freie Zeit, prüfen, welche internen Blöcke wegfallen können.',i:rr.length?rr[0][0]:0});
   });
+  klsMeIssues(out,day,ds,me,fz,svc,future);
   /* Info: Anlageberatung frei */
   day.cols.filter(function(c){return c.kind==='inv'}).forEach(function(c){var fr=[];for(var i=0;i<KLS_N;i++)fr.push(c.s[i]==='frei'&&(ivHas(sIv,i)||ivHas(bIv,i)));var rr=runsOf(fr);if(rr.length)out.inv.push({name:c.label||'Anlageberatung',r:rr})});
   out.issues.sort(function(a,b){return b.sev-a.sev||a.i-b.i});
@@ -5412,7 +5457,7 @@ function viewKls(){
   var grid='<section class="card glass rise" style="margin-top:16px"><div class="card-h"><h2>Tagesplan</h2><button class="btn sm" data-act="kls-manual">'+ic('edit',14)+' Bearbeiten</button></div><div class="kg-wrap">'+klsGridHtml(day.cols,ds,false)+'</div>'+
     '<div class="legend" style="margin-top:10px">'+['kunde','sm','admin','tel','intern','abw','frei'].map(function(k){return '<span><i class="t-'+k+'"></i>'+KLS_T[k].l+'</span>'}).join('')+'<span><i class="fzl"></i>Fokus '+cfg.fFrom+'–'+cfg.fTo+'</span></div>'+
     '<p class="muted small" style="margin-top:6px">Spalte „Frei“: freie Kolleginnen und Kollegen für Laufkunden während der Servicezeiten (Ziel mindestens '+cfg.freeMin+').</p></section>';
-  var ppl='<section class="card glass rise" style="margin-top:16px"><div class="card-h"><h2>Kundenzeit je Mitarbeiter</h2><span class="muted small">Ziel '+cfg.quote+' %</span></div>'+a.people.map(function(p){return '<div class="prow"><div class="l"><span>'+esc(p.name)+(p.c.sme?' <small class="muted">SME</small>':'')+'</span><span class="muted">'+(p.q===null?(p.sm?'Service Manager':'–'):p.q+' % · '+p.blocks+' '+plural(p.blocks,'Termin','Termine'))+'</span></div><div class="bar"><i class="'+(p.q===null?'':p.q>=cfg.quote?'good':p.q>=cfg.quote-15?'warn':'bad')+'" data-w="'+(p.q||0)+'"></i><b class="pace" style="left:'+cfg.quote+'%"></b></div></div>'}).join('')+'</section>';
+  var ppl='<section class="card glass rise" style="margin-top:16px"><div class="card-h"><h2>Kundenzeit je Mitarbeiter</h2><span class="muted small">Ziel '+cfg.quote+' %</span></div>'+a.people.map(function(p){return '<div class="prow"><div class="l"><span>'+esc(p.name)+(p.c.sme?' <small class="muted">SME</small>':'')+'</span><span class="muted">'+(p.q===null?(p.sm?'Service Manager':'–'):p.q+' % · '+p.blocks+' '+plural(p.blocks,'Termin','Termine'))+(p.me?' · Ziel '+cfg.meQuote+' %':'')+'</span></div><div class="bar"><i class="'+(p.q===null?'':p.q>=(p.me?cfg.meQuote:cfg.quote)?'good':p.q>=(p.me?cfg.meQuote:cfg.quote)-15?'warn':'bad')+'" data-w="'+(p.q||0)+'"></i><b class="pace" style="left:'+(p.me?cfg.meQuote:cfg.quote)+'%"></b></div></div>'}).join('')+'</section>';
   var inv=a.inv.length?'<section class="card glass rise" style="margin-top:16px"><div class="card-h"><h2>Für Überleitungen</h2></div>'+a.inv.map(function(x){return '<div class="row"><div class="badge">'+ic('send',16)+'</div><div class="grow"><b>'+esc(x.name)+' frei</b><span class="muted small">'+x.r.map(function(r){return rangeTxt(r[0],r[1])}).join(', ')+'</span></div></div>'}).join('')+'</section>':'';
   return bar+kv+sug+grid+ppl+inv+klsHistory();
 }
@@ -5423,8 +5468,10 @@ function klsHistory(){
 function openKlsRules(){var c=K().cfg,hs=[];for(var h=8;h<=20;h++)hs.push([String(h),pad(h)+':00']);
   sheet('KLS-Regeln','<form class="form" data-form="kls-rules">'+STP('Mindestens frei für Laufkunden','freeMin',c.freeMin,0,10,1,'Personen')+
     '<div class="full tpair">'+SEL('Beratungsfokus von','fFrom',hs,String(c.fFrom))+SEL('bis','fTo',hs,String(c.fTo))+'</div>'+
-    STP('Ziel Kundenzeit je Berater','quote',c.quote,5,100,5,'%')+SW('Service Manager zählt als Laufkunden-Puffer','smBuffer',c.smBuffer,'full')+formFoot()+'</form>')}
-function saveKlsRules(f,d){var c=K().cfg;c.freeMin=clamp(parseInt(d.get('freeMin'),10)||0,0,10);c.quote=clamp(parseInt(d.get('quote'),10)||50,5,100);c.fFrom=clamp(parseInt(d.get('fFrom'),10)||16,7,20);c.fTo=clamp(parseInt(d.get('fTo'),10)||18,8,21);if(c.fTo<=c.fFrom)c.fTo=c.fFrom+1;c.smBuffer=d.get('smBuffer')==='1';save();closeModal();rerender();toast('Regeln gespeichert')}
+    STP('Ziel Kundenzeit je Berater','quote',c.quote,5,100,5,'%')+SW('Service Manager zählt als Laufkunden-Puffer','smBuffer',c.smBuffer,'full')+
+    '<h6 class="full ml-h">Ich als Filialleiter</h6>'+SW('Ich stehe im KLS','me',c.me,'full','Eigene Spalte, eigene Kundentermine')+F('Mein Name im KLS','meName',c.meName,'text','maxlength="40" placeholder="z. B. Nachname" autocomplete="off"','full')+
+    STP('Mein Ziel Kundenzeit','meQuote',c.meQuote,0,100,5,'%')+SW('Meine freie Zeit zählt als Laufkunden-Puffer','meBuf',c.meBuf,'full','Aus: Die App zeigt, wenn der Puffer nur an dir hängt')+formFoot()+'</form>')}
+function saveKlsRules(f,d){var c=K().cfg;c.freeMin=clamp(parseInt(d.get('freeMin'),10)||0,0,10);c.quote=clamp(parseInt(d.get('quote'),10)||50,5,100);c.fFrom=clamp(parseInt(d.get('fFrom'),10)||16,7,20);c.fTo=clamp(parseInt(d.get('fTo'),10)||18,8,21);if(c.fTo<=c.fFrom)c.fTo=c.fFrom+1;c.smBuffer=d.get('smBuffer')==='1';c.me=d.get('me')==='1';c.meBuf=d.get('meBuf')==='1';c.meQuote=clamp(parseInt(d.get('meQuote'),10)||0,0,100);c.meName=String(d.get('meName')||'').trim().slice(0,40);save();closeModal();rerender();toast('Regeln gespeichert')}
 function klsCopyFrom(ds){
   var src=null;for(var k=1;k<=14&&!src;k++){var p=iso(addDays(parse(ds),-k));if(K().days[p]&&(k===7||k===14||k===1))src=p}
   if(!src){toast('Kein Vortag oder Vorwochentag mit KLS gefunden','warn');return}
@@ -5460,6 +5507,10 @@ function seedKls(st,by){
       }
       return {emp:by[x[0]],label:'',kind:'emp',sme:x[1]==='sme',s:s,g:g};
     });
+    var ms=[],mg=[];for(var i=0;i<KLS_N;i++){ms.push('frei');mg.push('')}
+    S_(0,0,'abw','',ms,mg);S_(1,3,'admin','',ms,mg);S_(5,6,'kunde','Baufinanzierung',ms,mg);S_(10,11,'abw','',ms,mg);S_(12,15,'intern','',ms,mg);S_(20,23,'abw','',ms,mg);
+    if(di===0){S_(12,13,'frei','',ms,mg);S_(17,17,'kunde','Kredit',ms,mg)}else S_(16,17,'kunde','Girokonto',ms,mg);
+    cols.unshift({emp:'me',label:'',kind:'emp',sme:false,s:ms,g:mg});
     var is=[],ig=[];for(var i=0;i<KLS_N;i++){is.push(i<2||i>19||i===10||i===11?'abw':(i%5===0?'frei':'kunde'));ig.push(is[i]==='kunde'?'Investment':'')}
     cols.push({emp:'',label:'Berger, T.',kind:'inv',sme:false,s:is,g:ig});
     k.days[ds]={src:'manual',at:ds+'T09:00',cols:cols};
@@ -5588,7 +5639,7 @@ function registerExt5(){
   });
   ROUTES.person.ht='';
   NAV.length=0;
-  [{sec:'Ich'},{id:'dashboard'},{id:'cal'},{id:'me'},{sec:'Team'},{id:'team'},{id:'dev'},{id:'events'},{sec:'Filiale'},{id:'sales'},{id:'plan'},{id:'region'},{id:'settings'}].forEach(function(n){NAV.push(n)});
+  [{sec:'Ich'},{id:'dashboard'},{id:'cal'},{id:'me'},{sec:'Team'},{id:'team'},{id:'dev'},{id:'events'},{sec:'Filiale'},{id:'goals'},{id:'plan'},{id:'region'},{id:'settings'}].forEach(function(n){NAV.push(n)});
   ROUTES.me.t='Mein Bereich';ROUTES.events.t='Team-Leben';
   Object.assign(ACTIONS,{
     'hub-go':function(t){if(t.dataset.p)UI.planTab=t.dataset.p;if(UI.route===t.dataset.r)rerender();else go(t.dataset.r)},
@@ -5682,7 +5733,7 @@ function WG(){return {
   myday:{t:'Mein Tag',icon:'brief',d:'Fällige To-Dos und Wiedervorlagen, mit Schnelleingabe',sz:['l','s'],l:homeMe,s:function(){var td=todayISO(),n=S.todos.filter(function(t){return !t.done&&(t.focus||(t.due&&t.due<=td))}).length+wvDue().length;return {v:String(n),s:n?'fällig oder im Fokus':'Nichts fällig',to:'me'}}},
   team:{t:'Team heute',icon:'users',d:'Wer heute da ist, dazu Kommen und Gehen',sz:['l','s'],l:homeTeam,s:function(){var ds=todayISO(),r=S.employees.map(function(e){return tDay(e.id,ds)}),n=r.filter(function(d){return d.ist>0&&d.kind!=='abs'&&d.kind!=='off'}).length;return {v:n+' / '+r.length,s:'im Dienst',to:'plan'}}},
   kls:{t:'Laufkunden-Puffer',icon:'scan',d:'KLS heute: freie Kapazität und Vorschläge',sz:['s','l'],l:wgKlsL,s:function(){var td=todayISO(),day=K().days[td];if(!isWorkday(new Date()))return {v:'–',s:'Heute geschlossen',to:'kls'};if(!day)return {v:'Foto',s:'KLS von heute fehlt',cls:'warn-txt',act:'kls-scan'};var a=klsAnalyze(td,day);return {v:a.kpi.cover===null?'–':a.kpi.cover+' %',s:a.issues.length?a.issues.length+' '+plural(a.issues.length,'Vorschlag','Vorschläge'):'Alles im grünen Bereich',cls:a.kpi.cover===null?'':pctCls(a.kpi.cover,95,80),to:'kls'}}},
-  goals:{t:'Filialziele',icon:'target',d:'Fortschritt der Monatsziele',sz:['s','l'],l:wgGoalsL,s:function(){if(!S.goals.length)return {v:'–',s:'Keine Ziele angelegt',to:'goals'};var p=S.goals.reduce(function(s,g){return s+Math.min(1.5,goalPct(g))},0)/S.goals.length;return {v:Math.round(p*100)+' %',s:monthLabel(monthKey()).split(' ')[0]+' · '+S.goals.length+' Ziele',cls:pctTone(p/Math.max(.05,monthPace(monthKey()))),to:'goals'}}},
+  goals:{t:'LEM-Punkte',icon:'target',d:'Qualität, Verkauf und Wachstum im Jahr, mit größtem Hebel',sz:['s','l'],l:wgLemL,s:wgLemS},
   region:{t:'Gebiet',icon:'map',d:'Platz deiner Filiale im Gebietsvergleich',sz:['s','l'],l:wgRegionL,s:function(){var mk=regMonths().slice(-1)[0],k=R_().kpis[0];if(!mk||!k)return {v:'–',s:'Noch keine Werte',to:'region'};var r=ownRank(mk,k.id);return {v:r?r.rank+'. / '+r.of:'–',s:k.n+' · '+monthLabel(mk).split(' ')[0],cls:r?(r.rank<=Math.ceil(r.of/3)?'good-txt':r.rank>r.of*2/3?'bad-txt':''):'',to:'region'}}},
   sales:{t:'Team-Ergebnisse',icon:'chart',d:'Zielerreichung des Teams im laufenden Monat',sz:['l','s'],l:wgSalesL,s:function(){var rs=teamRes(monthKey());if(!rs.length)return {v:'–',s:'Keine Kennzahlen',to:'sales'};var p=rs.reduce(function(a,x){return a+(x.t>0?Math.min(1.5,x.a/x.t):0)},0)/rs.length;return {v:Math.round(p*100)+' %',s:'Zielerreichung Team',cls:pctTone(p/Math.max(.05,monthPace(monthKey()))),to:'sales'}}},
   reviews:{t:'Google',icon:'star',d:'Aktuelle Sternebewertung',sz:['s'],s:function(){var l=rvLast(),c=rvOpenCritical().length;return {v:l?dec(l.rating,1)+' ★':'–',s:c?c+' kritisch offen':(l?l.count+' Bewertungen':'Stand eintragen'),cls:c?'bad-txt':'',to:'reviews'}}},
@@ -5883,6 +5934,314 @@ function registerExt6(){
     'rb-cmp-go':function(t){UI.regCmp=t.dataset.id;UI.regTab='cmp';closeModal();UI.sheet=false;if(UI.route!=='region')go('region');else rerender()}
   });
   FORMS['rb-ed']=saveRbEd;
+}
+/* ===================== LEM 2026: Zielsystem (Qualität · Verkauf · Wachstum) ===================== */
+/* --- Regelwerk laut LEM Filialen 2026 (Vertriebssteuerung, Juni 2026) --- */
+var LEM_EXP={q:50,v:60,w:40},LEM_MAX={q:65,v:100,w:50};
+var LEM_CONV=[[140,18],[130,17],[120,16],[110,15],[100,14],[90,12],[80,10],[70,8]];
+var LEM_KUKI=[[1.525,8],[1.465,7],[1.405,6],[1.345,5]];
+var LEM_OB=[[120,6],[110,5],[100,4],[90,3],[80,2],[70,1]];
+var LEM_PRODS=[['kre','Kredit','Volumen & LEM-Punkte','m_kre'],['gk','Girokonto','Verkauf, Prämie (Aktivierung) & Bestand','m_kon'],['kk','Kreditkarte','Verkauf, Prämie (Aktivierung) & Bestand',''],['ver','Versicherungen','Verkauf & Storno','m_ver'],['ob','One Bank','Überleitungen in andere Kanäle','__refs'],['fg','Festgeld','LEM-Punkte',''],['bf','Baufinanzierung','LEM-Punkte','']];
+var LEM_EPS=1e-7;
+function lemPct(ze){return Math.floor(ze*100+LEM_EPS)}
+/* Verkauf: unter 70 % = 0, ab 70 % = 30 Punkte, je 1 % ZE +1, ab 140 % = 100 */
+function lemVScore(ze){if(ze==null||!isFinite(ze))return null;var p=lemPct(ze);if(p<70)return 0;if(p>=140)return 100;return 30+(p-70)}
+/* Conversion TKE / Online-TK: Stufen ab 70 % */
+function lemConvPts(ze){if(ze==null||!isFinite(ze))return null;var p=lemPct(ze);for(var i=0;i<LEM_CONV.length;i++)if(p>=LEM_CONV[i][0])return LEM_CONV[i][1];return 0}
+function lemKukiPts(v){if(v==null||!isFinite(v))return null;for(var i=0;i<LEM_KUKI.length;i++)if(v>=LEM_KUKI[i][0]-LEM_EPS)return LEM_KUKI[i][1];return 0}
+/* Zugang Online Banking: <= 70 % = 0, dann je 10 %-Band +1, ab 120 % = 6 */
+function lemObPts(ze){if(ze==null||!isFinite(ze))return null;var p=ze*100;if(p<=70+LEM_EPS)return 0;for(var i=0;i<LEM_OB.length;i++)if(p>=LEM_OB[i][0]-LEM_EPS)return LEM_OB[i][1];return 1}
+/* KuBiS: 74,0 = 45 (Erwartung), je 0,4 ±1, Band 70–74 bleibt 45, max. 55 */
+function lemKubAbs(ts){if(ts==null||!isFinite(ts))return null;if(ts>=74-LEM_EPS)return Math.min(55,45+Math.floor((ts-74)/0.4+LEM_EPS));if(ts>=70-LEM_EPS)return 45;return Math.max(0,45-Math.ceil((70-ts)/0.4-LEM_EPS))}
+/* Punkte zum Bankdurchschnitt: -2,5 = 45, gleiche Staffel; Schwellen: >50 nur ab TS 70, TS < 65 max. 35, TS < 60 = 0 */
+function lemKubDiff(ts,bank){if(ts==null||bank==null||!isFinite(ts)||!isFinite(bank))return null;var p=lemKubAbs(ts-bank+76.5);if(ts<60-LEM_EPS)return 0;if(ts<65-LEM_EPS)return Math.min(p,35);if(ts<70-LEM_EPS)return Math.min(p,50);return p}
+function lemKubis(ts,bank){var a=lemKubAbs(ts),d=lemKubDiff(ts,bank);if(a==null)return null;return {pts:Math.max(a,d==null?0:d),abs:a,diff:d,best:d!=null&&d>a?'diff':'abs'}}
+/* Cross-Sell gesamt ohne Druckverkauf: < 62 = 0, ab 62 = 1, je 2 %-Punkte +1, ab 80 = 10 */
+function lemCsPts(v){if(v==null||!isFinite(v))return null;if(v<62-LEM_EPS)return 0;return Math.min(10,1+Math.floor((v-62)/2+LEM_EPS))}
+function lemWZe(pts){return pts==null?null:pts/LEM_EXP.w}
+
+/* --- Daten --- */
+function lemDef(){return {prods:LEM_PRODS.map(function(p){return {id:p[0],n:p[1],d:p[2],src:p[3],ppu:1}}),mon:{},norm:{v:null,w:null}}}
+function lemN(v){if(v===''||v==null)return null;var n=typeof v==='number'?v:parseFloat(String(v).replace(/\s/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.'));return isFinite(n)&&Math.abs(n)<1e9?n:null}
+function lemZI(o){o=o||{};return {z:lemN(o.z),i:lemN(o.i)}}
+function normLem(o){
+  var d=lemDef();if(!o||typeof o!=='object')return d;
+  if(Array.isArray(o.prods)){var by={};o.prods.forEach(function(p){if(p&&p.id)by[p.id]=p});d.prods.forEach(function(p){var x=by[p.id];if(x){p.src=str(x.src,40);p.ppu=lemN(x.ppu);if(p.ppu==null||p.ppu<0)p.ppu=1}})}
+  if(o.norm&&typeof o.norm==='object')d.norm={v:lemN(o.norm.v),w:lemN(o.norm.w)};
+  if(o.mon&&typeof o.mon==='object')Object.keys(o.mon).filter(function(k){return /^\d{4}-\d{2}$/.test(k)}).sort().slice(-36).forEach(function(mk){
+    var m=o.mon[mk]||{},v={};Object.keys(m.v||{}).forEach(function(pid){if(LEM_PRODS.some(function(p){return p[0]===pid}))v[pid]=lemZI(m.v[pid])});
+    d.mon[mk]={vz:lemN(m.vz),v:v,tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemN(m.kuki),ob:{n:lemN((m.ob||{}).n),k:lemN((m.ob||{}).k),q:lemN((m.ob||{}).q)},ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs)};
+  });
+  return d;
+}
+function L(){return S.lem}
+function lemMon(mk,create){var m=L().mon[mk];if(!m&&create)m=L().mon[mk]=lemBlankMon();return m||null}
+function lemBlankMon(){return {vz:null,v:{},tke:{z:null,i:null},tko:{z:null,i:null},kuki:null,ob:{n:null,k:null,q:null},ts:null,tsF:null,bank:null,cs:null}}
+function lemProd(id){return L().prods.filter(function(p){return p.id===id})[0]}
+/* Ist-Verkaufspunkte eines Produkts: Reporting-Wert, sonst aus Ergebnissen (Stück × Punkte je Stück) */
+function lemAutoIst(mk,p){
+  if(p.src==='__refs'){var n=refsOf({month:mk}).length;return n?n*p.ppu:null}
+  if(p.src&&metric(p.src)){var s=teamMetricSum(mk,p.src);return s==null?null:s*p.ppu}
+  return null;
+}
+function lemProdIst(mk,p){var m=lemMon(mk),x=m&&m.v[p.id];if(x&&x.i!=null)return {v:x.i,src:'rep'};var a=lemAutoIst(mk,p);return a==null?{v:null,src:''}:{v:a,src:'auto'}}
+function lemMonths(mk,per){if(per==='m')return [mk];var y=mk.slice(0,4),o=[];for(var i=1;i<=+mk.slice(5);i++)o.push(y+'-'+pad(i));return o}
+function lemLast(ms,f){for(var i=ms.length-1;i>=0;i--){var m=lemMon(ms[i]);if(m){var v=f(m);if(v!=null)return v}}return null}
+
+/* --- Berechnung für Monat (per 'm') oder Jahr bis Monat (per 'y') --- */
+function lemCalc(mk,per){
+  var ms=lemMonths(mk,per),R={mk:mk,per:per,months:ms};
+  /* Verkauf */
+  var prods=L().prods.map(function(p){var z=0,zi=false,i=0,ii=false,src={};ms.forEach(function(k){var m=lemMon(k),x=m&&m.v[p.id];if(x&&x.z!=null){z+=x.z;zi=true}var r=lemProdIst(k,p);if(r.v!=null){i+=r.v;ii=true;src[r.src]=1}});
+    return {p:p,z:zi?z:null,i:ii?i:null,ze:zi&&z>0?(ii?i:0)/z:null,src:src.rep&&src.auto?'mix':src.rep?'rep':src.auto?'auto':''}});
+  var zt=0,zh=false,it=0;ms.forEach(function(k){var m=lemMon(k);if(!m)return;if(m.vz!=null){zt+=m.vz;zh=true}else{var s=0,h=false;L().prods.forEach(function(p){var x=m.v[p.id];if(x&&x.z!=null){s+=x.z;h=true}});if(h){zt+=s;zh=true}}});
+  prods.forEach(function(x){if(x.i!=null)it+=x.i});
+  var vze=zh&&zt>0?it/zt:null,nv=L().norm.v,vzeN=vze!=null&&nv!=null&&nv>0&&nv<100?vze/(nv/100):vze;
+  R.v={prods:prods,ziel:zh?zt:null,ist:it,ze:vze,zeN:vzeN,norm:vzeN!==vze,pts:lemVScore(vzeN)};
+  /* Wachstum */
+  function conv(key){var z=0,i=0,h=false;ms.forEach(function(k){var m=lemMon(k);if(m&&m[key].z!=null){z+=m[key].z;i+=m[key].i||0;h=true}});var ze=h&&z>0?i/z:null;return {z:h?z:null,i:h?i:null,ze:ze,pts:lemConvPts(ze)}}
+  var tke=conv('tke'),tko=conv('tko'),kv=lemLast(ms,function(m){return m.kuki}),n=0,kk=0,oh=false;
+  ms.forEach(function(k){var m=lemMon(k);if(m&&m.ob.n!=null&&m.ob.n>0){n+=m.ob.n;kk+=m.ob.k||0;oh=true}});
+  var q=lemLast(ms,function(m){return m.ob.q}),obq=oh?kk/n:null,obze=obq!=null&&q>0?obq/(q/100):null;
+  var parts=[tke.pts,tko.pts,lemKukiPts(kv),lemObPts(obze)],wh=parts.some(function(x){return x!=null}),wp=parts.reduce(function(a,x){return a+(x||0)},0);
+  var nw=L().norm.w,wze=wh?wp/LEM_EXP.w:null,wzeN=wze!=null&&nw!=null&&nw>0&&nw<100?wze/(nw/100):wze;
+  R.w={tke:tke,tko:tko,kuki:{v:kv,pts:lemKukiPts(kv)},ob:{n:oh?n:null,k:oh?kk:null,q:q,quote:obq,ze:obze,pts:lemObPts(obze)},pts:wh?Math.min(LEM_MAX.w,Math.round(wzeN*LEM_EXP.w*10)/10):null,ze:wze,zeN:wzeN,norm:wzeN!==wze,raw:wh?wp:null};
+  /* Qualität (zählt der Bereichswert; letzter erfasster Stand) */
+  var ts=lemLast(ms,function(m){return m.ts}),tsF=lemLast(ms,function(m){return m.tsF}),bank=lemLast(ms,function(m){return m.bank}),cs=lemLast(ms,function(m){return m.cs});
+  var kub=lemKubis(ts,bank),csp=lemCsPts(cs),qh=kub!=null||csp!=null;
+  R.q={ts:ts,tsF:tsF,bank:bank,cs:cs,kub:kub,cs_pts:csp,pts:qh?(kub?kub.pts:0)+(csp||0):null};
+  var have=['q','v','w'].filter(function(k){return R[k].pts!=null});
+  R.tot=have.length?have.reduce(function(a,k){return a+R[k].pts},0):null;R.complete=have.length===3;R.exp=150;R.max=215;
+  return R;
+}
+/* --- Hebel: was bringt der nächste Schritt? --- */
+function lemLevers(R){
+  var o=[];
+  var v=R.v;if(v.ziel>0&&v.pts!=null&&v.pts<100){
+    var f=v.zeN&&v.ze?v.zeN/v.ze:1,p=lemPct(v.zeN),need=function(pc){return Math.max(1,Math.ceil(pc/100*v.ziel/f-v.ist-LEM_EPS))};
+    if(p<70)o.push({k:'v',g:30,t:'Verkauf auf 70 % bringen',s:'Noch '+num(need(70))+' Verkaufspunkte · darunter gibt es 0 Punkte',u:need(70)});
+    else{o.push({k:'v',g:1,t:'Verkauf: +1 % Zielerreichung',s:'Noch '+num(need(p+1))+' Verkaufspunkte bis '+(p+1)+' %',u:need(p+1)});
+      var ms=[100,110,120,130,140].filter(function(x){return x>p+1})[0];if(ms)o.push({k:'v',g:lemVScore(ms/100)-v.pts,t:'Verkauf auf '+ms+' %',s:'Noch '+num(need(ms))+' Verkaufspunkte',u:need(ms)})}
+  }
+  [['tke','Conversion TKE'],['tko','Conversion Online-TK']].forEach(function(x){var c=R.w[x[0]];if(!(c.z>0)||c.pts==null)return;var p=lemPct(c.ze),nx=LEM_CONV.slice().reverse().filter(function(t){return t[0]>p})[0];if(!nx)return;var nd=Math.max(1,Math.ceil(nx[0]/100*c.z-c.i-LEM_EPS));o.push({k:'w',g:nx[1]-c.pts,t:x[1]+' auf '+nx[0]+' %',s:'Noch '+nd+' '+plural(nd,'Conversion','Conversions'),u:nd})});
+  var ku=R.w.kuki;if(ku.v!=null){var nk=LEM_KUKI.slice().reverse().filter(function(t){return t[0]>ku.v+LEM_EPS})[0];if(nk)o.push({k:'w',g:nk[1]-ku.pts,t:'Werbeeinwilligung (KUKI) auf '+dec(nk[0],3),s:'Aktuell '+dec(ku.v,3)+' · Einwilligung für Telefon, SMS und E-Mail aktiv erfragen',u:nk[0]-ku.v})}
+  var ob=R.w.ob;if(ob.n>0&&ob.q>0&&ob.pts!=null&&ob.pts<6){var p2=ob.ze*100,nb=LEM_OB.slice().reverse().filter(function(t){return t[0]>p2+LEM_EPS||(t[0]===70&&p2<=70)})[0];if(nb){var tgt=(nb[0]===70?70.01:nb[0])/100*ob.q/100*ob.n,nd2=Math.max(1,Math.ceil(tgt-ob.k-LEM_EPS));o.push({k:'w',g:nb[1]-ob.pts,t:'Online Banking nach KLS-Termin',s:'Noch '+nd2+' '+plural(nd2,'Kunde','Kunden')+' mit Online Banking für '+(nb[0]===70?'über 70':nb[0])+' %',u:nd2})}}
+  var q=R.q;if(q.ts!=null&&q.kub&&q.kub.pts<55){var t1=q.ts;for(var s=0;s<200&&lemKubis(t1,q.bank).pts<=q.kub.pts;s++)t1=Math.round((t1+0.1)*10)/10;if(lemKubis(t1,q.bank).pts>q.kub.pts)o.push({k:'q',g:lemKubis(t1,q.bank).pts-q.kub.pts,t:'KuBiS-Teamscore auf '+dec(t1,1),s:'Bereichswert aktuell '+dec(q.ts,1)+(q.bank!=null?' · Bank Ø '+dec(q.bank,1):''),u:t1-q.ts})}
+  if(q.cs!=null&&q.cs_pts<10){var nc=q.cs<62?62:62+2*(q.cs_pts);o.push({k:'q',g:1,t:'Cross-Sell auf '+nc+' %',s:'Aktuell '+dec(q.cs,1)+' % ohne Druckverkauf',u:nc-q.cs})}
+  return o.filter(function(x){return x.g>0}).sort(function(a,b){return b.g-a.g||a.u-b.u});
+}
+function lemPillarState(pts,exp){if(pts==null)return {c:'#7b8794',l:'offen'};var r=pts/exp;return r>=1?{c:'#1f9d55',l:'über Erwartung'}:r>=.9?{c:'#1c7ed6',l:'knapp darunter'}:r>=.75?{c:'#d9780a',l:'unter Erwartung'}:{c:'#c92a3a',l:'deutlich darunter'}}
+
+/* ===================== Ansicht: LEM-Ziele ===================== */
+function lemMk(){return UI.lemMk&&/^\d{4}-\d{2}$/.test(UI.lemMk)?UI.lemMk:monthKey()}
+function lemPer(){return UI.lemPer==='m'?'m':'y'}
+function lemF(v,d){return v==null?'–':dec(v,d==null?(v%1?1:0):d)}
+function lemPctTxt(z){return z==null?'–':Math.round(z*100)+' %'}
+function lemBar(pts,exp,max,c){var w=pts==null?0:Math.min(100,pts/max*100);return '<div class="lem-bar"><i style="width:'+w.toFixed(1)+'%;background:'+c+'"></i><b style="left:'+(exp/max*100).toFixed(1)+'%" title="Erwartungswert '+exp+'"></b></div>'}
+function lemHero(R){
+  var st=lemPillarState(R.tot,R.exp),seg=[['q','Qualität','#0c8599'],['v','Verkauf','#1c7ed6'],['w','Wachstum','#7048e8']];
+  return '<section class="card glass rise lem-hero"><div class="lh-top"><div><small>LEM-Punkte '+(R.per==='y'?R.mk.slice(0,4)+' bis '+monthLabel(R.mk).split(' ')[0]:monthLabel(R.mk))+'</small><b class="lh-v">'+(R.tot==null?'–':dec(R.tot,R.tot%1?1:0))+'<span> / '+R.exp+'</span></b><span class="muted small">Erwartungswert '+R.exp+' · maximal '+R.max+(R.complete?'':' · noch nicht alle Säulen erfasst')+'</span></div>'+chipC(st.l,st.c)+'</div>'+
+    '<div class="lh-stack">'+seg.map(function(s){var p=R[s[0]].pts;return p?'<i style="width:'+(p/R.max*100).toFixed(1)+'%;background:'+s[2]+'" title="'+s[1]+' '+p+'"></i>':''}).join('')+'<b style="left:'+(R.exp/R.max*100).toFixed(1)+'%"></b></div>'+
+    '<div class="lh-leg">'+seg.map(function(s){var p=R[s[0]].pts;return '<span><i style="background:'+s[2]+'"></i>'+s[1]+' <b>'+lemF(p)+'</b><small>/'+LEM_EXP[s[0]]+'</small></span>'}).join('')+'</div></section>';
+}
+function lemCardV(R){
+  var v=R.v,st=lemPillarState(v.pts,LEM_EXP.v);
+  var rows=v.prods.map(function(x){var w=x.ze==null?0:Math.min(100,x.ze*100);return '<div class="lem-r"><span class="lr-n"><b>'+esc(x.p.n)+'</b><small>'+(x.i==null&&x.z==null?'keine Werte':lemF(x.i)+' / '+lemF(x.z)+' VP'+(x.src==='auto'?' · aus Ergebnissen':x.src==='rep'?' · Reporting':x.src==='mix'?' · gemischt':''))+'</small></span><div class="bar"><i class="'+(x.ze==null?'':x.ze>=1?'good':x.ze>=.7?'':'bad')+'" data-w="'+Math.round(w)+'"></i></div><em>'+lemPctTxt(x.ze)+'</em></div>'}).join('');
+  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="v" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#1c7ed6">'+ic('chart',18)+'</span><div class="grow"><h2>Verkauf</h2><small class="muted">Zielerreichung Verkaufspunkte '+lemPctTxt(v.zeN)+(v.norm?' (normiert)':'')+'</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(v.pts)+'<span>/'+LEM_EXP.v+'</span></b></div>'+lemBar(v.pts,LEM_EXP.v,LEM_MAX.v,st.c)+
+    '<p class="muted small lp-s">'+(v.ziel?lemF(v.ist)+' von '+lemF(v.ziel)+' Verkaufspunkten · ab 70 % = 30, je 1 % +1, ab 140 % = 100':'Noch kein Verkaufsziel erfasst. Antippen zum Eintragen.')+'</p>'+rows+'</section>';
+}
+function lemCardW(R){
+  var w=R.w,st=lemPillarState(w.pts,LEM_EXP.w);
+  function row(n,sub,pts,max,ze){return '<div class="lem-r"><span class="lr-n"><b>'+n+'</b><small>'+sub+'</small></span><div class="bar"><i class="'+(pts==null?'':pts>=max*.75?'good':pts>0?'':'bad')+'" data-w="'+(pts==null?0:Math.round(pts/max*100))+'"></i></div><em>'+lemF(pts)+'<small>/'+max+'</small></em></div>'}
+  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="w" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#7048e8">'+ic('trend',18)+'</span><div class="grow"><h2>Wachstum</h2><small class="muted">Zielerreichung '+lemPctTxt(w.zeN)+(w.norm?' (normiert)':'')+' · 40 Punkte = 100 %</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(w.pts)+'<span>/'+LEM_EXP.w+'</span></b></div>'+lemBar(w.pts,LEM_EXP.w,LEM_MAX.w,st.c)+
+    row('Conversion TKE',w.tke.z?lemF(w.tke.i)+' / '+lemF(w.tke.z)+' · '+lemPctTxt(w.tke.ze):'kein Ziel',w.tke.pts,18)+
+    row('Conversion Online-TK',w.tko.z?lemF(w.tko.i)+' / '+lemF(w.tko.z)+' · '+lemPctTxt(w.tko.ze):'kein Ziel',w.tko.pts,18)+
+    row('Werbeeinwilligung (KUKI)',w.kuki.v==null?'kein Wert':'Wert '+dec(w.kuki.v,3)+' · Erwartung 1,525',w.kuki.pts,8)+
+    row('Online Banking nach KLS-Termin',w.ob.n?Math.round(w.ob.quote*100)+' % von '+lemF(w.ob.n)+' Kunden'+(w.ob.q?' · Ziel '+lemF(w.ob.q)+' % · ZE '+lemPctTxt(w.ob.ze):''):'keine Werte',w.ob.pts,6)+'</section>';
+}
+function lemCardQ(R){
+  var q=R.q,st=lemPillarState(q.pts,LEM_EXP.q),k=q.kub;
+  function row(n,sub,pts,max){return '<div class="lem-r"><span class="lr-n"><b>'+n+'</b><small>'+sub+'</small></span><div class="bar"><i class="'+(pts==null?'':pts>=max*.8?'good':pts>=max*.6?'':'bad')+'" data-w="'+(pts==null?0:Math.round(pts/max*100))+'"></i></div><em>'+lemF(pts)+'<small>/'+max+'</small></em></div>'}
+  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="q" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#0c8599">'+ic('star',18)+'</span><div class="grow"><h2>Qualität</h2><small class="muted">KuBiS (Bereichswert) und Cross-Sell</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(q.pts)+'<span>/'+LEM_EXP.q+'</span></b></div>'+lemBar(q.pts,LEM_EXP.q,LEM_MAX.q,st.c)+
+    row('KuBiS-Teamscore',q.ts==null?'kein Wert':'Bereich '+dec(q.ts,1)+(q.tsF!=null?' · Filiale '+dec(q.tsF,1):'')+(q.bank!=null?' · Bank Ø '+dec(q.bank,1):'')+(k&&k.best==='diff'?' · zählt über Bankdurchschnitt':''),k?k.pts:null,55)+
+    row('Cross-Sell ohne Druckverkauf',q.cs==null?'kein Wert':dec(q.cs,1)+' % · Erwartung 70 %',q.cs_pts,10)+'</section>';
+}
+function lemLeverCard(R){
+  var l=lemLevers(R).slice(0,UI.lemAllLev?12:5);if(!l.length)return '';
+  var nm={v:'Verkauf',w:'Wachstum',q:'Qualität'};
+  return '<section class="card glass rise s12"><div class="card-h"><div><h2>Hebel</h2><span class="sub">Was der nächste Schritt an LEM-Punkten bringt</span></div></div>'+l.map(function(x){return '<div class="row lev"><span class="lev-g">+'+dec(x.g,x.g%1?1:0)+'</span><div class="grow"><b>'+esc(x.t)+'</b><span class="muted small">'+nm[x.k]+' · '+esc(x.s)+'</span></div></div>'}).join('')+
+    (lemLevers(R).length>5?'<button class="btn sm ghost more-l" data-act="lem-lev-all">'+(UI.lemAllLev?'Weniger':'Alle Hebel')+'</button>':'')+'</section>';
+}
+function lemOwnGoals(){
+  if(!S.goals.length)return '';
+  return '<section class="card glass rise s12"><div class="card-h"><h2>Eigene Monatsziele</h2><span class="sub">zusätzlich zur LEM</span></div>'+S.goals.map(function(g){var p=goalPct(g),st=goalState(g);return '<div class="prow click" data-act="goal-open" data-id="'+esc(g.id)+'"><div class="l"><span>'+esc(g.name)+'</span><span class="muted">'+num(goalActual(g))+' / '+num(g.target)+' '+esc(g.unit)+' · '+chipC(st.l,st.c)+'</span></div><div class="bar"><i style="background:'+st.c+'" data-w="'+Math.min(100,Math.round(p*100))+'"></i></div></div>'}).join('')+'</section>';
+}
+function viewLem(){
+  var mk=lemMk(),per=lemPer(),R=lemCalc(mk,per);
+  var top='<div class="toolbar rise lem-tb"><div class="seg"><button type="button" class="'+(per==='y'?'on':'')+'" data-act="lem-per" data-v="y">Jahr</button><button type="button" class="'+(per==='m'?'on':'')+'" data-act="lem-per" data-v="m">Monat</button></div>'+'<div class="mnav"><button class="btn icon sm" data-act="lem-m" data-k="-1" aria-label="Vorheriger Monat">'+ic('left',16)+'</button><b>'+esc(new Date(+mk.slice(0,4),+mk.slice(5)-1,1).toLocaleDateString('de-DE',{month:'short',year:'numeric'}))+'</b><button class="btn icon sm" data-act="lem-m" data-k="1" aria-label="Nächster Monat">'+ic('right',16)+'</button></div></div>';
+  var miss=!lemMon(mk)?'<div class="nb rise">'+ic('edit',16)+'<span class="grow">Für '+esc(monthLabel(mk))+' sind noch keine LEM-Werte erfasst.</span><button class="btn sm primary" data-act="lem-add">Eintragen</button></div>':'';
+  var norm=(R.v.norm||R.w.norm)?'<p class="muted small s12" style="padding:0 4px">Normiert mit Bank-Zielerreichung (Verkauf '+lemF(L().norm.v)+' %, Wachstum '+lemF(L().norm.w)+' %). Liegt die Bank über 100 %, wird nicht nach unten angepasst.</p>':'';
+  return top+miss+'<div class="grid">'+'<div class="s12">'+lemHero(R)+'</div>'+lemCardV(R)+lemCardW(R)+lemCardQ(R)+lemLeverCard(R)+lemOwnGoals()+norm+
+    '<p class="muted small s12" style="padding:0 4px">Berechnet nach der LEM-Systematik 2026 (Folien Vertriebssteuerung). Verbindlich ist das Reporting der Bank; die Gesamt-LEM wird am Jahresende noch mit dem Mittelwert der Bereiche normiert.</p></div>';
+}
+
+/* ===================== Erfassen ===================== */
+function lemIn(name,val,ph,lbl){return '<input name="'+name+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':esc(String(val).replace('.',',')))+'" placeholder="'+esc(ph||'–')+'" aria-label="'+esc(lbl||name)+'">'}
+function lemSheetHead(mk,t){return t+' · '+esc(monthLabel(mk))}
+function openLemV(mk){
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon();
+  var rows=L().prods.map(function(p){var x=m.v[p.id]||{},a=lemAutoIst(mk,p);
+    return '<div class="lem-in"><span><b>'+esc(p.n)+'</b><small>'+(a!=null?'aus Ergebnissen: '+lemF(a)+' VP':p.src?'verknüpft, noch keine Ergebnisse':'nur aus Reporting')+'</small></span>'+lemIn('z_'+p.id,x.z,'Ziel',p.n+' Ziel')+lemIn('i_'+p.id,x.i,a!=null?lemF(a):'Ist',p.n+' Ist')+'</div>'}).join('');
+  sheet(lemSheetHead(mk,'Verkauf'),'<form class="lemf" data-form="lem-v"><input type="hidden" name="mk" value="'+mk+'">'+
+    '<div class="lem-in tot"><span><b>Ziel gesamt</b><small>Verkaufspunkte laut Scorecard, optional</small></span>'+lemIn('vz',m.vz,'Summe','Ziel gesamt')+'<span></span></div>'+
+    '<div class="lem-ih"><span></span><small>Ziel VP</small><small>Ist VP</small></div>'+rows+
+    '<p class="muted small" style="margin:10px 0">Ist leer lassen, dann rechnet die App aus euren Ergebnissen (Stück × Verkaufspunkte je Stück) bzw. bei One Bank aus den Überleitungen. Ein eingetragener Ist-Wert aus dem Reporting hat Vorrang.</p>'+
+    formFoot('<button type="button" class="btn left" data-act="lem-prods">'+ic('settings',15)+' Verknüpfung</button>')+'</form>');
+}
+function lemKlsAppts(mk){var n=0;Object.keys(K().days).forEach(function(ds){if(ds.slice(0,7)===mk)n+=klsAnalyze(ds).kpi.appts});return n}
+function openLemW(mk){
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),kc=lemKlsAppts(mk);
+  sheet(lemSheetHead(mk,'Wachstum'),'<form class="lemf" data-form="lem-w"><input type="hidden" name="mk" value="'+mk+'">'+
+    '<div class="lem-ih"><span></span><small>Ziel</small><small>Ist</small></div>'+
+    '<div class="lem-in"><span><b>Conversion TKE</b><small>Kunde erreicht Status „strategisch“</small></span>'+lemIn('tke_z',m.tke.z,'Ziel')+lemIn('tke_i',m.tke.i,'Ist')+'</div>'+
+    '<div class="lem-in"><span><b>Conversion Online-TK</b><small>POS-Zusatzkredit, GK mit Limit oder Gehaltseingang · kein LiA</small></span>'+lemIn('tko_z',m.tko.z,'Ziel')+lemIn('tko_i',m.tko.i,'Ist')+'</div>'+
+    '<div class="lem-in one"><span><b>Werbeeinwilligung (KUKI)</b><small>Telefon, SMS, E-Mail · Wert laut Reporting (1,345 = 5 … 1,525 = 8 Punkte)</small></span>'+lemIn('kuki',m.kuki,'z. B. 1,48')+'</div>'+
+    '<h6 class="ml-h">Zugang Online Banking</h6>'+
+    '<div class="lem-in"><span><b>Kunden mit KLS-Termin</b><small>'+(kc?'Laut übernommenen KLS-Tagen: '+kc+' Termine':'Basis für die Quote')+'</small></span>'+lemIn('ob_n',m.ob.n,kc?String(kc):'Anzahl')+'<span></span></div>'+
+    '<div class="lem-in"><span><b>davon nutzen Online Banking</b><small>nach dem Termin</small></span>'+lemIn('ob_k',m.ob.k,'Anzahl')+'<span></span></div>'+
+    '<div class="lem-in"><span><b>Zielquote</b><small>in %, Zielerreichung = Ist-Quote ÷ Zielquote</small></span>'+lemIn('ob_q',m.ob.q,'%')+'<span></span></div>'+
+    formFoot()+'</form>');
+}
+function openLemQ(mk){
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon();
+  sheet(lemSheetHead(mk,'Qualität'),'<form class="lemf" data-form="lem-q"><input type="hidden" name="mk" value="'+mk+'">'+
+    '<div class="lem-in one"><span><b>KuBiS-Teamscore Bereich</b><small>Für die LEM zählt der Bereichswert · 74,0 = 45 Punkte, je 0,4 ± 1</small></span>'+lemIn('ts',m.ts,'z. B. 75,2')+'</div>'+
+    '<div class="lem-in one"><span><b>Bank-Durchschnitt</b><small>Für „Punkte zum Durchschnitt“ (Best of 2)</small></span>'+lemIn('bank',m.bank,'z. B. 76,6')+'</div>'+
+    '<div class="lem-in one"><span><b>Teamscore Filiale</b><small>Nur zur Info</small></span>'+lemIn('tsF',m.tsF,'optional')+'</div>'+
+    '<div class="lem-in one"><span><b>Cross-Sell gesamt</b><small>ohne Druckverkauf, in % · ab 62 % = 1, je 2 %-Punkte +1</small></span>'+lemIn('cs',m.cs,'z. B. 74')+'</div>'+
+    formFoot()+'</form>');
+}
+function openLemProds(){
+  var opts=[['','Nur Reporting'],['__refs','Überleitungen']].concat(S.metrics.map(function(m){return [m.id,m.n]}));
+  sheet('Verkaufspunkte verknüpfen','<form class="form" data-form="lem-prods"><p class="full muted small">Je Produkt: aus welchen Ergebnissen die App die Ist-Verkaufspunkte schätzt und wie viele Verkaufspunkte ein Abschluss bringt (laut Scorecard). „Nur Reporting“: Ist von Hand eintragen.</p>'+
+    L().prods.map(function(p){return '<div class="full lem-pp">'+SEL(p.n,'src_'+p.id,opts,p.src)+'<label class="fld"><span>VP je Stück</span><input name="ppu_'+p.id+'" type="text" inputmode="decimal" value="'+esc(String(p.ppu).replace('.',','))+'"></label></div>'}).join('')+formFoot()+'</form>');
+}
+function openLemNorm(){var n=L().norm;
+  sheet('Normierung','<form class="form" data-form="lem-norm"><p class="full muted small">Liegt die Bank in Verkauf oder Wachstum unter 100 %, wird die Zielerreichung aller Einheiten angehoben. Über 100 % wird nicht nach unten angepasst. Leer lassen, solange nichts bekannt ist.</p>'+
+    F('Bank-Zielerreichung Verkauf (%)','v',n.v==null?'':String(n.v).replace('.',','),'text','inputmode="decimal" placeholder="z. B. 94"')+F('Bank-Zielerreichung Wachstum (%)','w',n.w==null?'':String(n.w).replace('.',','),'text','inputmode="decimal" placeholder="z. B. 97"')+formFoot()+'</form>')}
+function openLemRules(){
+  function tb(h,rows){return '<table class="lem-t"><thead><tr>'+h.map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r){return '<tr>'+r.map(function(x){return '<td>'+x+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table>'}
+  sheet('LEM 2026 · Regeln',
+    '<p class="small">Drei Säulen: <b>Qualität</b> (Erwartung 50, max. 65), <b>Verkauf</b> (100 % = 60, max. 100), <b>Wachstum</b> (100 % = 40, max. 50). Erwartung gesamt 150.</p>'+
+    '<h6 class="ml-h">Verkauf · Scorecard</h6>'+tb(['Zielerreichung','Punkte'],[['unter 70 %','0'],['70 %','30'],['80 %','40'],['90 %','50'],['100 %','60'],['110 %','70'],['120 %','80'],['130 %','90'],['ab 140 %','100']])+'<p class="muted small">Dazwischen je 1 % +1 Punkt. Produkte: Kredit, Girokonto, Kreditkarte, Versicherungen, One Bank, Festgeld, Baufinanzierung.</p>'+
+    '<h6 class="ml-h">Wachstum</h6>'+tb(['ZE Conversion TKE / Online-TK','Punkte'],LEM_CONV.slice().reverse().map(function(x){return ['ab '+x[0]+' %',x[1]]}))+tb(['KUKI-Wert','Punkte'],LEM_KUKI.slice().reverse().map(function(x){return [dec(x[0],3),x[1]]}))+tb(['ZE Online Banking','Punkte'],[['bis 70 %','0'],['70–80 %','1'],['80–90 %','2'],['90–100 %','3'],['100–110 %','4'],['110–120 %','5'],['über 120 %','6']])+'<p class="muted small">Wachstum gesamt: 40 Punkte = 100 %, 50 Punkte = 125 %.</p>'+
+    '<h6 class="ml-h">Qualität</h6>'+tb(['KuBiS-Teamscore','Punkte'],[['ab 78,0','55'],['ab 77,6','54'],['ab 76,0','50'],['70,0–74,0','45'],['ab 68,0','40'],['ab 60,0','20'],['unter 52,4','0']])+'<p class="muted small">Je 0,4 Teamscore ± 1 Punkt. Best of 2: absoluter Teamscore oder Punkte zum Bankdurchschnitt (74,0 ≙ −2,5). Schwellen für den Durchschnittsweg: über 50 Punkte nur ab Teamscore 70, unter 65 max. 35, unter 60 = 0. Es zählt der Bereichswert.</p>'+
+    tb(['Cross-Sell (ohne Druckverkauf)','Punkte'],[['unter 62','0'],['ab 62','1'],['ab 70','5'],['ab 74','7'],['ab 80','10']])+'<p class="muted small">Je 2 %-Punkte +1.</p>',
+    '<div class="m-foot"><button class="btn primary" data-act="modal-close">Fertig</button></div>');
+}
+function lemSaveForm(kind,f,d){
+  var mk=d.get('mk')||lemMk(),m=lemMon(mk,true),g=function(n){return lemN(d.get(n))};
+  if(kind==='v'){m.vz=g('vz');L().prods.forEach(function(p){var z=g('z_'+p.id),i=g('i_'+p.id);if(z==null&&i==null)delete m.v[p.id];else m.v[p.id]={z:z,i:i}})}
+  if(kind==='w'){m.tke={z:g('tke_z'),i:g('tke_i')};m.tko={z:g('tko_z'),i:g('tko_i')};m.kuki=g('kuki');m.ob={n:g('ob_n'),k:g('ob_k'),q:g('ob_q')};
+    if(m.ob.n!=null&&m.ob.k!=null&&m.ob.k>m.ob.n){toast('„davon“ ist größer als die Basis','err');return}}
+  if(kind==='q'){m.ts=g('ts');m.bank=g('bank');m.tsF=g('tsF');m.cs=g('cs');
+    if(m.ts!=null&&(m.ts<0||m.ts>100)||m.cs!=null&&(m.cs<0||m.cs>100)){toast('Teamscore und Cross-Sell liegen zwischen 0 und 100','err');return}}
+  UI.lemMk=mk;save();closeModal();if(UI.route!=='goals')go('goals');else rerender();
+  var R=lemCalc(mk,lemPer());toast({v:'Verkauf',w:'Wachstum',q:'Qualität'}[kind]+': '+lemF(R[kind].pts)+' LEM-Punkte');
+}
+/* Verkaufspunkte je Person (aus Ergebnissen) */
+function lemPersonVP(e,mk){var a=0,t=0,any=false;L().prods.forEach(function(p){if(!p.src||p.src==='__refs')return;var m=metric(p.src);if(!m)return;var x=metAct(mk,e,m);if(x!=null){a+=x*p.ppu;any=true}t+=metTarget(e,m).v*p.ppu});
+  var r=refsOf({emp:e.id,month:mk}).length,ob=lemProd('ob');if(ob&&ob.src==='__refs'&&r){a+=r*ob.ppu;any=true}
+  return {a:any?a:null,t:t}}
+function lemRegionVal(mk,id){var R=lemCalc(mk,'m');if(id==='__lem')return R.complete?R.tot:null;if(id==='__lemv')return R.v.zeN==null?null:Math.round(R.v.zeN*100);if(id==='__lemw')return R.w.pts;if(id==='__lemq')return R.q.pts;if(id==='__kubis')return R.q.ts;return null}
+var LEM_REG_OPTS=[['__lem','LEM-Punkte gesamt'],['__lemv','LEM Verkauf: Zielerreichung %'],['__lemw','LEM Wachstum: Punkte'],['__lemq','LEM Qualität: Punkte'],['__kubis','KuBiS-Teamscore Bereich']];
+function lemAttention(){
+  var o=[],mk=monthKey(),d=new Date();if(!S.employees.length)return o;
+  if(!lemMon(mk)&&d.getDate()>=3)o.push({sev:1,icon:'target',c:'#1c7ed6',t:'LEM-Werte für '+monthLabel(mk).split(' ')[0]+' fehlen',s:'Ziele und Stand aus dem Reporting eintragen',act:'go',to:'goals'});
+  var R=lemCalc(mk,'y');if(R.v.ziel&&R.v.zeN!=null&&R.v.zeN<.7)o.push({sev:2,icon:'chart',c:'#c92a3a',t:'Verkauf unter 70 %: 0 LEM-Punkte',s:'Jahr bis heute '+lemPctTxt(R.v.zeN)+' · ab 70 % gibt es 30 Punkte',act:'go',to:'goals'});
+  return o;
+}
+function seedLem(st){
+  var d=lemDef(),y=new Date().getFullYear(),cm=new Date().getMonth()+1;st.lem=d;
+  d.prods.forEach(function(p){p.ppu={kre:12,gk:8,ver:10,ob:4}[p.id]||1});
+  var zp={kre:120,gk:80,kk:30,ver:60,ob:20,fg:15,bf:40};
+  for(var i=1;i<=cm;i++){var mk=y+'-'+pad(i),r=function(k){return (hseed(mk+k)%31-15)/100},m=lemBlankMon(),cur=i===cm;
+    Object.keys(zp).forEach(function(k){var z=zp[k],iv=Math.round(z*(1.0+r(k)));m.v[k]={z:z,i:cur&&['kre','gk','ver','ob'].indexOf(k)>-1?null:(cur?Math.round(iv*0.1):iv)}});
+    m.tke={z:12,i:cur?2:Math.round(12*(1.03+r('t')/2))};m.tko={z:8,i:cur?1:Math.round(8*(1.02+r('o')/2))};m.kuki=Math.round((1.49+r('k')/6)*1000)/1000;
+    m.ob={n:cur?8:60,k:cur?5:Math.round(60*(0.58+r('b')/4)),q:55};
+    m.ts=Math.round((75.2+r('q')*3)*10)/10;m.tsF=Math.round((m.ts+1.4)*10)/10;m.bank=76.6;m.cs=Math.round(73+r('c')*10);
+    d.mon[mk]=m}
+}
+function registerLem(){
+  ROUTES.goals.t='LEM-Ziele';ROUTES.goals.icon='target';ROUTES.goals.fn=function(){return viewLem()};ROUTES.goals.sub=function(){return 'Qualität, Verkauf und Wachstum nach LEM 2026'};
+  var h=hubById('sales');h.tabs=[['goals','LEM-Ziele'],['sales','Ergebnisse'],['refs','Überleitungen'],['reviews','Google']];
+  Object.assign(ACTIONS,{
+    'lem-per':function(t){UI.lemPer=t.dataset.v;rerender()},
+    'lem-m':function(t){var k=+t.dataset.k;UI.lemMk=k===0?monthKey():shiftMonth(lemMk(),k);rerender()},
+    'lem-edit':function(t){var k=t.dataset.v;(k==='v'?openLemV:k==='w'?openLemW:openLemQ)(lemMk())},
+    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'trend',label:'Wachstum: Conversions, KUKI, Online Banking',fn:function(){openLemW(lemMk())}},{icon:'star',label:'Qualität: KuBiS und Cross-Sell',fn:function(){openLemQ(lemMk())}}]})},
+    'lem-prods':openLemProds,'lem-norm':openLemNorm,'lem-rules':openLemRules,
+    'lem-lev-all':function(){UI.lemAllLev=!UI.lemAllLev;rerender()}
+  });
+  Object.assign(FORMS,{
+    'lem-v':function(f,d){lemSaveForm('v',f,d)},'lem-w':function(f,d){lemSaveForm('w',f,d)},'lem-q':function(f,d){lemSaveForm('q',f,d)},
+    'lem-prods':function(f,d){L().prods.forEach(function(p){var s=d.get('src_'+p.id)||'';p.src=s==='__refs'||metric(s)?s:'';var n=lemN(d.get('ppu_'+p.id));p.ppu=n!=null&&n>=0?n:1});save();rerender();openLemV(lemMk());toast('Verknüpfung gespeichert')},
+    'lem-norm':function(f,d){var v=lemN(d.get('v')),w=lemN(d.get('w'));L().norm={v:v!=null&&v>0&&v<300?v:null,w:w!=null&&w>0&&w<300?w:null};save();closeModal();rerender();toast('Normierung gespeichert')}
+  });
+  QA_ALL.lem=['target','LEM-Werte'];
+}
+function lemVpRow(e,mk){var x=lemPersonVP(e,mk);if(x.a==null&&!x.t)return '';var p=x.t>0?Math.min(100,Math.round((x.a||0)/x.t*100)):0;
+  return '<div class="prow lem-vp"><div class="l"><span>'+ic('target',14)+' LEM-Verkaufspunkte</span><span class="muted">'+lemF(x.a)+' / '+lemF(Math.round(x.t))+'</span></div><div class="bar"><i class="'+(p>=100?'good':p<70?'bad':'')+'" data-w="'+p+'"></i></div></div>'}
+function wgLemS(){var R=lemCalc(monthKey(),'y');if(R.tot==null)return {v:'–',s:'LEM-Werte eintragen',act:'lem-add'};var st=lemPillarState(R.tot,R.exp);return {v:dec(R.tot,R.tot%1?1:0),s:'von 150 · '+(R.complete?st.l:'unvollständig'),cls:R.tot>=R.exp?'good-txt':R.tot>=135?'warn-txt':'bad-txt',to:'goals'}}
+function wgLemL(){var R=lemCalc(monthKey(),'y'),c={q:'#0c8599',v:'#1c7ed6',w:'#7048e8'},n={q:'Qualität',v:'Verkauf',w:'Wachstum'};
+  return '<section class="card glass"><a class="card-h wg-lh" href="#/goals"><h2>LEM-Punkte '+monthKey().slice(0,4)+'</h2><span class="muted small">'+(R.tot==null?'–':dec(R.tot,R.tot%1?1:0))+' / 150</span>'+ic('right',16)+'</a>'+
+    ['q','v','w'].map(function(k){var p=R[k].pts,st=lemPillarState(p,LEM_EXP[k]);return '<div class="prow"><div class="l"><span>'+n[k]+'</span><span class="muted">'+lemF(p)+' / '+LEM_EXP[k]+'</span></div>'+lemBar(p,LEM_EXP[k],LEM_MAX[k],st.c)+'</div>'}).join('')+
+    (lemLevers(R)[0]?'<p class="muted small" style="margin-top:8px">Größter Hebel: '+esc(lemLevers(R)[0].t)+' (+'+lemLevers(R)[0].g+')</p>':'')+'</section>'}
+function registerLemPage(){
+  PAGE_ACTS.goals=function(){return {add:{label:'LEM-Werte erfassen',fn:function(){ACTIONS['lem-add']()}},menu:[{icon:'settings',label:'Verkaufspunkte verknüpfen',fn:openLemProds},{icon:'swap',label:'Normierung (Bank-Zielerreichung)',fn:openLemNorm},{icon:'tasks',label:'LEM-Regeln und Tabellen',fn:openLemRules},{icon:'plus',label:'Eigenes Monatsziel',fn:function(){openGoalForm()}},S.goals.length?{icon:'sparkle',label:'Eigene Ziele: neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}:null]}};
+}
+/* ===================== Filialleiter im KLS ===================== */
+/* Eigene Spalte vorbelegen: Arbeitszeit, Mittag, Termine aus dem App-Kalender */
+function klsMeCol(ds){
+  var c={emp:'me',label:'',key:'',kind:'emp',sme:false,s:[],g:[]};
+  for(var i=0;i<KLS_N;i++){c.s.push('frei');c.g.push('')}
+  lunchSlots(ds).forEach(function(i){c.s[i]='abw'});
+  applyPlan(c,ds);
+  apptsOn(ds).forEach(function(a){
+    if(a.all||!tm(a.start))return;var t=a.cat==='kunde'?'kunde':a.cat==='gebiet'||a.cat==='privat'?'abw':'intern';
+    for(var i=0;i<KLS_N;i++){var x=slotT(i);if(Math.min(toMin(apptEnd(a)),x+30)-Math.max(toMin(a.start),x)>=15){c.s[i]=t;c.g[i]=t==='kunde'?klsGrund(a.t)||'Sonstiges':''}}
+  });
+  return c;
+}
+/* Zusätzliche Vorschläge rund um den Filialleiter */
+function klsMeIssues(out,day,ds,me,fz,svc,future){
+  if(!me)return;var cfg=K().cfg,others=day.cols.filter(function(c){return c.kind==='emp'&&c.emp!=='me'});
+  /* Fokuszeit ausgebucht, du bist frei → selbst Kundentermine übernehmen */
+  var take=[];for(var i=0;i<KLS_N;i++){var busy=others.filter(function(c){return c.s[i]==='frei'}).length<=cfg.freeMin;take.push(fz(i)&&busy&&me.s[i]==='frei')}
+  runsOf(take).forEach(function(r){out.issues.push({sev:1,icon:'calendar',c:'#1c7ed6',t:'Fokuszeit ausgebucht · du bist '+rangeTxt(r[0],r[1])+' frei',s:'Die Berater sind voll. Weitere Kundentermine in dieser Zeit kannst du selbst übernehmen.',i:r[0]})});
+  /* Konflikt: KLS-Kundentermin und anderer Termin im App-Kalender */
+  apptsOn(ds).forEach(function(a){
+    if(a.all||!tm(a.start)||a.cat==='kunde')return;var hit=[];
+    for(var i=0;i<KLS_N;i++){var x=slotT(i);hit.push(me.s[i]==='kunde'&&Math.min(toMin(apptEnd(a)),x+30)-Math.max(toMin(a.start),x)>=15)}
+    runsOf(hit).forEach(function(r){out.issues.push({sev:future(r)?3:2,icon:'alert',c:'#c92a3a',t:'Terminkonflikt '+rangeTxt(r[0],r[1]),s:'Im KLS hast du einen Kundentermin, im Kalender steht „'+a.t+'“. Einen der beiden verschieben oder den Kunden übergeben.',i:r[0]})});
+  });
+  /* Eigene Kundenzeit unter deinem Ziel */
+  var p=out.people.filter(function(x){return x.me})[0];
+  if(p&&p.q!==null&&cfg.meQuote>0&&p.q<cfg.meQuote)out.issues.push({sev:1,icon:'chart',c:'#7b8794',t:'Deine Kundenzeit: '+p.q+' % (Ziel '+cfg.meQuote+' %)',s:'Ein Kundentermin pro Tag hält dich nah am Kunden und entlastet das Team in der Fokuszeit.',i:0});
+}
+/* KLS-Kundentermine des Filialleiters als Einträge im Kalender */
+function klsMeAppts(ds){
+  var day=K().days[ds];if(!day||!K().cfg.me)return [];var me=day.cols.filter(function(c){return c.emp==='me'})[0];if(!me)return [];
+  var own=apptsOn(ds).filter(function(a){return !a.all&&tm(a.start)&&a.cat==='kunde'}),o=[],st=-1;
+  for(var i=0;i<=KLS_N;i++){
+    var on=i<KLS_N&&me.s[i]==='kunde';
+    if(st>=0&&(!on||me.g[i]!==me.g[st])){var a=slotT(st),b=slotT(i);if(!own.some(function(x){return Math.min(toMin(apptEnd(x)),b)-Math.max(toMin(x.start),a)>0}))o.push({id:'kls_'+ds+'_'+st,t:'Kundentermin · '+(me.g[st]||'KLS'),date:ds,start:fromMin(a),end:fromMin(b),all:false,cat:'kunde',loc:'aus dem KLS',kls:true});st=-1}
+    if(on&&st<0)st=i;
+  }
+  return o;
+}
+function registerKlsMe(){
+  ACTIONS['kls-open']=function(t){UI.klsDay=t.dataset.v||todayISO();go('kls')};
 }
 
 /* ============ Formulare (Modals) ============ */
@@ -6276,7 +6635,7 @@ Object.assign(CHANGES,{
   'staff-me':function(v,t){S.staff.me=!!t.checked;save();rerender()}
 });
 
-registerExt();registerExt2();registerExt3();registerExt4();registerExt5();registerExt5b();registerExt6();
+registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();
 /* ============ Events ============ */
 document.addEventListener('click',function(e){
   var el=e.target;if(!el||!el.closest)return;

@@ -1191,6 +1191,11 @@ form.quick[data-form=qtask]{display:flex;gap:10px;flex-wrap:nowrap;align-items:c
 .deal-vp{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;background:rgba(31,157,85,.12)}.deal-vp b{font-size:20px;color:var(--good)}.deal-vp span{font-size:13px;color:var(--muted)}
 .lem-sh{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:10px;align-items:center;padding:6px 0;border-bottom:.5px solid var(--line)}.lem-sh span{display:flex;flex-direction:column;min-width:0}.lem-sh small{font-size:12px;color:var(--muted)}.lem-sh input{text-align:right}
 .dealf optgroup{font-weight:700}
+/* r14: Verlauf, Einbuchungen */
+.lem-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px 6px;padding:0 4px}
+.lem-t.lem-h{font-size:13px;min-width:100%}.lem-t.lem-h th,.lem-t.lem-h td{text-align:right;white-space:nowrap;padding:6px 7px;font-variant-numeric:tabular-nums}.lem-t.lem-h th:first-child,.lem-t.lem-h td:first-child{text-align:left;position:sticky;left:0;background:var(--bg1);font-weight:600}
+.lem-t.lem-h tr.on td{font-weight:700;color:var(--accent,inherit)}
+.pr-nav{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:-4px 0 6px}.pr-nav .btn{min-height:36px}
 
 </style>
 </head>
@@ -1810,7 +1815,7 @@ function normRegion(r,st){
   if(Array.isArray(r.branches)&&r.branches.length)d.branches=r.branches.filter(function(b){return b&&b.n}).map(function(b){return {id:str(b.id||uid(),40),n:str(b.n,60),nr:str(b.nr,12).replace(/[^0-9A-Za-z-]/g,''),lead:str(b.lead,80),phone:str(b.phone,40),mail:str(b.mail,120),own:!!b.own}});
   if(!d.branches.some(function(b){return b.own})&&d.branches.length)d.branches[0].own=true;
   var seen=false;d.branches.forEach(function(b){if(b.own){if(seen)b.own=false;seen=true}});
-  if(Array.isArray(r.kpis))d.kpis=r.kpis.filter(function(k){return k&&k.n}).map(function(k){return {id:str(k.id||uid(),40),n:str(k.n,50),unit:REG_UNITS.indexOf(k.unit)>-1?k.unit:'Stück',hi:k.hi!==false,metric:str(k.metric,40)}});
+  if(Array.isArray(r.kpis))d.kpis=r.kpis.filter(function(k){return k&&k.n}).map(function(k){return {id:str(k.id||uid(),40),n:str(k.n,50),unit:REG_UNITS.indexOf(k.unit)>-1?k.unit:'Stück',hi:k.hi!==false,metric:str(k.metric,40),set:str(k.set,20)}});
   if(r.data&&typeof r.data==='object')Object.keys(r.data).forEach(function(mk){
     if(!/^\d{4}-\d{2}$/.test(mk)||!r.data[mk]||typeof r.data[mk]!=='object')return;d.data[mk]={};
     Object.keys(r.data[mk]).forEach(function(bid){var m=r.data[mk][bid];if(!m||typeof m!=='object')return;d.data[mk][bid]={};Object.keys(m).forEach(function(kid){var v=sNum(m[kid]);if(v!==null)d.data[mk][bid][kid]=v})});
@@ -1864,7 +1869,7 @@ function seedExtra(st,by,td){
     {t:'Gebietsrunde Filialleitungen',date:W[3],start:'13:00',end:'16:30',cat:'gebiet',loc:'Dortmund'},
     {t:'Zahnarzt',date:W[4],start:'17:30',end:'18:30',cat:'privat'}
   ]);
-  seedKls(st,by);seedLem(st,by);st.metrics=lemMetrics().concat(st.metrics.filter(function(m){return !m.lem&&['m_kre','m_kon','m_ver'].indexOf(m.id)<0}));st.lemMig=1;st.goals=[{id:uid(),name:'Girokonto laut LEM',unit:'VP',target:0,actual:0,metric:'__lp:gk'},{id:uid(),name:'Neue Google-Bewertungen',unit:'Stück',target:10,actual:4,metric:''}];
+  seedKls(st,by);seedLem(st,by);st.metrics=lemMetrics().concat(st.metrics.filter(function(m){return !m.lem&&['m_kre','m_kon','m_ver'].indexOf(m.id)<0}));st.lemMig=2;st.goals=[{id:uid(),name:'Girokonto laut LEM',unit:'VP',target:0,actual:0,metric:'__lp:gk'},{id:uid(),name:'Neue Google-Bewertungen',unit:'Stück',target:10,actual:4,metric:''}];
   st.reviews=defReviews(st.settings);
   st.reviews.snaps=[[-170,4.1,61],[-140,4.1,64],[-110,4.2,68],[-80,4.2,71],[-50,4.3,75],[-20,4.3,79]].map(function(x){return {date:td(x[0]),rating:x[1],count:x[2]}});
   st.reviews.list=[
@@ -2983,6 +2988,7 @@ function quickAct(k,pid){
   closeModal();UI.sheet=false;
   if(k==='kls')openKlsImport(todayISO());
   else if(k==='lem')ACTIONS['lem-add']();
+  else if(k==='pr')openPr(monthKey());
   else if(k==='appt')openApptForm('',{emp:pid,cat:pid?'ma':''});
   else if(k==='todo')openTodoForm('',{due:todayISO()});
   else if(k==='wv')openWvForm('',{emp:pid});
@@ -5947,16 +5953,17 @@ function registerExt6(){
 /* --- Regelwerk laut LEM Filialen 2026 (Vertriebssteuerung, Juni 2026) --- */
 var LEM_EXP={q:50,v:60,w:40},LEM_MAX={q:65,v:100,w:50};
 var LEM_CONV=[[140,18],[130,17],[120,16],[110,15],[100,14],[90,12],[80,10],[70,8]];
-var LEM_KUKI=[[1.525,8],[1.465,7],[1.405,6],[1.345,5]];
+var LEM_KUKI=[[1525,8],[1465,7],[1405,6],[1345,5]];
 var LEM_OB=[[120,6],[110,5],[100,4],[90,3],[80,2],[70,1]];
-var LEM_PRODS=[['kre','Kredit','Volumen & LEM-Punkte','m_kre'],['gk','Girokonto','Verkauf, Prämie (Aktivierung) & Bestand','m_kon'],['kk','Kreditkarte','Verkauf, Prämie (Aktivierung) & Bestand',''],['ver','Versicherungen','Verkauf & Storno','m_ver'],['ob','One Bank','Überleitungen in andere Kanäle',''],['fg','Geldanlage','Festgeld, Tagesgeld, Junior-Tagesgeld, Verflechtung',''],['bf','Baufinanzierung','LEM-Punkte','']];
+var LEM_PRODS=[['kre','TK Verkaufsleistung','Kredit inkl. BzH- und LbP-Überleitungen'],['rsv','Versicherung Kreditschutz','Kredit-RSV, RSV zu Konto oder Karte'],['ver','Versicherung (Netto)','ACM/TAV ohne Kreditschutz'],['gk','Girokonto','Eröffnung, Einbuchung nach 6 Monaten, Bestand'],['kk','Kreditkarte','Verkauf, Einbuchung nach 6 Monaten'],['fg','Termineinlagen','Festgeld, Tagesgeld, Junior-Tagesgeld'],['bf','Bauspar/Baufi','Planet Home oder OLB'],['inv','Überleitung an Investment','TAV CNR und Fondsvolumen'],['lia','Loan in APP','Kredit über die App']];
 var LEM_EPS=1e-7;
 function lemPct(ze){return Math.floor(ze*100+LEM_EPS)}
 /* Verkauf: unter 70 % = 0, ab 70 % = 30 Punkte, je 1 % ZE +1, ab 140 % = 100 */
-function lemVScore(ze){if(ze==null||!isFinite(ze))return null;var p=lemPct(ze);if(p<70)return 0;if(p>=140)return 100;return 30+(p-70)}
+function lemVScore(ze){if(ze==null||!isFinite(ze))return null;var p=ze*100;if(p<70-LEM_EPS)return 0;if(p>=140)return 100;return Math.round((30+(p-70))*100)/100}
 /* Conversion TKE / Online-TK: Stufen ab 70 % */
 function lemConvPts(ze){if(ze==null||!isFinite(ze))return null;var p=lemPct(ze);for(var i=0;i<LEM_CONV.length;i++)if(p>=LEM_CONV[i][0])return LEM_CONV[i][1];return 0}
-function lemKukiPts(v){if(v==null||!isFinite(v))return null;for(var i=0;i<LEM_KUKI.length;i++)if(v>=LEM_KUKI[i][0]-LEM_EPS)return LEM_KUKI[i][1];return 0}
+function lemKukiN(v){return v==null||!isFinite(v)?null:v<10?Math.round(v*1000):v}
+function lemKukiPts(v){v=lemKukiN(v);if(v==null)return null;for(var i=0;i<LEM_KUKI.length;i++)if(v>=LEM_KUKI[i][0]-1e-6)return LEM_KUKI[i][1];return 0}
 /* Zugang Online Banking: <= 70 % = 0, dann je 10 %-Band +1, ab 120 % = 6 */
 function lemObPts(ze){if(ze==null||!isFinite(ze))return null;var p=ze*100;if(p<=70+LEM_EPS)return 0;for(var i=0;i<LEM_OB.length;i++)if(p>=LEM_OB[i][0]-LEM_EPS)return LEM_OB[i][1];return 1}
 /* KuBiS: 74,0 = 45 (Erwartung), je 0,4 ±1, Band 70–74 bleibt 45, max. 55 */
@@ -5969,24 +5976,28 @@ function lemCsPts(v){if(v==null||!isFinite(v))return null;if(v<62-LEM_EPS)return
 function lemWZe(pts){return pts==null?null:pts/LEM_EXP.w}
 
 /* --- Daten --- */
-function lemDef(){return {prods:LEM_PRODS.map(function(p){return {id:p[0],n:p[1],d:p[2],src:''}}),mon:{},norm:{v:null,w:null},cfg:{bf:'ph',tbol:26,tbolBank:null},share:{}}}
+function lemDef(){return {prods:LEM_PRODS.map(function(p){return {id:p[0],n:p[1],d:p[2],src:''}}),mon:{},norm:{v:null,w:null},cfg:{bf:'ph'},share:{},pr:{}}}
 function lemN(v){if(v===''||v==null)return null;var n=typeof v==='number'?v:parseFloat(String(v).replace(/\s/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',','.'));return isFinite(n)&&Math.abs(n)<1e9?n:null}
 function lemZI(o){o=o||{};return {z:lemN(o.z),i:lemN(o.i)}}
 function normLem(o){
   var d=lemDef();if(!o||typeof o!=='object')return d;
-  if(Array.isArray(o.prods)){var by={};o.prods.forEach(function(p){if(p&&p.id)by[p.id]=p});d.prods.forEach(function(p){var x=by[p.id];if(x){p.src=str(x.src,40)}})}
   if(o.norm&&typeof o.norm==='object')d.norm={v:lemN(o.norm.v),w:lemN(o.norm.w)};
-  var c=o.cfg||{};d.cfg={bf:['ph','olb1','olb2'].indexOf(c.bf)>-1?c.bf:'ph',tbol:lemN(c.tbol)>0?lemN(c.tbol):26,tbolBank:lemN(c.tbolBank)>0?lemN(c.tbolBank):null};
+  var c=o.cfg||{};d.cfg={bf:['ph','olb1','olb2'].indexOf(c.bf)>-1?c.bf:'ph'};
   if(o.share&&typeof o.share==='object')Object.keys(o.share).forEach(function(k){var v=lemN(o.share[k]);if(v!=null&&v>=0&&v<=5)d.share[str(k,40)]=v});
+  if(o.pr&&typeof o.pr==='object')Object.keys(o.pr).filter(function(k){return /^\d{4}-\d{2}$/.test(k)}).sort().slice(-36).forEach(function(k){var x=o.pr[k]||{},cc={},nn={};Object.keys(x.c||{}).forEach(function(id){var v=lemN(x.c[id]);if(PR_ALL.indexOf(id)>-1&&v!=null&&v>=0)cc[id]=Math.round(v)});['gk','kk'].forEach(function(t){var v=lemN((x.n||{})[t]);if(v!=null&&v>=0)nn[t]=Math.round(v)});var qq={};['ast','geh','sme'].forEach(function(t){var v=lemN((x.q||{})[t]);if(v!=null&&v>=0&&v<=300)qq[t]=v});d.pr[k]={c:cc,n:nn,q:qq,split:x.split!==false}});
   if(o.mon&&typeof o.mon==='object')Object.keys(o.mon).filter(function(k){return /^\d{4}-\d{2}$/.test(k)}).sort().slice(-36).forEach(function(mk){
-    var m=o.mon[mk]||{},v={},ob=m.ob||{};Object.keys(m.v||{}).forEach(function(pid){if(LEM_PRODS.some(function(p){return p[0]===pid}))v[pid]=lemZI(m.v[pid])});
-    d.mon[mk]={vz:lemN(m.vz),v:v,tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemN(m.kuki),ob:{n:lemN(ob.n),a:lemN(ob.a),b:lemN(ob.b)},ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs),korr:lemN(m.korr)};
+    var m=o.mon[mk]||{},v={},ob=m.ob||{},ag=m.agb||{};Object.keys(m.v||{}).forEach(function(pid){if(LEM_PRODS.some(function(p){return p[0]===pid}))v[pid]=lemZI(m.v[pid])});
+    d.mon[mk]={vz:lemN(m.vz),v:v,um:lemZI(m.um),kv:lemN(m.kv),tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemKukiN(lemN(m.kuki)),ob:{z:lemN(ob.z),i:lemN(ob.i)},agb:{c:lemN(ag.c),e:lemN(ag.e),s:lemN(ag.s),a:lemN(ag.a)},stk:lemStk(m.stk),ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs),korr:lemN(m.korr)};
   });
   return d;
 }
 function L(){return S.lem}
 function lemMon(mk,create){var m=L().mon[mk];if(!m&&create)m=L().mon[mk]=lemBlankMon();return m||null}
-function lemBlankMon(){return {vz:null,v:{},tke:{z:null,i:null},tko:{z:null,i:null},kuki:null,ob:{n:null,a:null,b:null},ts:null,tsF:null,bank:null,cs:null,korr:null}}
+function lemStk(o){o=o||{};var r={};['gi','gl','gs','kz','ki','ks'].forEach(function(k){var v=lemN(o[k]);r[k]=v!=null&&v>=0?v:null});return r}
+function lemBlankMon(){return {stk:lemStk(),vz:null,v:{},um:{z:null,i:null},kv:null,tke:{z:null,i:null},tko:{z:null,i:null},kuki:null,ob:{z:null,i:null},agb:{c:null,e:null,s:null,a:null},ts:null,tsF:null,bank:null,cs:null,korr:null}}
+/* Arbeitstage: im laufenden Monat wird das Ziel wie im Reporting nach vergangenen Arbeitstagen heruntergerechnet */
+function lemWd(mk){var p=mk.split('-'),a=iso(new Date(+p[0],+p[1]-1,1)),b=iso(new Date(+p[0],+p[1],0)),all=workdaysBetween(a,b),td=todayISO();if(td<a||td>b||!all.length)return {past:td>b?all.length:0,all:all.length,f:1,cur:false};var past=all.filter(function(d){return d<td}).length;return {past:past,all:all.length,f:past/all.length,cur:true}}
+function lemUmApp(mk){var s=0,h=false;S.deals.forEach(function(d){if(d.d.slice(0,7)!==mk||d.kons||!(d.vol>0)||dealProd(d)!=='kre')return;s+=d.vol;h=true});return h?s:null}
 function lemProd(id){return L().prods.filter(function(p){return p.id===id})[0]}
 /* Ist-Verkaufspunkte eines Produkts: Reporting-Wert, sonst aus Ergebnissen (Stück × Punkte je Stück) */
 function lemAutoIst(mk,p){return dealSum(mk,{p:p.id})}
@@ -6000,23 +6011,24 @@ function lemCalc(mk,per){
   /* Verkauf: Ist aus Abschlüssen, ein Reporting-Wert hat Vorrang */
   var prods=L().prods.map(function(p){var z=0,zi=false,i=0,ii=false,app=0,ah=false,src={};ms.forEach(function(k){var m=lemMon(k),x=m&&m.v[p.id];if(x&&x.z!=null){z+=x.z;zi=true}var r=lemProdIst(k,p);if(r.v!=null){i+=r.v;ii=true;src[r.src]=1}if(r.app!=null){app+=r.app;ah=true}});
     return {p:p,z:zi?z:null,i:ii?i:null,app:ah?Math.round(app):null,ze:zi&&z>0?(ii?i:0)/z:null,src:src.rep&&src.auto?'mix':src.rep?'rep':src.auto?'auto':''}});
-  var zt=0,zh=false,it=0,zc=0;ms.forEach(function(k){var m=lemMon(k);if(!m)return;var s=0,h=false;if(m.vz!=null){s=m.vz;h=true}else{L().prods.forEach(function(p){var x=m.v[p.id];if(x&&x.z!=null){s+=x.z;h=true}})}if(h){zt+=s;zh=true;zc+=k===mk?s*pace:s}});
-  prods.forEach(function(x){if(x.i!=null)it+=x.i});
+  var zt=0,zh=false,it=0,kv=0,kvh=false,uz=0,uzh=false,ui=0,uih=false,ua=0,uah=false;
+  ms.forEach(function(k){var m=lemMon(k);var a=lemUmApp(k);if(m&&m.um.i!=null){ui+=m.um.i;uih=true}else if(a!=null){ui+=a;uih=true}if(a!=null){ua+=a;uah=true}if(!m)return;if(m.um.z!=null){uz+=m.um.z;uzh=true}if(m.kv!=null){kv+=m.kv;kvh=true}var s=0,h=false;if(m.vz!=null){s=m.vz;h=true}else{L().prods.forEach(function(p){var x=m.v[p.id];if(x&&x.z!=null){s+=x.z;h=true}})}if(h){zt+=s;zh=true}});
+  prods.forEach(function(x){if(x.i!=null)it+=x.i});it+=kv;
   var vze=zh&&zt>0?it/zt:null,nv=L().norm.v,vzeN=vze!=null&&nv!=null&&nv>0&&nv<100?vze/(nv/100):vze;
   /* Prognose (ZE FC): laufender Monat hochgerechnet, ratierliche Versicherungspunkte aus Vormonaten nicht hochgerechnet */
   var fc=null;if(zh&&zt>0&&pace>=.2&&pace<1&&mk===monthKey()){var cur=0,carry=0,mv=lemMon(mk);prods.forEach(function(x){var r=lemProdIst(mk,x.p);if(r.v!=null)cur+=r.v});
-    if(!(mv&&mv.v.ver&&mv.v.ver.i!=null))S.deals.forEach(function(d){var c=cat(d.it);if(c&&(c.u==='beitrag'||c.u==='einmal')&&d.d.slice(0,7)<mk)carry+=dealVP(d,mk)});
+    S.deals.forEach(function(d){var c=cat(d.it);if(!c||!(c.u==='beitrag'||c.u==='einmal')||d.d.slice(0,7)>=mk)return;var pp=dealProd(d);if(mv&&mv.v[pp]&&mv.v[pp].i!=null)return;carry+=dealVP(d,mk)});
     carry=Math.min(carry,cur);fc=(it-cur+(cur-carry)/pace+carry)/zt*(vzeN!=null&&vze?vzeN/vze:1)}
-  R.v={prods:prods,ziel:zh?zt:null,ist:it,ze:vze,zeN:vzeN,fc:fc,fcPts:lemVScore(fc),norm:vzeN!==vze,pts:lemVScore(vzeN)};
-  /* Wachstum */
-  function conv(key){var z=0,i=0,h=false,auto=false;ms.forEach(function(k){var m=lemMon(k);if(m&&m[key].z!=null){z+=m[key].z;h=true}var ii=m&&m[key].i!=null?m[key].i:null;if(ii==null){ii=convCount(k,key);if(ii)auto=true}i+=ii});var ze=h&&z>0?i/z:null;return {z:h?z:null,i:i,auto:auto,ze:ze,pts:lemConvPts(ze)}}
-  var tke=conv('tke'),tko=conv('tko'),kv=lemLast(ms,function(m){return m.kuki});
-  /* Online Banking (TBOL): Chancen × 3 = maximale Punkte; 1 Log-in = 1, ab 5 Log-ins = 3 Punkte */
-  var on=lemLast(ms,function(m){return m.ob.n}),oa=lemLast(ms,function(m){return m.ob.a}),obb=lemLast(ms,function(m){return m.ob.b}),tgt=lemTbolTarget();
-  var opts=on>0?(oa||0)+3*(obb||0):null,omax=on>0?3*on:null,oq=opts!=null?opts/omax:null,oze=oq!=null&&tgt>0?oq/(tgt/100):null;
-  var parts=[tke.pts,tko.pts,lemKukiPts(kv),lemObPts(oze)],wh=parts.some(function(x){return x!=null}),wp=parts.reduce(function(a,x){return a+(x||0)},0);
+  R.v={prods:prods,ziel:zh?zt:null,ist:it,kv:kvh?kv:null,um:{z:uzh?uz:null,i:uih?ui:null,app:uah?ua:null,ze:uzh&&uz>0&&uih?ui/uz:null},ze:vze,zeN:vzeN,fc:fc,fcPts:lemVScore(fc),norm:vzeN!==vze,pts:lemVScore(vzeN)};
+  /* Wachstum: Ist-Anzahl ÷ Ziel-Anzahl; im laufenden Monat Ziel anteilig nach vergangenen Arbeitstagen */
+  function cnt(key,auto){var z=0,zf=0,i=0,h=false,ih=false,au=false,wd=null;ms.forEach(function(k){var m=lemMon(k),x=m&&m[key],f=lemWd(k);if(x&&x.z!=null){z+=x.z*f.f;zf+=x.z;h=true;if(f.f<1)wd=f}var ii=x&&x.i!=null?x.i:null;if(ii==null&&auto){var cc=convCount(k,key);if(cc){ii=cc;au=true}}if(ii!=null){i+=ii;ih=true}});
+    var ze=h&&z>0?i/z:null;return {z:h?Math.round(z*100)/100:null,zFull:h?zf:null,wd:wd,i:ih?i:(h?0:null),auto:au,ze:ze}}
+  var tke=cnt('tke',true),tko=cnt('tko',true),ob=cnt('ob',false),kv2=lemLast(ms,function(m){return m.kuki});
+  tke.pts=lemConvPts(tke.ze);tko.pts=lemConvPts(tko.ze);ob.pts=lemObPts(ob.ze);
+  var agb=lemLast(ms,function(m){var a=m.agb;return a&&(a.a!=null||a.c!=null||a.e!=null||a.s!=null)?a:null});
+  var parts=[tke.pts,tko.pts,lemKukiPts(kv2),ob.pts],wh=parts.some(function(x){return x!=null}),wp=parts.reduce(function(a,x){return a+(x||0)},0);
   var nw=L().norm.w,wze=wh?wp/LEM_EXP.w:null,wzeN=wze!=null&&nw!=null&&nw>0&&nw<100?wze/(nw/100):wze;
-  R.w={tke:tke,tko:tko,kuki:{v:kv,pts:lemKukiPts(kv)},ob:{n:on,a:oa,b:obb,pts0:opts,max:omax,quote:oq,target:tgt,ze:oze,pts:lemObPts(oze)},pts:wh?Math.min(LEM_MAX.w,Math.round(wzeN*LEM_EXP.w*10)/10):null,ze:wze,zeN:wzeN,norm:wzeN!==wze,raw:wh?wp:null};
+  R.w={tke:tke,tko:tko,kuki:{v:kv2,pts:lemKukiPts(kv2)},ob:ob,agb:agb,pts:wh?Math.min(LEM_MAX.w,Math.round(wzeN*LEM_EXP.w*100)/100):null,ze:wze,zeN:wzeN,norm:wzeN!==wze,raw:wh?wp:null};
   /* Qualität (zählt der Bereichswert; letzter erfasster Stand) */
   var ts=lemLast(ms,function(m){return m.ts}),tsF=lemLast(ms,function(m){return m.tsF}),bank=lemLast(ms,function(m){return m.bank}),cs=lemLast(ms,function(m){return m.cs});
   var kub=lemKubis(ts,bank),csp=lemCsPts(cs),qh=kub!=null||csp!=null;
@@ -6024,21 +6036,21 @@ function lemCalc(mk,per){
   /* Korrektur laut LEM-Übersicht */
   var kr=0,kh=false;ms.forEach(function(k){var m=lemMon(k);if(m&&m.korr!=null){kr+=m.korr;kh=true}});R.korr=kh?kr:null;
   var have=['q','v','w'].filter(function(k){return R[k].pts!=null});
-  R.tot=have.length?Math.round((have.reduce(function(a,k){return a+R[k].pts},0)+(kh?kr:0))*10)/10:null;R.complete=have.length===3;R.exp=150;R.max=215;
+  R.tot=have.length?Math.round((have.reduce(function(a,k){return a+R[k].pts},0)+(kh?kr:0))*100)/100:null;R.complete=have.length===3;R.exp=150;R.max=215;
   return R;
 }
 /* --- Hebel: was bringt der nächste Schritt? --- */
 function lemLevers(R){
   var o=[];
   var v=R.v;if(v.ziel>0&&v.pts!=null&&v.pts<100){
-    var f=v.zeN&&v.ze?v.zeN/v.ze:1,p=lemPct(v.zeN),need=function(pc){return Math.max(1,Math.ceil(pc/100*v.ziel/f-v.ist-LEM_EPS))};
+    var f=v.zeN&&v.ze?v.zeN/v.ze:1,p=Math.floor(v.zeN*100+LEM_EPS),need=function(pc){return Math.max(1,Math.ceil(pc/100*v.ziel/f-v.ist-LEM_EPS))};
     if(p<70)o.push({k:'v',g:30,t:'Verkauf auf 70 % bringen',s:'Noch '+num(need(70))+' Verkaufspunkte · darunter gibt es 0 Punkte',u:need(70)});
-    else{o.push({k:'v',g:1,t:'Verkauf: +1 % Zielerreichung',s:'Noch '+num(need(p+1))+' Verkaufspunkte bis '+(p+1)+' %',u:need(p+1)});
-      var ms=[100,110,120,130,140].filter(function(x){return x>p+1})[0];if(ms)o.push({k:'v',g:lemVScore(ms/100)-v.pts,t:'Verkauf auf '+ms+' %',s:'Noch '+num(need(ms))+' Verkaufspunkte',u:need(ms)})}
+    else{o.push({k:'v',g:Math.round((p+1-v.zeN*100)*100)/100,t:'Verkauf: +1 % Zielerreichung',s:'Noch '+num(need(p+1))+' Verkaufspunkte bis '+(p+1)+' %',u:need(p+1)});
+      var ms=[100,110,120,130,140].filter(function(x){return x>p+1})[0];if(ms)o.push({k:'v',g:Math.round((lemVScore(ms/100)-v.pts)*100)/100,t:'Verkauf auf '+ms+' %',s:'Noch '+num(need(ms))+' Verkaufspunkte',u:need(ms)})}
   }
-  [['tke','Conversion TKE'],['tko','Conversion Online-TK']].forEach(function(x){var c=R.w[x[0]];if(!(c.z>0)||c.pts==null)return;var p=lemPct(c.ze),nx=LEM_CONV.slice().reverse().filter(function(t){return t[0]>p})[0];if(!nx)return;var nd=Math.max(1,Math.ceil(nx[0]/100*c.z-c.i-LEM_EPS));o.push({k:'w',g:nx[1]-c.pts,t:x[1]+' auf '+nx[0]+' %',s:'Noch '+nd+' '+plural(nd,'Conversion','Conversions'),u:nd})});
-  var ku=R.w.kuki;if(ku.v!=null){var nk=LEM_KUKI.slice().reverse().filter(function(t){return t[0]>ku.v+LEM_EPS})[0];if(nk)o.push({k:'w',g:nk[1]-ku.pts,t:'Werbeeinwilligung (KUKI) auf '+dec(nk[0],3),s:'Aktuell '+dec(ku.v,3)+' · Einwilligung für Telefon, SMS und E-Mail aktiv erfragen',u:nk[0]-ku.v})}
-  var ob=R.w.ob;if(ob.n>0&&ob.pts!=null&&ob.pts<6){var p2=ob.ze*100,nb=LEM_OB.slice().reverse().filter(function(t){return t[0]>p2+LEM_EPS||(t[0]===70&&p2<=70)})[0];if(nb){var need=(nb[0]===70?70.01:nb[0])/100*ob.target/100*ob.max-ob.pts0,nd2=Math.max(1,Math.ceil(need/3-LEM_EPS));o.push({k:'w',g:nb[1]-ob.pts,t:'Online Banking (TBOL) auf '+(nb[0]===70?'über 70':nb[0])+' %',s:'Noch '+num(Math.ceil(need))+' Punkte, z. B. '+nd2+' '+plural(nd2,'Kunde','Kunden')+' mit 5 Log-ins',u:nd2})}}
+  [['tke','Conversion TKE'],['tko','Conversion TKO']].forEach(function(x){var c=R.w[x[0]];if(!(c.z>0)||c.pts==null)return;var p=lemPct(c.ze),nx=LEM_CONV.slice().reverse().filter(function(t){return t[0]>p})[0];if(!nx)return;var nd=Math.max(1,Math.ceil(nx[0]/100*c.z-c.i-LEM_EPS));o.push({k:'w',g:nx[1]-c.pts,t:x[1]+' auf '+nx[0]+' %',s:'Noch '+nd+' '+plural(nd,'Conversion','Conversions')+(c.wd?' (Ziel anteilig bis heute)':''),u:nd})});
+  var ku=R.w.kuki;if(ku.v!=null){var nk=LEM_KUKI.slice().reverse().filter(function(t){return t[0]>ku.v+1e-6})[0];if(nk)o.push({k:'w',g:nk[1]-ku.pts,t:'KUKI auf '+num(nk[0])+' Punkte',s:'Aktuell '+num(ku.v)+' · Einwilligung für Telefon, SMS und E-Mail aktiv erfragen',u:nk[0]-ku.v})}
+  var ob=R.w.ob;if(ob.z>0&&ob.pts!=null&&ob.pts<6){var p2=ob.ze*100,nb=LEM_OB.slice().reverse().filter(function(t){return t[0]>p2+LEM_EPS||(t[0]===70&&p2<=70)})[0];if(nb){var nd2=Math.max(1,Math.ceil((nb[0]===70?70.01:nb[0])/100*ob.z-ob.i-LEM_EPS));o.push({k:'w',g:nb[1]-ob.pts,t:'TBOL auf '+(nb[0]===70?'über 70':nb[0])+' %',s:'Noch '+nd2+' TBOL'+(ob.wd?' (Ziel anteilig bis heute)':''),u:nd2})}}
   var q=R.q;if(q.ts!=null&&q.kub&&q.kub.pts<55){var t1=q.ts;for(var s=0;s<200&&lemKubis(t1,q.bank).pts<=q.kub.pts;s++)t1=Math.round((t1+0.1)*10)/10;if(lemKubis(t1,q.bank).pts>q.kub.pts)o.push({k:'q',g:lemKubis(t1,q.bank).pts-q.kub.pts,t:'KuBiS-Teamscore auf '+dec(t1,1),s:'Bereichswert aktuell '+dec(q.ts,1)+(q.bank!=null?' · Bank Ø '+dec(q.bank,1):''),u:t1-q.ts})}
   if(q.cs!=null&&q.cs_pts<10){var nc=q.cs<62?62:62+2*(q.cs_pts);o.push({k:'q',g:1,t:'Cross-Sell auf '+nc+' %',s:'Aktuell '+dec(q.cs,1)+' % ohne Druckverkauf',u:nc-q.cs})}
   return o.filter(function(x){return x.g>0}).sort(function(a,b){return b.g-a.g||a.u-b.u});
@@ -6048,30 +6060,36 @@ function lemPillarState(pts,exp){if(pts==null)return {c:'#7b8794',l:'offen'};var
 /* ===================== Ansicht: LEM-Ziele ===================== */
 function lemMk(){return UI.lemMk&&/^\d{4}-\d{2}$/.test(UI.lemMk)?UI.lemMk:monthKey()}
 function lemPer(){return UI.lemPer==='m'?'m':'y'}
-function lemF(v,d){return v==null?'–':dec(v,d==null?(v%1?1:0):d)}
+function lemF(v,d){return v==null?'–':dec(v,d==null?(Math.abs(v%1)>1e-9?(Math.abs(v*10%1)>1e-6?2:1):0):d)}
 function lemPctTxt(z){return z==null?'–':Math.round(z*100)+' %'}
 function lemBar(pts,exp,max,c){var w=pts==null?0:Math.min(100,pts/max*100);return '<div class="lem-bar"><i style="width:'+w.toFixed(1)+'%;background:'+c+'"></i><b style="left:'+(exp/max*100).toFixed(1)+'%" title="Erwartungswert '+exp+'"></b></div>'}
 function lemHero(R){
   var st=lemPillarState(R.tot,R.exp),seg=[['q','Qualität','#0c8599'],['v','Verkauf','#1c7ed6'],['w','Wachstum','#7048e8']];
-  return '<section class="card glass rise lem-hero"><div class="lh-top"><div><small>LEM brutto '+(R.per==='y'?R.mk.slice(0,4)+' bis '+monthLabel(R.mk).split(' ')[0]:monthLabel(R.mk))+'</small><b class="lh-v">'+(R.tot==null?'–':dec(R.tot,R.tot%1?1:0))+'<span> / '+R.exp+'</span></b><span class="muted small">Erwartungswert '+R.exp+' · maximal '+R.max+(R.korr?' · Korrektur '+(R.korr>0?'+':'')+dec(R.korr,R.korr%1?1:0):'')+(R.complete?'':' · noch nicht alle Säulen erfasst')+'</span></div>'+chipC(st.l,st.c)+'</div>'+
+  return '<section class="card glass rise lem-hero"><div class="lh-top"><div><small>LEM brutto '+(R.per==='y'?R.mk.slice(0,4)+' bis '+monthLabel(R.mk).split(' ')[0]:monthLabel(R.mk))+'</small><b class="lh-v">'+(R.tot==null?'–':lemF(R.tot))+'<span> / '+R.exp+'</span></b><span class="muted small">Erwartungswert '+R.exp+' · maximal '+R.max+(R.korr?' · Korrektur '+(R.korr>0?'+':'')+dec(R.korr,R.korr%1?1:0):'')+(R.complete?'':' · noch nicht alle Säulen erfasst')+'</span></div>'+chipC(st.l,st.c)+'</div>'+
     '<div class="lh-stack">'+seg.map(function(s){var p=R[s[0]].pts;return p?'<i style="width:'+(p/R.max*100).toFixed(1)+'%;background:'+s[2]+'" title="'+s[1]+' '+p+'"></i>':''}).join('')+'<b style="left:'+(R.exp/R.max*100).toFixed(1)+'%"></b></div>'+
     '<div class="lh-leg">'+seg.map(function(s){var p=R[s[0]].pts;return '<span><i style="background:'+s[2]+'"></i>'+s[1]+' <b>'+lemF(p)+'</b><small>/'+LEM_EXP[s[0]]+'</small></span>'}).join('')+'</div></section>';
 }
 function lemCardV(R){
   var v=R.v,st=lemPillarState(v.pts,LEM_EXP.v);
-  var rows=v.prods.map(function(x){var w=x.ze==null?0:Math.min(100,x.ze*100),diff=x.src==='rep'&&x.app!=null&&Math.abs(x.app-x.i)>=1?' · App '+num(x.app):'';
-    return '<div class="lem-r"><span class="lr-n"><b>'+esc(x.p.n)+'</b><small>'+(x.i==null&&x.z==null?'keine Werte':(x.i==null?'–':num(Math.round(x.i)))+' / '+(x.z==null?'–':num(Math.round(x.z)))+' VP'+(x.src==='auto'?' · aus Abschlüssen':x.src==='rep'?' · Reporting':x.src==='mix'?' · gemischt':'')+diff)+'</small></span><div class="bar"><i class="'+(x.ze==null?'':x.ze>=1?'good':x.ze>=.7?'':'bad')+'" data-w="'+Math.round(w)+'"></i></div><em>'+lemPctTxt(x.ze)+'</em></div>'}).join('');
-  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="v" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#1c7ed6">'+ic('chart',18)+'</span><div class="grow"><h2>Verkauf</h2><small class="muted">Zielerreichung '+lemPctTxt(v.zeN)+(v.norm?' (normiert)':'')+(v.fc!=null&&R.mk===monthKey()?' · Prognose '+lemPctTxt(v.fc):'')+'</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(v.pts)+'<span>/'+LEM_EXP.v+'</span></b></div>'+lemBar(v.pts,LEM_EXP.v,LEM_MAX.v,st.c)+
-    '<p class="muted small lp-s">'+(v.ziel?num(Math.round(v.ist))+' von '+num(Math.round(v.ziel))+' Verkaufspunkten'+(v.fc!=null&&R.mk===monthKey()&&v.fcPts!=null?' · bei gleichem Tempo '+v.fcPts+' Punkte':''):'Noch kein Verkaufsziel erfasst. Antippen zum Eintragen.')+'</p>'+rows+'</section>';
+  var rows=v.prods.filter(function(x){return x.z!=null||x.i!=null||x.app!=null}).map(function(x){var w=x.ze==null?0:Math.min(100,x.ze*100),diff=x.src==='rep'&&x.app!=null&&Math.abs(x.app-x.i)>=1?' · App '+num(x.app):'';
+    return '<div class="lem-r"><span class="lr-n"><b>'+esc(x.p.n)+'</b><small>'+(x.i==null?'–':num(Math.round(x.i)))+(x.z==null?' VP · ohne Ziel':' / '+num(Math.round(x.z))+' VP')+(x.src==='auto'?' · aus Abschlüssen':x.src==='rep'?' · Reporting':x.src==='mix'?' · gemischt':'')+diff+'</small></span><div class="bar"><i class="'+(x.ze==null?'':x.ze>=1?'good':x.ze>=.7?'':'bad')+'" data-w="'+Math.round(w)+'"></i></div><em>'+lemPctTxt(x.ze)+'</em></div>'}).join('');
+  if(v.kv)rows+='<div class="lem-r"><span class="lr-n"><b>Korrekturen</b><small>'+(v.kv>0?'+':'')+num(Math.round(v.kv))+' VP laut Reporting</small></span><div class="bar"></div><em></em></div>';
+  var sc=lemStkCalc(R.months),stl=sc.gi!=null||sc.ki!=null?'<p class="muted small lp-s">Stück: '+(sc.gi!=null?num(sc.gi)+' Girokonten'+(sc.gl!=null?', davon '+num(sc.gl)+' mit Limit':''):'')+(sc.gi!=null&&sc.ki!=null?' · ':'')+(sc.ki!=null?num(sc.ki)+(sc.kz!=null?' / '+num(Math.round(sc.kz))+' Kreditkarten · '+lemPctTxt(sc.kz>0?sc.ki/sc.kz:null):' Kreditkarten'):'')+'</p>':'';
+  var um=v.um.z!=null||v.um.i!=null?'<p class="muted small lp-s">TK Umsatz: '+(v.um.i==null?'–':num(Math.round(v.um.i)))+' €'+(v.um.z!=null?' von '+num(Math.round(v.um.z))+' € · '+lemPctTxt(v.um.ze):'')+' (Info, zählt nicht für die Punkte)</p>':'';
+  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="v" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#1c7ed6">'+ic('chart',18)+'</span><div class="grow"><h2>Verkauf</h2><small class="muted">Zielerreichung '+(v.zeN==null?'–':dec(v.zeN*100,2)+' %')+(v.norm?' (normiert)':'')+(v.fc!=null&&R.mk===monthKey()?' · Prognose '+lemPctTxt(v.fc):'')+'</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(v.pts)+'<span>/'+LEM_EXP.v+'</span></b></div>'+lemBar(v.pts,LEM_EXP.v,LEM_MAX.v,st.c)+
+    '<p class="muted small lp-s">'+(v.ziel?num(Math.round(v.ist))+' von '+num(Math.round(v.ziel))+' Verkaufspunkten'+(v.fc!=null&&R.mk===monthKey()&&v.fcPts!=null?' · bei gleichem Tempo '+lemF(v.fcPts)+' Punkte':''):'Noch kein Verkaufsziel erfasst. Antippen zum Eintragen.')+'</p>'+rows+um+stl+'</section>';
 }
 function lemCardW(R){
-  var w=R.w,st=lemPillarState(w.pts,LEM_EXP.w),ob=w.ob;
+  var w=R.w,st=lemPillarState(w.pts,LEM_EXP.w),ag=w.agb;
   function row(n,sub,pts,max){return '<div class="lem-r"><span class="lr-n"><b>'+n+'</b><small>'+sub+'</small></span><div class="bar"><i class="'+(pts==null?'':pts>=max*.75?'good':pts>0?'':'bad')+'" data-w="'+(pts==null?0:Math.round(pts/max*100))+'"></i></div><em>'+lemF(pts)+'<small>/'+max+'</small></em></div>'}
+  function cs(c,au){return c.z==null?'kein Ziel':lemF(c.i)+' / '+dec(c.z,c.z%1?2:0)+' · '+lemPctTxt(c.ze)+(c.wd?' · Ziel anteilig ('+c.wd.past+' von '+c.wd.all+' Arbeitstagen)':'')+(au&&c.auto?' · aus Abschlüssen':'')}
+  var wd=w.tke.wd||w.tko.wd||w.ob.wd;
   return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="w" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#7048e8">'+ic('trend',18)+'</span><div class="grow"><h2>Wachstum</h2><small class="muted">Zielerreichung '+lemPctTxt(w.zeN)+(w.norm?' (normiert)':'')+' · 40 Punkte = 100 %</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(w.pts)+'<span>/'+LEM_EXP.w+'</span></b></div>'+lemBar(w.pts,LEM_EXP.w,LEM_MAX.w,st.c)+
-    row('Conversion TKE',w.tke.z?lemF(w.tke.i)+' / '+lemF(w.tke.z)+' · '+lemPctTxt(w.tke.ze)+(w.tke.auto?' · aus Abschlüssen':''):'kein Ziel',w.tke.pts,18)+
-    row('Conversion Online-TK',w.tko.z?lemF(w.tko.i)+' / '+lemF(w.tko.z)+' · '+lemPctTxt(w.tko.ze)+(w.tko.auto?' · aus Abschlüssen':''):'kein Ziel',w.tko.pts,18)+
-    row('Werbeeinwilligung (KUKI)',w.kuki.v==null?'kein Wert':'Wert '+dec(w.kuki.v,3)+' · Erwartung 1,525',w.kuki.pts,8)+
-    row('Online Banking (TBOL)',ob.n?num(ob.pts0)+' von '+num(ob.max)+' Punkten = '+dec(ob.quote*100,1)+' % · Ziel '+lemF(ob.target)+' % · ZE '+lemPctTxt(ob.ze):'keine Werte',ob.pts,6)+'</section>';
+    row('Conversion TKE',cs(w.tke,1),w.tke.pts,18)+
+    row('Conversion TKO',cs(w.tko,1),w.tko.pts,18)+
+    row('KUKI',w.kuki.v==null?'kein Wert':num(w.kuki.v)+' Punkte · ab 1.525 volle Punkte',w.kuki.pts,8)+
+    row('TBOL',cs(w.ob),w.ob.pts,6)+
+    (ag?'<p class="muted small lp-s">AGB-Chance '+lemF(ag.a)+' % · OK 2 Call '+lemF(ag.c)+' % · E-Mail '+lemF(ag.e)+' % · SMS '+lemF(ag.s)+' % (ohne Punkte)</p>':'')+'</section>';
 }
 function lemCardQ(R){
   var q=R.q,st=lemPillarState(q.pts,LEM_EXP.q),k=q.kub;
@@ -6103,28 +6121,38 @@ function viewLem(){
 function lemIn(name,val,ph,lbl){return '<input name="'+name+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':esc(String(val).replace('.',',')))+'" placeholder="'+esc(ph||'–')+'" aria-label="'+esc(lbl||name)+'">'}
 function lemSheetHead(mk,t){return t+' · '+esc(monthLabel(mk))}
 function openLemV(mk){
-  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon();
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),ua=lemUmApp(mk),st=m.stk||{},sg=prSold(S.deals,mk,'gk'),sk=prSold(S.deals,mk,'kk');
   var rows=L().prods.map(function(p){var x=m.v[p.id]||{},a=lemAutoIst(mk,p);
-    return '<div class="lem-in"><span><b>'+esc(p.n)+'</b><small>'+(a!=null?'aus Abschlüssen: '+num(Math.round(a))+' VP':'noch keine Abschlüsse')+'</small></span>'+lemIn('z_'+p.id,x.z,'Ziel',p.n+' Ziel')+lemIn('i_'+p.id,x.i,a!=null?num(Math.round(a)):'Ist',p.n+' Ist laut Reporting')+'</div>'}).join('');
+    return '<div class="lem-in"><span><b>'+esc(p.n)+'</b><small>'+(a!=null?'aus Abschlüssen: '+num(Math.round(a))+' VP':esc(p.d))+'</small></span>'+lemIn('z_'+p.id,x.z,'Ziel',p.n+' Ziel')+lemIn('i_'+p.id,x.i,a!=null?num(Math.round(a)):'Ist',p.n+' Ist laut Reporting')+'</div>'}).join('');
   sheet(lemSheetHead(mk,'Verkauf'),'<form class="lemf" data-form="lem-v"><input type="hidden" name="mk" value="'+mk+'">'+
-    '<div class="lem-in tot"><span><b>Ziel gesamt</b><small>Verkaufspunkte laut Scorecard, optional</small></span>'+lemIn('vz',m.vz,'Summe','Ziel gesamt')+'<span></span></div>'+
     '<div class="lem-ih"><span></span><small>Ziel VP</small><small>Ist Reporting</small></div>'+rows+
-    '<p class="muted small" style="margin:10px 0">Die Ziele je Produkt sind die eine Quelle für alle Ziele der App: Sie werden nach der Zielverteilung auf das Team verteilt. Ist leer lassen, dann zählt die App die erfassten Abschlüsse. Ein Ist aus dem Monatsreport hat Vorrang.</p>'+
+    '<div class="lem-in"><span><b>Korrekturen</b><small>Verkaufspunkte, mit Minus bei Abzug</small></span><span></span>'+lemIn('kv',m.kv,'0','Korrekturen')+'</div>'+
+    '<div class="lem-in tot"><span><b>Verkaufsleistung Ziel</b><small>Nur falls abweichend von der Summe der Produktziele</small></span>'+lemIn('vz',m.vz,'Summe','Ziel gesamt')+'<span></span></div>'+
+    '<div class="lem-in"><span><b>TK Umsatz (€)</b><small>Info, zählt nicht für die Punkte'+(ua!=null?' · aus Abschlüssen: '+num(Math.round(ua))+' €':'')+'</small></span>'+lemIn('um_z',m.um.z,'Ziel','TK Umsatz Ziel')+lemIn('um_i',m.um.i,ua!=null?num(Math.round(ua)):'Ist','TK Umsatz Ist')+'</div>'+
+    '<h6 class="ml-h">Stückzahlen · Info</h6><div class="lem-ih"><span></span><small>Ziel</small><small>Ist</small></div>'+
+    '<div class="lem-in"><span><b>GK-Eröffnungen</b><small>'+(sg?'aus Abschlüssen: '+sg:'laut Reporting')+'</small></span><span></span>'+lemIn('st_gi',st.gi,sg?String(sg):'Ist','GK-Eröffnungen')+'</div>'+
+    '<div class="lem-in"><span><b>GK mit Limit</b><small>laut Reporting</small></span><span></span>'+lemIn('st_gl',st.gl,'Ist','GK mit Limit')+'</div>'+
+    '<div class="lem-in"><span><b>GK SME</b><small>laut Reporting</small></span><span></span>'+lemIn('st_gs',st.gs,'Ist','GK SME')+'</div>'+
+    '<div class="lem-in"><span><b>Kreditkarten Stück</b><small>'+(sk?'aus Abschlüssen: '+sk:'laut Reporting')+'</small></span>'+lemIn('st_kz',st.kz,'Ziel','Kreditkarten Stück Ziel')+lemIn('st_ki',st.ki,sk?String(sk):'Ist','Kreditkarten Stück Ist')+'</div>'+
+    '<div class="lem-in"><span><b>Kreditkarten SME</b><small>laut Reporting</small></span><span></span>'+lemIn('st_ks',st.ks,'Ist','Kreditkarten SME')+'</div>'+
+    '<p class="muted small" style="margin:10px 0">Wie im Monatsreport: Kredit-Überleitungen über BzH und LbP zählen in der TK Verkaufsleistung. Die Produktziele werden nach der Zielverteilung auf das Team verteilt. Ist leer lassen, dann zählt die App die erfassten Abschlüsse. Ein Ist aus dem Reporting hat Vorrang.</p>'+
     formFoot('<button type="button" class="btn left" data-act="lem-cat">'+ic('tasks',15)+' Katalog</button>')+'</form>');
 }
 function lemKlsAppts(mk){var n=0;Object.keys(K().days).forEach(function(ds){if(ds.slice(0,7)===mk)n+=klsAnalyze(ds).kpi.appts});return n}
 function openLemW(mk){
-  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),kc=lemKlsAppts(mk),ce=convCount(mk,'tke'),co=convCount(mk,'tko'),tg=lemTbolTarget();
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),ce=convCount(mk,'tke'),co=convCount(mk,'tko'),wd=lemWd(mk),ag=m.agb||{};
   sheet(lemSheetHead(mk,'Wachstum'),'<form class="lemf" data-form="lem-w"><input type="hidden" name="mk" value="'+mk+'">'+
-    '<div class="lem-ih"><span></span><small>Ziel</small><small>Ist</small></div>'+
-    '<div class="lem-in"><span><b>Conversion TKE</b><small>Kunde erreicht Status „strategisch“'+(ce?' · aus Abschlüssen: '+ce:'')+'</small></span>'+lemIn('tke_z',m.tke.z,'Ziel')+lemIn('tke_i',m.tke.i,ce?String(ce):'Ist')+'</div>'+
-    '<div class="lem-in"><span><b>Conversion Online-TK</b><small>POS-Zusatzkredit, GK mit Limit oder Gehaltseingang · kein LiA'+(co?' · aus Abschlüssen: '+co:'')+'</small></span>'+lemIn('tko_z',m.tko.z,'Ziel')+lemIn('tko_i',m.tko.i,co?String(co):'Ist')+'</div>'+
-    '<div class="lem-in one"><span><b>Werbeeinwilligung (KUKI)</b><small>Telefon, SMS, E-Mail · Wert laut Reporting (1,345 = 5 … 1,525 = 8 Punkte)</small></span>'+lemIn('kuki',m.kuki,'z. B. 1,48')+'</div>'+
-    '<h6 class="ml-h">Online Banking (TBOL) · Stand im Jahr</h6>'+
-    '<div class="lem-in one"><span><b>Chancen</b><small>Kunden 18–69 ohne Online Banking mit eingehaltenem KLS-Termin'+(kc?' · KLS-Termine in der App: '+kc:'')+'</small></span>'+lemIn('ob_n',m.ob.n,'Anzahl')+'</div>'+
-    '<div class="lem-in one"><span><b>davon 1 bis 4 Log-ins</b><small>je 1 Punkt</small></span>'+lemIn('ob_a',m.ob.a,'Anzahl')+'</div>'+
-    '<div class="lem-in one"><span><b>davon 5 und mehr Log-ins</b><small>je 3 Punkte (Log-ins an verschiedenen Tagen)</small></span>'+lemIn('ob_b',m.ob.b,'Anzahl')+'</div>'+
-    '<p class="muted small" style="margin:10px 0">Ziel für 100 %: '+lemF(tg)+' % der maximalen Punkte (Chancen × 3)'+(lemCfg().tbolBank!=null&&lemCfg().tbolBank<lemCfg().tbol?', durch den Sicherheitsschirm auf den Bank-Mittelwert gesenkt':'')+'. Ändern unter ⋯ → Zielverteilung.</p>'+
+    '<div class="lem-ih"><span></span><small>Monatsziel</small><small>Ist</small></div>'+
+    '<div class="lem-in"><span><b>Conversion TKE</b><small>Erfolgreiche Conversions'+(ce?' · aus Abschlüssen: '+ce:'')+'</small></span>'+lemIn('tke_z',m.tke.z,'Ziel')+lemIn('tke_i',m.tke.i,ce?String(ce):'Ist')+'</div>'+
+    '<div class="lem-in"><span><b>Conversion TKO</b><small>POS-Zusatzkredit, GK mit Limit oder Gehaltseingang · kein LiA'+(co?' · aus Abschlüssen: '+co:'')+'</small></span>'+lemIn('tko_z',m.tko.z,'Ziel')+lemIn('tko_i',m.tko.i,co?String(co):'Ist')+'</div>'+
+    '<div class="lem-in"><span><b>TBOL</b><small>Ist-Anzahl und Ziel-Anzahl laut Reporting</small></span>'+lemIn('ob_z',m.ob.z,'Ziel')+lemIn('ob_i',m.ob.i,'Ist')+'</div>'+
+    '<p class="muted small" style="margin:8px 0 12px">Volle Monatsziele eintragen. '+(wd.cur?'Im laufenden Monat rechnet die App sie wie das Reporting nach vergangenen Arbeitstagen herunter (heute '+wd.past+' von '+wd.all+').':'Im laufenden Monat rechnet die App sie wie das Reporting nach vergangenen Arbeitstagen herunter.')+'</p>'+
+    '<div class="lem-in one"><span><b>KUKI-Punkte</b><small>Laut Reporting, z. B. 1551 · ab 1.345 = 5 bis ab 1.525 = 8 LEM-Punkte</small></span>'+lemIn('kuki',m.kuki,'z. B. 1551')+'</div>'+
+    '<h6 class="ml-h">AGB & Einwilligungen · Info, ohne LEM-Punkte</h6>'+
+    '<div class="lem-in one"><span><b>AGB-Chance</b><small>in %</small></span>'+lemIn('agb_a',ag.a,'z. B. 99,3')+'</div>'+
+    '<div class="lem-in one"><span><b>OK 2 Call</b><small>in %</small></span>'+lemIn('agb_c',ag.c,'%')+'</div>'+
+    '<div class="lem-in one"><span><b>OK 2 E-Mail</b><small>in %</small></span>'+lemIn('agb_e',ag.e,'%')+'</div>'+
+    '<div class="lem-in one"><span><b>OK 2 SMS</b><small>in %</small></span>'+lemIn('agb_s',ag.s,'%')+'</div>'+
     formFoot()+'</form>');
 }
 function openLemQ(mk){
@@ -6149,18 +6177,19 @@ function openLemRules(){
   function tb(h,rows){return '<table class="lem-t"><thead><tr>'+h.map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r){return '<tr>'+r.map(function(x){return '<td>'+x+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table>'}
   sheet('LEM 2026 · Regeln',
     '<p class="small">Drei Säulen: <b>Qualität</b> (Erwartung 50, max. 65), <b>Verkauf</b> (100 % = 60, max. 100), <b>Wachstum</b> (100 % = 40, max. 50). Erwartung gesamt 150.</p>'+
-    '<h6 class="ml-h">Verkauf · Scorecard</h6>'+tb(['Zielerreichung','Punkte'],[['unter 70 %','0'],['70 %','30'],['80 %','40'],['90 %','50'],['100 %','60'],['110 %','70'],['120 %','80'],['130 %','90'],['ab 140 %','100']])+'<p class="muted small">Dazwischen je 1 % +1 Punkt. Produkte: Kredit, Girokonto, Kreditkarte, Versicherungen, One Bank, Festgeld, Baufinanzierung.</p>'+
+    '<h6 class="ml-h">Verkauf · Scorecard</h6>'+tb(['Zielerreichung','Punkte'],[['unter 70 %','0'],['70 %','30'],['80 %','40'],['90 %','50'],['100 %','60'],['110 %','70'],['120 %','80'],['130 %','90'],['ab 140 %','100']])+'<p class="muted small">Dazwischen je 1 % +1 Punkt, anteilig (102,79 % = 62,79 Punkte). Es zählt die Zielerreichung im Jahr bis zum Monat (Score Verkauf YTD). Ist wie im Monatsreport: TK Verkaufsleistung inkl. BzH- und LbP-Überleitungen, Versicherung Kreditschutz, Versicherung (Netto), Girokonto, Kreditkarte, Termineinlagen, Bauspar/Baufi, Überleitung an Investment, Loan in APP und Korrekturen.</p>'+
     '<h6 class="ml-h">Verkaufspunkte</h6><p class="muted small">Alle Punktwerte je Abschluss stehen im Verkaufspunkte-Katalog.</p><button type="button" class="btn sm" data-act="lem-cat">'+ic('tasks',14)+' Katalog öffnen</button>'+
-    '<h6 class="ml-h">Wachstum</h6>'+tb(['ZE Conversion TKE / Online-TK','Punkte'],LEM_CONV.slice().reverse().map(function(x){return ['ab '+x[0]+' %',x[1]]}))+tb(['KUKI-Wert','Punkte'],LEM_KUKI.slice().reverse().map(function(x){return [dec(x[0],3),x[1]]}))+'<p class="muted small">Online Banking (TBOL): Chance = Kunde 18–69 ohne Online Banking mit eingehaltenem KLS-Termin. 1 Log-in im Jahr = 1 Punkt, ab 5 Log-ins = 3 Punkte, maximal 3 je Chance. Ziel für 100 % = 26 % der maximalen Punkte (Beispiel: 2.000 möglich → 520 nötig). Liegt der Bank-Mittelwert darunter, wird das Ziel darauf gesenkt.</p>'+tb(['ZE Online Banking','Punkte'],[['bis 70 %','0'],['70–80 %','1'],['80–90 %','2'],['90–100 %','3'],['100–110 %','4'],['110–120 %','5'],['über 120 %','6']])+'<p class="muted small">Wachstum gesamt: 40 Punkte = 100 %, 50 Punkte = 125 %.</p>'+
+    '<h6 class="ml-h">Wachstum</h6>'+tb(['ZE Conversion TKE / TKO','Punkte'],LEM_CONV.slice().reverse().map(function(x){return ['ab '+x[0]+' %',x[1]]}))+tb(['KUKI-Punkte','LEM-Punkte'],LEM_KUKI.slice().reverse().map(function(x){return ['ab '+num(x[0]),x[1]]}))+'<p class="muted small">TKE, TKO und TBOL: Ist-Anzahl ÷ Ziel-Anzahl. Im laufenden Monat wird das Ziel nach den vergangenen Arbeitstagen heruntergerechnet.</p>'+tb(['ZE TBOL','Punkte'],[['bis 70 %','0'],['70–80 %','1'],['80–90 %','2'],['90–100 %','3'],['100–110 %','4'],['110–120 %','5'],['über 120 %','6']])+'<p class="muted small">Wachstum gesamt: 40 Punkte = 100 %, 50 Punkte = 125 %.</p>'+
     '<h6 class="ml-h">Qualität</h6>'+tb(['KuBiS-Teamscore','Punkte'],[['ab 78,0','55'],['ab 77,6','54'],['ab 76,0','50'],['70,0–74,0','45'],['ab 68,0','40'],['ab 60,0','20'],['unter 52,4','0']])+'<p class="muted small">Je 0,4 Teamscore ± 1 Punkt. Best of 2: absoluter Teamscore oder Punkte zum Bankdurchschnitt (74,0 ≙ −2,5). Schwellen für den Durchschnittsweg: über 50 Punkte nur ab Teamscore 70, unter 65 max. 35, unter 60 = 0. Es zählt der Bereichswert.</p>'+
     tb(['Cross-Sell (ohne Druckverkauf)','Punkte'],[['unter 62','0'],['ab 62','1'],['ab 70','5'],['ab 74','7'],['ab 80','10']])+'<p class="muted small">Je 2 %-Punkte +1.</p><h6 class="ml-h">Normierung</h6><p class="muted small">Verkauf und Wachstum werden nur angepasst, wenn die Bank unter 100 % liegt; darüber wird nicht nach unten angepasst. Die Gesamt-LEM (Summe der 3 Säulen) wird am Ende mit dem Mittelwert der Bereiche normiert; das Bonusbudget ändert sich nur durch den Bankfaktor.</p>',
     '<div class="m-foot"><button class="btn primary" data-act="modal-close">Fertig</button></div>');
 }
 function lemSaveForm(kind,f,d){
   var mk=d.get('mk')||lemMk(),m=lemMon(mk,true),g=function(n){return lemN(d.get(n))};
-  if(kind==='v'){m.vz=g('vz');L().prods.forEach(function(p){var z=g('z_'+p.id),i=g('i_'+p.id);if(z==null&&i==null)delete m.v[p.id];else m.v[p.id]={z:z,i:i}})}
-  if(kind==='w'){m.tke={z:g('tke_z'),i:g('tke_i')};m.tko={z:g('tko_z'),i:g('tko_i')};m.kuki=g('kuki');m.ob={n:g('ob_n'),a:g('ob_a'),b:g('ob_b')};
-    if(m.ob.n!=null&&(m.ob.a||0)+(m.ob.b||0)>m.ob.n){toast('Mehr Kunden mit Log-in als Chancen','err');return}}
+  if(kind==='v'){m.stk=lemStk({gi:g('st_gi'),gl:g('st_gl'),gs:g('st_gs'),kz:g('st_kz'),ki:g('st_ki'),ks:g('st_ks')});m.vz=g('vz');m.kv=g('kv');m.um={z:g('um_z'),i:g('um_i')};L().prods.forEach(function(p){var z=g('z_'+p.id),i=g('i_'+p.id);if(z==null&&i==null)delete m.v[p.id];else m.v[p.id]={z:z,i:i}})}
+  if(kind==='w'){m.tke={z:g('tke_z'),i:g('tke_i')};m.tko={z:g('tko_z'),i:g('tko_i')};m.ob={z:g('ob_z'),i:g('ob_i')};m.kuki=lemKukiN(g('kuki'));m.agb={a:g('agb_a'),c:g('agb_c'),e:g('agb_e'),s:g('agb_s')};
+    if([m.tke.z,m.tke.i,m.tko.z,m.tko.i,m.ob.z,m.ob.i].some(function(x){return x!=null&&x<0})){toast('Bitte keine negativen Anzahlen','err');return}
+    if(['a','c','e','s'].some(function(k){return m.agb[k]!=null&&(m.agb[k]<0||m.agb[k]>100)})){toast('Quoten liegen zwischen 0 und 100 %','err');return}}
   if(kind==='k'){m.korr=g('korr')}
   if(kind==='q'){m.ts=g('ts');m.bank=g('bank');m.tsF=g('tsF');m.cs=g('cs');
     if(m.ts!=null&&(m.ts<0||m.ts>100)||m.cs!=null&&(m.cs<0||m.cs>100)){toast('Teamscore und Cross-Sell liegen zwischen 0 und 100','err');return}}
@@ -6169,11 +6198,14 @@ function lemSaveForm(kind,f,d){
 }
 /* Verkaufspunkte je Person (aus Ergebnissen) */
 function lemPersonVP(e,mk){var r=personRes(e,mk);return {a:r.vp.a||null,t:r.vp.t}}
-function lemRegionVal(mk,id){var R=lemCalc(mk,'m');if(id==='__lem')return R.complete?R.tot:null;if(id==='__lemv')return R.v.zeN==null?null:Math.round(R.v.zeN*100);if(id==='__lemw')return R.w.pts;if(id==='__lemq')return R.q.pts;if(id==='__kubis')return R.q.ts;return null}
-var LEM_REG_OPTS=[['__cnt:kre','Kredite (Stück aus Abschlüssen)'],['__cnt:gk','Girokonten (Stück aus Abschlüssen)'],['__cnt:kk','Kreditkarten (Stück aus Abschlüssen)'],['__cnt:ver','Versicherungen (Stück aus Abschlüssen)'],['__lem','LEM-Punkte gesamt'],['__lemv','LEM Verkauf: Zielerreichung %'],['__lemw','LEM Wachstum: Punkte'],['__lemq','LEM Qualität: Punkte'],['__kubis','KuBiS-Teamscore Bereich']];
+function lemRegionVal(mk,id){var R=lemCalc(mk,'m'),w=R.w;if(id==='__lem')return R.complete?R.tot:null;if(id==='__lemv')return R.v.zeN==null?null:Math.round(R.v.zeN*10000)/100;if(id==='__lemw')return w.pts;if(id==='__lemq')return R.q.pts;if(id==='__kubis')return R.q.ts;
+  var m=/^__(tke|tko|ob)_(i|z|ze|p)$/.exec(id);if(m){var c=w[m[1]];if(c.z==null&&c.i==null)return null;return m[2]==='i'?c.i:m[2]==='z'?c.z:m[2]==='ze'?(c.ze==null?null:Math.round(c.ze*100)):c.pts}
+  if(id==='__kuki')return w.kuki.v;if(id==='__kuki_p')return w.kuki.pts;return null}
+var LEM_REG_OPTS=[['__tke_i','Conv. TKE Ist-Anzahl'],['__tke_z','Conv. TKE Ziel-Anzahl'],['__tke_ze','Conv. TKE ZE %'],['__tke_p','Conv. TKE LEM-Score'],['__tko_i','Conv. TKO Ist-Anzahl'],['__tko_z','Conv. TKO Ziel-Anzahl'],['__tko_ze','Conv. TKO ZE %'],['__tko_p','Conv. TKO LEM-Score'],['__kuki','KUKI-Punkte'],['__kuki_p','KUKI LEM-Score'],['__ob_i','TBOL Ist-Anzahl'],['__ob_z','TBOL Ziel-Anzahl'],['__ob_ze','TBOL ZE %'],['__ob_p','TBOL LEM-Score'],['__cnt:kre','Kredite (Stück aus Abschlüssen)'],['__cnt:gk','Girokonten (Stück aus Abschlüssen)'],['__cnt:kk','Kreditkarten (Stück aus Abschlüssen)'],['__cnt:ver','Versicherungen (Stück aus Abschlüssen)'],['__lem','LEM-Punkte gesamt'],['__lemv','LEM Verkauf: Zielerreichung %'],['__lemw','Score Wachstum normiert'],['__lemq','LEM Qualität: Punkte'],['__kubis','KuBiS-Teamscore Bereich']];
 function lemAttention(){
   var o=[],mk=monthKey(),d=new Date();if(!S.employees.length)return o;
   if(!lemMon(mk)&&d.getDate()>=3)o.push({sev:1,icon:'target',c:'#1c7ed6',t:'LEM-Werte für '+monthLabel(mk).split(' ')[0]+' fehlen',s:'Ziele und Stand aus dem Reporting eintragen',act:'go',to:'goals'});
+  var coh=shiftMonth(mk,-6);if(d.getDate()>=10&&!L().pr[coh]&&(prSold(S.deals,coh,'gk')||prSold(S.deals,coh,'kk')))o.push({sev:1,icon:'swap',c:'#1c7ed6',t:'Einbuchungen nach 6 Monaten eintragen',s:'Girokonten und Karten aus '+monthLabel(coh),act:'pr-open',id:mk});
   var R=lemCalc(mk,'y');if(R.v.ziel&&R.v.zeN!=null&&R.v.zeN<.7)o.push({sev:2,icon:'chart',c:'#c92a3a',t:'Verkauf unter 70 %: 0 LEM-Punkte',s:'Jahr bis heute '+lemPctTxt(R.v.zeN)+' · ab 70 % gibt es 30 Punkte',act:'go',to:'goals'});
   return o;
 }
@@ -6186,19 +6218,25 @@ function seedLem(st,by){
   function who(k){var r=rnd(k)*tw;for(var i=0;i<W.length;i++){r-=W[i][1];if(r<=0)return W[i][0]==='me'?'me':by[W[i][0]]}return by.Jonas}
   function day(mk,k){var days=[],last=new Date(+mk.slice(0,4),+mk.slice(5),0).getDate();for(var i=1;i<=last;i++){var ds=mk+'-'+pad(i);if(isWorkday(parse(ds))&&ds<=td)days.push(ds)}return days.length?days[Math.floor(rnd(k)*days.length)]:null}
   function add(mk,k,o){var ds=day(mk,k+'d');if(!ds)return;if(mk===monthKey()&&rnd(k+'pace')>monthPace(mk))return;o.id=uid();o.d=ds;if(o.emp==null)o.emp=o.kred?by.Markus:who(k+'w');delete o.kred;st.deals.push(o)}
-  for(var i=1;i<=cm;i++){var mk=y+'-'+pad(i),m=lemBlankMon(),k=0;
-    m.v={kre:{z:11000,i:null},gk:{z:9000,i:null},kk:{z:3000,i:null},ver:{z:400+220*(i-1),i:null},ob:{z:1200,i:null},fg:{z:1600,i:null},bf:{z:1200,i:null}};
-    m.tke={z:3,i:null};m.tko={z:3,i:null};m.kuki=Math.round((1.49+(rnd(mk+'ku')-.5)/12)*1000)/1000;
-    var n=55*i;m.ob={n:n,a:Math.round(n*(.3+rnd(mk+'oa')*.06)),b:Math.round(n*(.11+rnd(mk+'ob')*.04))};
+  for(var i=1;i<=cm;i++){var mk=y+'-'+pad(i),m=lemBlankMon(),f=lemWd(mk).f;
+    m.v={kre:{z:11000,i:null},ver:{z:400+220*(i-1),i:null},gk:{z:9000,i:null},kk:{z:3000,i:null},bf:{z:1200,i:null}};m.um={z:70000,i:null};
+    m.tke={z:3,i:null};m.tko={z:3,i:null};m.kuki=Math.round(1490+(rnd(mk+'ku')-.5)*80);
+    m.ob={z:28,i:Math.round(28*f*(.92+rnd(mk+'oi')*.25))};m.agb={a:Math.round((99+rnd(mk+'ag')*.7)*100)/100,c:Math.round((96+rnd(mk+'c')*3)*100)/100,e:Math.round((94+rnd(mk+'e')*3)*100)/100,s:Math.round((95+rnd(mk+'s')*3)*100)/100};
     m.ts=Math.round((75.2+(rnd(mk+'ts')-.5)*3)*10)/10;m.tsF=Math.round((m.ts+1.4)*10)/10;m.bank=76.6;m.cs=Math.round(73+(rnd(mk+'cs')-.5)*8);
     d.mon[mk]=m;
     var nk=8+Math.floor(rnd(mk+'nk')*4);for(var j=0;j<nk;j++)add(mk,mk+'k'+j,{it:j<6?'kr_neu':'kr_zus',a:Math.round(1200+rnd(mk+'z'+j)*2000),pgf:Math.round((.85+rnd(mk+'p'+j)*.4)*100)/100,vol:Math.round(8000+rnd(mk+'v'+j)*14000),ch:j===7?'ds':'fil',conv:j<6&&j%2===0?'tke':(j>=6&&j<9?'tko':'')});
-    [['gk_std',13],['gk_prem',2],['gk_gel',3],['gk_ge',1],['gk_bge',1],['gk_blim',1],['gk_u18',1],['kk_cl',5],['kk_gold',1],['kk_use',3],['kk_rev',1],['kk_zus',1],['fg_fest',4],['fg_tg',2],['fg_jtg',1],['fg_gk',1],['bf_tipp',4],['bf_plan',1]].forEach(function(x){var c=x[1]+(rnd(mk+x[0])<.3?-1:rnd(mk+x[0])>.75?1:0);for(var j=0;j<c;j++)add(mk,mk+x[0]+j,{it:x[0],a:1})});
+    if(rnd(mk+'lia')>.4)add(mk,mk+'lia',{it:'kr_lia',a:Math.round(600+rnd(mk+'lz')*900),pgf:1,vol:6000});
+    [['gk_std',13],['gk_prem',2],['gk_bge',1],['gk_blim',1],['gk_u18',1],['kk_cl',5],['kk_gold',1],['fg_fest',4],['fg_tg',2],['fg_jtg',1],['fg_gk',1],['bf_tipp',4],['bf_plan',1]].forEach(function(x){var c=x[1]+(rnd(mk+x[0])<.3?-1:rnd(mk+x[0])>.75?1:0);for(var j=0;j<c;j++)add(mk,mk+x[0]+j,{it:x[0],a:1})});
     if(i%2===0)add(mk,mk+'bfg',{it:'bf_geb',a:1,kred:true});
     for(var j2=0;j2<5;j2++)add(mk,mk+'ve'+j2,{it:j2===4?'v_rsv':'v_lfd',a:Math.round((18+rnd(mk+'b'+j2)*30)*100)/100,zw:'m',rec:j2===1?Math.round((30+rnd(mk+'r'+j2)*20)*100)/100:null,rate:j2===4?220:null});
-    add(mk,mk+'obk',{it:'ob_kr',a:Math.round(1500+rnd(mk+'obz')*800),pgf:1});add(mk,mk+'obf',{it:'ob_fonds',a:20000});if(i%3===0)add(mk,mk+'obt',{it:'ob_tav',a:1000});
+    add(mk,mk+'obk',{it:'ob_kr',a:Math.round(1500+rnd(mk+'obz')*800),pgf:1,vol:9000});add(mk,mk+'obf',{it:'ob_fonds',a:20000});if(i%3===0)add(mk,mk+'obt',{it:'ob_tav',a:1000});
   }
   st.deals.forEach(function(x){var c=cat(x.it);if(c&&(c.u==='beitrag'||c.u==='einmal')&&x.rec!=null&&x.rec<x.a)x.rec=x.a+5});
+  /* Einbuchungen nach 6 Monaten (Prämien aus dem Verkaufsmonat) */
+  for(var b=1;b<=cm;b++){var bk=y+'-'+pad(b),coh=shiftMonth(bk,-6);if(bk===monthKey()&&new Date().getDate()<8)continue;
+    var ng=prSold(st.deals,coh,'gk')||15,nkk=prSold(st.deals,coh,'kk')||6,r2=function(k){return rnd(coh+k)};
+    var rec={n:{},c:{gk_gel:Math.round(ng*(.16+r2('a')*.08)),gk_ge:Math.round(ng*(.05+r2('b')*.05)),gk_klv:r2('k')>.6?1:0,gk_del1:Math.round(ng*r2('c')*.08),gk_del2:0,kk_use:Math.round(nkk*(.55+r2('d')*.15)),kk_rev:Math.round(nkk*(.25+r2('e')*.1)),kk_zus:r2('f')>.5?1:0,kk_klv:0,kk_del1:r2('g')>.7?1:0,kk_del2:0},split:true};
+    d.pr[coh]=rec;st.deals=st.deals.concat(prMake(st.deals,coh,rec,prDate(bk)))}
   if(cm>2)d.mon[y+'-'+pad(cm-1)].korr=-1;
 }
 function registerLem(){
@@ -6208,7 +6246,7 @@ function registerLem(){
     'lem-per':function(t){UI.lemPer=t.dataset.v;rerender()},
     'lem-m':function(t){var k=+t.dataset.k;UI.lemMk=k===0?monthKey():shiftMonth(lemMk(),k);rerender()},
     'lem-edit':function(t){var k=t.dataset.v;(k==='v'?openLemV:k==='w'?openLemW:openLemQ)(lemMk())},
-    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'trend',label:'Wachstum: Conversions, KUKI, Online Banking',fn:function(){openLemW(lemMk())}},{icon:'star',label:'Qualität: KuBiS und Cross-Sell',fn:function(){openLemQ(lemMk())}},{icon:'edit',label:'Korrektur laut LEM-Übersicht',fn:function(){openLemK(lemMk())}}]})},
+    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'trend',label:'Wachstum: Conversions, KUKI, TBOL',fn:function(){openLemW(lemMk())}},{icon:'star',label:'Qualität: KuBiS und Cross-Sell',fn:function(){openLemQ(lemMk())}},{icon:'edit',label:'Korrektur laut LEM-Übersicht',fn:function(){openLemK(lemMk())}}]})},
     'lem-prods':openLemProds,'lem-norm':openLemNorm,'lem-rules':openLemRules,
     'lem-lev-all':function(){UI.lemAllLev=!UI.lemAllLev;rerender()}
   });
@@ -6220,13 +6258,13 @@ function registerLem(){
   QA_ALL.lem=['target','LEM-Werte'];
 }
 function lemVpRow(e,mk){return ''}
-function wgLemS(){var R=lemCalc(monthKey(),'y');if(R.tot==null)return {v:'–',s:'LEM-Werte eintragen',act:'lem-add'};var st=lemPillarState(R.tot,R.exp);return {v:dec(R.tot,R.tot%1?1:0),s:'von 150 · '+(R.complete?st.l:'unvollständig'),cls:R.tot>=R.exp?'good-txt':R.tot>=135?'warn-txt':'bad-txt',to:'goals'}}
+function wgLemS(){var R=lemCalc(monthKey(),'y');if(R.tot==null)return {v:'–',s:'LEM-Werte eintragen',act:'lem-add'};var st=lemPillarState(R.tot,R.exp);return {v:lemF(R.tot),s:'von 150 · '+(R.complete?st.l:'unvollständig'),cls:R.tot>=R.exp?'good-txt':R.tot>=135?'warn-txt':'bad-txt',to:'goals'}}
 function wgLemL(){var R=lemCalc(monthKey(),'y'),c={q:'#0c8599',v:'#1c7ed6',w:'#7048e8'},n={q:'Qualität',v:'Verkauf',w:'Wachstum'};
-  return '<section class="card glass"><a class="card-h wg-lh" href="#/goals"><h2>LEM-Punkte '+monthKey().slice(0,4)+'</h2><span class="muted small">'+(R.tot==null?'–':dec(R.tot,R.tot%1?1:0))+' / 150</span>'+ic('right',16)+'</a>'+
+  return '<section class="card glass"><a class="card-h wg-lh" href="#/goals"><h2>LEM-Punkte '+monthKey().slice(0,4)+'</h2><span class="muted small">'+(R.tot==null?'–':lemF(R.tot))+' / 150</span>'+ic('right',16)+'</a>'+
     ['q','v','w'].map(function(k){var p=R[k].pts,st=lemPillarState(p,LEM_EXP[k]);return '<div class="prow"><div class="l"><span>'+n[k]+'</span><span class="muted">'+lemF(p)+' / '+LEM_EXP[k]+'</span></div>'+lemBar(p,LEM_EXP[k],LEM_MAX[k],st.c)+'</div>'}).join('')+
     (lemLevers(R)[0]?'<p class="muted small" style="margin-top:8px">Größter Hebel: '+esc(lemLevers(R)[0].t)+' (+'+lemLevers(R)[0].g+')</p>':'')+'</section>'}
 function registerLemPage(){
-  PAGE_ACTS.goals=function(){return {add:{label:'LEM-Werte erfassen',fn:function(){ACTIONS['lem-add']()}},menu:[{icon:'users',label:'Zielverteilung, Baufi-Phase, TBOL-Ziel',fn:openLemShare},{icon:'tasks',label:'Verkaufspunkte-Katalog',fn:openLemCatalog},{icon:'chart',label:'Abschlüsse dieses Monats',fn:function(){openDealList(lemMk(),null)}},{icon:'swap',label:'Normierung (Bank-Zielerreichung)',fn:openLemNorm},{icon:'tasks',label:'LEM-Regeln und Tabellen',fn:openLemRules},{icon:'plus',label:'Eigenes Monatsziel',fn:function(){openGoalForm()}},S.goals.length?{icon:'sparkle',label:'Eigene Ziele: neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}:null]}};
+  PAGE_ACTS.goals=function(){return {add:{label:'LEM-Werte erfassen',fn:function(){ACTIONS['lem-add']()}},menu:[{icon:'swap',label:'Einbuchungen nach 6 Monaten (Girokonto, Karte)',fn:function(){openPr(lemMk())}},{icon:'chart',label:'Verlauf wie im Monatsreport',fn:openLemHist},{icon:'users',label:'Zielverteilung und Baufi-Phase',fn:openLemShare},{icon:'tasks',label:'Verkaufspunkte-Katalog',fn:openLemCatalog},{icon:'chart',label:'Abschlüsse dieses Monats',fn:function(){openDealList(lemMk(),null)}},{icon:'swap',label:'Normierung (Bank-Zielerreichung)',fn:openLemNorm},{icon:'tasks',label:'LEM-Regeln und Tabellen',fn:openLemRules},{icon:'plus',label:'Eigenes Monatsziel',fn:function(){openGoalForm()}},S.goals.length?{icon:'sparkle',label:'Eigene Ziele: neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}:null]}};
 }
 /* ===================== Filialleiter im KLS ===================== */
 /* Eigene Spalte vorbelegen: Arbeitszeit, Mittag, Termine aus dem App-Kalender */
@@ -6276,7 +6314,7 @@ function registerKlsMe(){
 var LEM_CAT=[
   {id:'kr_neu',p:'kre',g:'Kredit',n:'Neukredit',u:'zins',bonus:500,conv:'tke',d:'320 VP je 1.000 € Zinsen × Preisgewichtungsfaktor + 500 Bonus'},
   {id:'kr_zus',p:'kre',g:'Kredit',n:'Zusatzkredit (neuer Anteil)',u:'zins',bonus:0,conv:'tko',d:'320 VP je 1.000 € Zinsen × Faktor; TKO-Conversion +500'},
-  {id:'kr_lia',p:'kre',g:'Kredit',n:'Loan in App',u:'zins',bonus:0,d:'Preisgewichtungsfaktor LiA · KLS-Termin der letzten 7 Tage nötig · keine Conversion'},
+  {id:'kr_lia',p:'lia',g:'Kredit',n:'Loan in App',u:'zins',bonus:0,d:'Preisgewichtungsfaktor LiA · KLS-Termin der letzten 7 Tage nötig · keine Conversion'},
   {id:'gk_std',p:'gk',g:'Girokonto',n:'Plus/Vorteil/Komfort/Starter',u:'stk',vp:150,conv:'tko'},
   {id:'gk_prem',p:'gk',g:'Girokonto',n:'Premiumkonto',u:'stk',vp:250,conv:'tko'},
   {id:'gk_u18',p:'gk',g:'Girokonto',n:'Starterkonto unter 18',u:'stk',vp:500},
@@ -6302,8 +6340,8 @@ var LEM_CAT=[
   {id:'kk_klv',p:'kk',g:'Kreditkarte · 6. Monat',n:'KLV Revolver oder Vollzahler',u:'stk',vp:50},
   {id:'v_lfd',p:'ver',g:'Versicherung',n:'Laufender Beitrag',u:'beitrag',d:'1 VP je 1 € Monatsbeitrag, jeden Monat solange der Vertrag läuft'},
   {id:'v_einm',p:'ver',g:'Versicherung',n:'Einmalbeitrag',u:'einmal',d:'1 VP je 1 € (Beitrag ÷ Laufzeit) pro Monat'},
-  {id:'v_rsv',p:'ver',g:'Versicherung',n:'Kredit-RSV',u:'beitrag',rsv:true,d:'Ratierlich, höchstens 34 % der monatlichen Kreditrate'},
-  {id:'v_rsvgk',p:'ver',g:'Versicherung',n:'RSV zu Girokonto/Karte',u:'vp',d:'Einmalige Abschlusspunkte laut Reporting, Prüfung nach 6 Monaten'},
+  {id:'v_rsv',p:'rsv',g:'Versicherung',n:'Kredit-RSV',u:'beitrag',rsv:true,d:'Ratierlich, höchstens 34 % der monatlichen Kreditrate'},
+  {id:'v_rsvgk',p:'rsv',g:'Versicherung',n:'RSV zu Girokonto/Karte',u:'vp',d:'Einmalige Abschlusspunkte laut Reporting, Prüfung nach 6 Monaten'},
   {id:'fg_fest',p:'fg',g:'Geldanlage',n:'Festgeld neu (≥ 10.000 €)',d:'Neueröffnung, mindestens 10.000 € am Monatsende',u:'stk',vp:200},
   {id:'fg_tg',p:'fg',g:'Geldanlage',n:'Tagesgeld, nur POS (≥ 10.000 €)',d:'Prüfung fortlaufend im Jahr, bis das Volumen erstmals erreicht ist',u:'stk',vp:200},
   {id:'fg_jtg',p:'fg',g:'Geldanlage',n:'Junior-Tagesgeld (≥ 500 €)',u:'stk',vp:200},
@@ -6315,13 +6353,14 @@ var LEM_CAT=[
   {id:'bf_plan',p:'bf',g:'Baufinanzierung',n:'Baufi-Planer: Antrag komplett',u:'stk',vp:500,mode:'ph'},
   {id:'bf_geb',p:'bf',g:'Baufinanzierung',n:'Baufi-Planer: Antrag gebucht',u:'stk',vp:1000,mode:'ph'},
   {id:'bf_olb',p:'bf',g:'Baufinanzierung',n:'OLB: gebuchter Kredit',d:'Nach Überleitung an den Baufi-Hub, gebucht von qualifizierten Beratern',u:'stk',vp:0,mode:'olb'},
-  {id:'ob_kr',p:'ob',g:'Überleitung',n:'Kredit über BzH/LbP',u:'zins',bonus:500,f:0.75,d:'Nach KLS-Überleitung: 75 % der Punkte eines vergleichbaren Filialkredits'},
-  {id:'ob_cmp',p:'ob',g:'Überleitung',n:'GK, Karte, Vers. über BzH/LbP',u:'cmp',d:'100 % eines vergleichbaren Filialabschlusses'},
-  {id:'ob_tav',p:'ob',g:'Überleitung',n:'AB/VB: TAV CNR',d:'500 VP je 1.000 €, Überleitungsquartal + 2 Folgequartale',u:'tsd',vp:500},
-  {id:'ob_fonds',p:'ob',g:'Überleitung',n:'AB/VB: Fondsvolumen',d:'10 VP je 1.000 €, Überleitungsquartal + 2 Folgequartale',u:'tsd',vp:10}
+  {id:'ob_kr',p:'kre',g:'Überleitung',n:'Kredit über BzH/LbP',u:'zins',bonus:500,f:0.75,d:'Nach KLS-Überleitung: 75 % eines vergleichbaren Filialkredits, zählt in der TK Verkaufsleistung'},
+  {id:'ob_cmp',p:'',g:'Überleitung',n:'Konto oder Karte über BzH/LbP',u:'cmp',d:'100 % eines vergleichbaren Filialabschlusses, zählt beim Produkt'},
+  {id:'ob_tav',p:'inv',g:'Überleitung',n:'AB/VB: TAV CNR',d:'500 VP je 1.000 €, Überleitungsquartal + 2 Folgequartale',u:'tsd',vp:500},
+  {id:'ob_fonds',p:'inv',g:'Überleitung',n:'AB/VB: Fondsvolumen',d:'10 VP je 1.000 €, Überleitungsquartal + 2 Folgequartale',u:'tsd',vp:10}
 ];
 var LEM_ZW=[['m','monatlich',1],['q','vierteljährlich',3],['h','halbjährlich',6],['j','jährlich',12]];
 var LEM_CH=[['fil','Filiale (Selbstbuchung)',1],['ds','Direct Sales (Filial-Telefonkredit)',1],['onl','An Online übergeleitet',0]];
+function dealProd(d){var c=cat(d.it);if(!c)return '';if(c.u==='cmp'){var x=cat(d.cmp);return x?x.p:''}return c.p}
 function cat(id){for(var i=0;i<LEM_CAT.length;i++)if(LEM_CAT[i].id===id)return LEM_CAT[i];return null}
 function lemCfg(){return L().cfg}
 function lemBfVp(){var m=lemCfg().bf;return m==='olb2'?1000:m==='olb1'?750:0}
@@ -6357,14 +6396,14 @@ function dealVP(d,mk){
   return 0;
 }
 function dealOnce(d){var c=cat(d.it);if(!c)return 0;if(c.u==='beitrag'||c.u==='einmal')return lemVerMonthly(d,c).vp;return dealVP(d,d.d.slice(0,7))}
-function dealsIn(mk,f){f=f||{};return S.deals.filter(function(d){var c=cat(d.it);if(!c)return false;if(f.p&&c.p!==f.p)return false;if(f.emp!=null&&d.emp!==f.emp)return false;if(c.u==='beitrag'||c.u==='einmal')return dealVP(d,mk)!==0||d.d.slice(0,7)===mk;return d.d.slice(0,7)===mk})}
+function dealsIn(mk,f){f=f||{};return S.deals.filter(function(d){var c=cat(d.it);if(!c)return false;if(f.p&&dealProd(d)!==f.p)return false;if(f.emp!=null&&d.emp!==f.emp)return false;if(c.u==='beitrag'||c.u==='einmal')return dealVP(d,mk)!==0||d.d.slice(0,7)===mk;return d.d.slice(0,7)===mk})}
 function dealSum(mk,f){var s=0,any=false;dealsIn(mk,f).forEach(function(d){s+=dealVP(d,mk);any=true});return any?Math.round(s*10)/10:null}
-function dealCount(mk,f){return dealsIn(mk,f).filter(function(d){return d.d.slice(0,7)===mk&&dealOnce(d)>0}).reduce(function(a,d){var c=cat(d.it);return a+(c.u==='stk'?(d.a==null?1:d.a):1)},0)}
+function dealCount(mk,f){return dealsIn(mk,f).filter(function(d){return d.d.slice(0,7)===mk&&!d.pr&&dealOnce(d)>0}).reduce(function(a,d){var c=cat(d.it);return a+(c.u==='stk'?(d.a==null?1:d.a):c.u==='cmp'?(d.n||1):1)},0)}
 function convCount(mk,k){return S.deals.filter(function(d){return d.d.slice(0,7)===mk&&d.conv===k&&d.it!=='kr_lia'}).length}
-function normDeals(a){return (Array.isArray(a)?a:[]).filter(function(x){return x&&cat(x.it)&&validISO(x.d)}).slice(-4000).map(function(x){var n=function(v){var r=lemN(v);return r};return {id:str(x.id||uid(),40),d:x.d,emp:str(x.emp,40),it:x.it,a:n(x.a),pgf:n(x.pgf),ch:['fil','ds','onl'].indexOf(x.ch)>-1?x.ch:'fil',conv:['tke','tko'].indexOf(x.conv)>-1?x.conv:'',kons:!!x.kons,vol:n(x.vol),zw:['m','q','h','j'].indexOf(x.zw)>-1?x.zw:'m',lz:n(x.lz),rec:n(x.rec),rate:n(x.rate),noBer:!!x.noBer,kim:!!x.kim,cmp:str(x.cmp,20),n:n(x.n),end:/^\d{4}-\d{2}$/.test(x.end||'')?x.end:'',ref:str(x.ref,30),note:str(x.note,200)}})}
+function normDeals(a){return (Array.isArray(a)?a:[]).filter(function(x){return x&&cat(x.it)&&validISO(x.d)}).slice(-4000).map(function(x){var n=function(v){var r=lemN(v);return r};return {id:str(x.id||uid(),40),pr:/^\d{4}-\d{2}$/.test(x.pr||'')?x.pr:'',d:x.d,emp:str(x.emp,40),it:x.it,a:n(x.a),pgf:n(x.pgf),ch:['fil','ds','onl'].indexOf(x.ch)>-1?x.ch:'fil',conv:['tke','tko'].indexOf(x.conv)>-1?x.conv:'',kons:!!x.kons,vol:n(x.vol),zw:['m','q','h','j'].indexOf(x.zw)>-1?x.zw:'m',lz:n(x.lz),rec:n(x.rec),rate:n(x.rate),noBer:!!x.noBer,kim:!!x.kim,cmp:str(x.cmp,20),n:n(x.n),end:/^\d{4}-\d{2}$/.test(x.end||'')?x.end:'',ref:str(x.ref,30),note:str(x.note,200)}})}
 
 /* ---------- Kennzahlen: LEM-Produkte sind Kennzahlen in Verkaufspunkten ---------- */
-var LEM_MET=[['kre','Kredit','Kredit','#BC123D','kre'],['gk','Girokonto','Giro','#1c7ed6','kon'],['kk','Kreditkarte','Karte','#0c8599','kon'],['ver','Versicherungen','Vers.','#7048e8','vor'],['ob','One Bank (Überleitungen)','One Bank','#d9780a','zusatz'],['fg','Geldanlage','Anlage','#1f9d55','bed'],['bf','Baufinanzierung','Baufi','#3d5a80','kre']];
+var LEM_MET=[['kre','Kredit (TK Verkaufsleistung)','Kredit','#BC123D','kre'],['rsv','Versicherung Kreditschutz','RSV','#e8590c','vor'],['ver','Versicherung (Netto)','Vers.','#7048e8','vor'],['gk','Girokonto','Giro','#1c7ed6','kon'],['kk','Kreditkarte','Karte','#0c8599','kon'],['fg','Termineinlagen','Anlage','#1f9d55','bed'],['bf','Bauspar/Baufi','Baufi','#3d5a80','kre'],['inv','Überleitung Investment','Invest','#d9780a','zusatz'],['lia','Loan in APP','LiA','#868e96','kre']];
 function lemMetrics(){return LEM_MET.map(function(x){return {id:'m_lp_'+x[0],n:x[1],s:x[2],unit:'VP',t:0,c:x[3],comp:x[4],lem:x[0]}})}
 function isLemMet(m){return !!(m&&m.lem)}
 function manualMets(){return S.metrics.filter(function(m){return !m.lem})}
@@ -6490,7 +6529,7 @@ function openDealList(mk,empId){
   var rat=S.deals.filter(function(d){var c=cat(d.it);return (c.u==='beitrag'||c.u==='einmal')&&d.d.slice(0,7)<mk&&dealVP(d,mk)>0&&(empId==null||d.emp===empId)});
   var sum=l.concat(rat).reduce(function(a,d){return a+dealVP(d,mk)},0);
   sheet('Abschlüsse · '+esc(monthLabel(mk)),'<p class="muted small" style="margin-bottom:10px">'+(empId!=null?esc(dealWho(empId))+' · ':'')+num(Math.round(sum))+' VP in diesem Monat'+(rat.length?' · davon '+num(Math.round(rat.reduce(function(a,d){return a+dealVP(d,mk)},0)))+' VP ratierlich aus früheren Versicherungen':'')+'</p>'+
-    (l.length?lgroup('',l.slice(0,80).map(function(d){var c=cat(d.it);return li({t:esc(c.n),s:esc(fmt(d.d,{day:'2-digit',month:'2-digit'})+' · '+dealWho(d.emp)+(d.ref?' · '+d.ref:'')),v:'<b>'+(c.u==='beitrag'||c.u==='einmal'?dec(dealVP(d,mk),2):num(Math.round(dealVP(d,mk))))+'</b> VP',act:'deal-open',id:d.id})})):'<p class="muted">Noch keine Abschlüsse in diesem Monat.</p>'),
+    (l.length?lgroup('',l.slice(0,80).map(function(d){var c=cat(d.it);return li({t:esc(c.n)+(d.pr?' · '+(d.a||1)+'×':''),s:esc(fmt(d.d,{day:'2-digit',month:'2-digit'})+' · '+dealWho(d.emp)+(d.pr?' · Einbuchung aus '+monthLabel(d.pr):'')+(d.ref?' · '+d.ref:'')),v:'<b>'+(c.u==='beitrag'||c.u==='einmal'?dec(dealVP(d,mk),2):num(Math.round(dealVP(d,mk))))+'</b> VP',act:'deal-open',id:d.id})})):'<p class="muted">Noch keine Abschlüsse in diesem Monat.</p>'),
     '<div class="m-foot"><button class="btn" data-act="modal-close">Schließen</button><button class="btn primary" data-act="deal-new" data-emp="'+(empId||'')+'">'+ic('plus',15)+' Abschluss</button></div>');
 }
 function openLemCatalog(){
@@ -6506,24 +6545,17 @@ function openLemShare(){
   var c=lemCfg(),ppl=[{id:'me',n:'Ich (Filialleitung)'}].concat(S.employees.map(function(e){return {id:e.id,n:e.name,h:e.hours}}));
   sheet('Zielverteilung','<form class="form" data-form="lem-share"><p class="full muted small">Das Filialziel je Produkt wird nach diesen Anteilen auf das Team verteilt. Standard: Wochenstunden ÷ 39. Leer = Standard, 0 = kein persönliches Verkaufsziel.</p>'+
     ppl.map(function(p){var s=(L().share||{})[p.id];return '<div class="full lem-sh"><span><b>'+esc(p.n)+'</b><small>'+(p.id==='me'?'Standard 0':'Standard '+dec((p.h||39)/39,2))+' · aktuell '+Math.round(lemShareOf(p.id)*100)+' %</small></span><input name="s_'+esc(p.id)+'" type="text" inputmode="decimal" value="'+(s==null?'':String(s).replace('.',','))+'" placeholder="'+(p.id==='me'?'0':dec((p.h||39)/39,2))+'" aria-label="Anteil '+esc(p.n)+'"></div>'}).join('')+
-    '<h6 class="full ml-h">Baufinanzierung</h6>'+SEL('Stand im Bereich','bf',[['ph','Vor Umstellung (Planet Home)'],['olb1','OLB Erprobungsphase (750 je Kredit, ohne Ziele)'],['olb2','OLB Roll-Out (1.000 je Kredit, mit Zielen)']],c.bf,'full')+
-    '<h6 class="full ml-h">Online Banking (TBOL)</h6>'+F('Ziel für 100 % (% der maximalen Punkte)','tbol',String(c.tbol).replace('.',','),'text','inputmode="decimal"')+F('Bankweiter Mittelwert (Sicherheitsschirm, %)','tbolBank',c.tbolBank==null?'':String(c.tbolBank).replace('.',','),'text','inputmode="decimal" placeholder="falls bekannt"')+
-    '<p class="full muted small">Liegt der bankweite Mittelwert unter dem Ziel, gilt der Mittelwert als Ziel (Beispiel: Mittelwert 20 % → Ziel 20 %; Mittelwert 35 % → Ziel bleibt 26 %).</p>'+formFoot()+'</form>');
+    '<h6 class="full ml-h">Baufinanzierung</h6>'+SEL('Stand im Bereich','bf',[['ph','Vor Umstellung (Planet Home)'],['olb1','OLB Erprobungsphase (750 je Kredit, ohne Ziele)'],['olb2','OLB Roll-Out (1.000 je Kredit, mit Zielen)']],c.bf,'full')+formFoot()+'</form>');
 }
 function saveLemShare(f,d){
   var s={};[{id:'me'}].concat(S.employees).forEach(function(p){var v=lemN(d.get('s_'+p.id));if(v!=null&&v>=0&&v<=5)s[p.id]=v});L().share=s;
-  var c=lemCfg();c.bf=['ph','olb1','olb2'].indexOf(d.get('bf'))>-1?d.get('bf'):'ph';var t=lemN(d.get('tbol'));c.tbol=t!=null&&t>0&&t<=100?t:26;var tb=lemN(d.get('tbolBank'));c.tbolBank=tb!=null&&tb>0&&tb<=100?tb:null;
+  var c=lemCfg();c.bf=['ph','olb1','olb2'].indexOf(d.get('bf'))>-1?d.get('bf'):'ph';
   save();closeModal();rerender();toast('Zielverteilung gespeichert');
 }
-function lemTbolTarget(){var c=lemCfg();return c.tbolBank!=null&&c.tbolBank<c.tbol?c.tbolBank:c.tbol}
 
 /* ---------- Migration: LEM-Kennzahlen, alte Doppelungen auflösen ---------- */
 function migrateLemMetrics(b){
   if(!Array.isArray(b.metrics))b.metrics=[];
-  var seen={};b.metrics=b.metrics.filter(function(m){if(!m.lem)return true;if(seen[m.lem])return false;seen[m.lem]=1;return true});
-  var have={};b.metrics.forEach(function(m){if(m.lem)have[m.lem]=1});
-  var add=lemMetrics().filter(function(m){return !have[m.lem]});
-  if(add.length)b.metrics=add.concat(b.metrics);
   var dup={m_kre:'kre',m_kon:'gk',m_ver:'ver'};
   if(!b.lemMig){
     b.metrics=b.metrics.filter(function(m){return !dup[m.id]});
@@ -6531,11 +6563,21 @@ function migrateLemMetrics(b){
     if(b.region&&b.region.kpis)b.region.kpis.forEach(function(k){if(dup[k.metric])k.metric='__cnt:'+dup[k.metric]});
     b.lemMig=1;
   }
+  if(b.lemMig<2){
+    /* Produktzeilen wie im Monatsreport: One Bank aufgeteilt (Kredit → TK Verkaufsleistung, AB/VB → Investment) */
+    b.metrics=b.metrics.filter(function(m){return m.lem!=='ob'});
+    (b.goals||[]).forEach(function(g){if(g.metric==='__lp:ob')g.metric='__lp:inv'});
+    b.lemMig=2;
+  }
+  var ids=LEM_MET.map(function(x){return x[0]}),seen={};
+  b.metrics=b.metrics.filter(function(m){if(!m.lem)return true;if(seen[m.lem]||ids.indexOf(m.lem)<0)return false;seen[m.lem]=1;return true});
+  var lm=lemMetrics().map(function(n){var o=b.metrics.filter(function(m){return m.lem===n.lem})[0];if(o){o.n=n.n;o.s=n.s;o.unit='VP';return o}return n});
+  b.metrics=lm.concat(b.metrics.filter(function(m){return !m.lem}));
 }
 function registerVp(){
   Object.assign(ACTIONS,{
     'deal-new':function(t){closeModal();openDealForm({emp:t&&t.dataset?t.dataset.emp||'':'',p:t&&t.dataset?t.dataset.p:''})},
-    'deal-open':function(t){openDealForm(null,t.dataset.id)},
+    'deal-open':function(t){var x=byId(S.deals,t.dataset.id);if(x&&x.pr){closeModal();openPr(shiftMonth(x.pr,6));return}openDealForm(null,t.dataset.id)},
     'deal-del':function(t){var id=t.dataset.id;confirmBox('Abschluss löschen?','Die Verkaufspunkte werden wieder abgezogen.','Löschen',function(){S.deals=S.deals.filter(function(x){return x.id!==id});save();closeModal();rerender();toast('Abschluss gelöscht')})},
     'deal-list':function(t){openDealList(UI.salesMonth||monthKey(),t&&t.dataset&&t.dataset.emp!=null&&t.dataset.emp!==''?t.dataset.emp:null)},
     'lem-cat':openLemCatalog,'lem-share':openLemShare
@@ -6552,14 +6594,150 @@ function registerVp(){
 function lemCheck(mk){
   var o=[],m=lemMon(mk),hasDeals=S.deals.some(function(d){return d.d.slice(0,7)===mk});
   if(hasDeals&&(!m||!L().prods.some(function(p){return m.v[p.id]&&m.v[p.id].z!=null})))o.push({c:'#c92a3a',t:'LEM-Ziele für '+monthLabel(mk).split(' ')[0]+' fehlen',s:'Abschlüsse sind erfasst, aber ohne Filialziel haben Team und Personen kein Verkaufsziel.',act:'lem-edit',v:'v'});
+  var coh=shiftMonth(mk,-6);if(mk<=monthKey()&&!L().pr[coh]&&(prSold(S.deals,coh,'gk')||prSold(S.deals,coh,'kk')))o.push({c:'#1c7ed6',t:'Einbuchungen nach 6 Monaten für '+monthLabel(coh).split(' ')[0]+' fehlen',s:'Gehaltseingang, Limit, Kartennutzung und Löschungen aus den Verkäufen von '+monthLabel(coh)+' eintragen.',act:'pr-open',v:mk});
   if(m)L().prods.forEach(function(p){var x=m.v[p.id];if(!x||x.i==null)return;var a=dealSum(mk,{p:p.id});if(a!=null&&Math.abs(a-x.i)>=Math.max(50,x.i*.05))o.push({c:'#d9780a',t:p.n+': Reporting '+num(Math.round(x.i))+' VP, App '+num(Math.round(a))+' VP',s:'Abweichung '+(a>x.i?'+':'')+num(Math.round(a-x.i))+' VP. Für die LEM zählt das Reporting; fehlende oder doppelte Abschlüsse prüfen.',act:'deal-list'})});
   var un=S.deals.filter(function(d){return d.d.slice(0,7)===mk&&!d.emp}).length;if(un)o.push({c:'#7b8794',t:un+' '+plural(un,'Abschluss','Abschlüsse')+' ohne Person',s:'Zählen für die Filiale, aber für niemanden im Team.',act:'deal-list'});
   if(S.employees.length&&lemShareSum()<=0)o.push({c:'#c92a3a',t:'Zielverteilung ergibt 0',s:'Niemand hat einen Anteil am Filialziel.',act:'lem-share'});
-  var tot=0;S.employees.forEach(function(e){tot+=lemShareOf(e.id)});var me=lemShareOf('me');if(me>0)o.push({c:'#1c7ed6',t:'Du trägst '+Math.round(me*100)+' % des Filialziels',s:'Das Teamziel ist entsprechend kleiner.',act:'lem-share'});
+  var me=lemShareOf('me');if(me>0)o.push({c:'#1c7ed6',t:'Du trägst '+Math.round(me*100)+' % des Filialziels',s:'Das Teamziel ist entsprechend kleiner.',act:'lem-share'});
   return o;
 }
 function lemCheckCard(mk){var l=lemCheck(mk);if(!l.length)return '';
   return '<section class="card glass rise s12"><div class="card-h"><div><h2>Datenabgleich</h2><span class="sub">Ziele und Ist-Werte aus einer Quelle · '+esc(monthLabel(mk))+'</span></div></div>'+l.map(function(x){return '<div class="row click hint" data-act="'+x.act+'"'+(x.v?' data-v="'+x.v+'"':'')+' tabindex="0"><div class="badge" style="--c-rgb:'+rgbOf(x.c)+'">'+ic('alert',16)+'</div><div class="grow"><b>'+esc(x.t)+'</b><span class="muted small">'+esc(x.s)+'</span></div>'+ic('right',15)+'</div>'}).join('')+'</section>'}
+/* ===================== Einbuchungen nach 6 Monaten (Prämien aus dem Verkaufsmonat) ===================== */
+/* Girokonto und Kreditkarte: im 6. Monat nach Verkauf werden Gehaltseingang, Limit, Nutzung, Revolver und Löschungen eingebucht. */
+var PR_ITEMS={
+  gk:[['gk_gel','Gehaltseingang + Limit ≥ 500 €',1500],['gk_ge','Gehaltseingang ohne Limit',1000],['gk_klv','KLV (Eingang + Limit)',150],['gk_del1','Gelöschte Konten (Standard)',-150],['gk_del2','Gelöschte Konten (Premium)',-250]],
+  kk:[['kk_use','Genutzt (3× Händlereinsatz)',150],['kk_rev','Revolver (Zinsen)',300],['kk_zus','Zusatzkarte',150],['kk_klv','KLV Revolver oder Vollzahler',50],['kk_del1','Geschlossene Karten (Classic)',-200],['kk_del2','Geschlossene Karten (Gold/Premium)',-300]]
+};
+var PR_ALL=PR_ITEMS.gk.concat(PR_ITEMS.kk).map(function(x){return x[0]});
+var PR_SOLD={gk:['gk_std','gk_prem','gk_u18'],kk:['kk_cl','kk_gold']};
+function prIsSold(d,t){if(d.pr)return false;if(PR_SOLD[t].indexOf(d.it)>-1)return true;return d.it==='ob_cmp'&&PR_SOLD[t].indexOf(d.cmp)>-1}
+function prQty(d){return d.it==='ob_cmp'?(d.n||1):(d.a==null?1:d.a)}
+function prSold(deals,coh,t){var n=0;deals.forEach(function(d){if(d.d.slice(0,7)===coh&&prIsSold(d,t))n+=prQty(d)});return n}
+function prWeights(deals,coh,t){var w={};deals.forEach(function(d){if(d.d.slice(0,7)===coh&&prIsSold(d,t)){var k=d.emp||'';w[k]=(w[k]||0)+prQty(d)}});return w}
+/* Anzahl auf die Verkäufer des Verkaufsmonats verteilen (größter Rest) */
+function prSplit(n,w){var ks=Object.keys(w),tot=ks.reduce(function(a,k){return a+w[k]},0);if(!tot)return {'':n};
+  var o={},rest=[],used=0;ks.forEach(function(k){var x=n*w[k]/tot,f=Math.floor(x);o[k]=f;used+=f;rest.push([k,x-f])});
+  rest.sort(function(a,b){return b[1]-a[1]||(w[b[0]]-w[a[0]])});for(var i=0;used<n&&i<rest.length;i++,used++)o[rest[i][0]]++;
+  Object.keys(o).forEach(function(k){if(!o[k])delete o[k]});return o}
+function prMake(deals,coh,rec,ds){
+  var out=[];PR_ALL.forEach(function(id){var n=rec.c[id]||0;if(!(n>0))return;var t=id.slice(0,2),parts=rec.split!==false?prSplit(n,prWeights(deals,coh,t)):{'':n};
+    Object.keys(parts).forEach(function(emp){out.push({id:uid(),pr:coh,d:ds,emp:emp,it:id,a:parts[emp],pgf:null,ch:'fil',conv:'',kons:false,vol:null,zw:'m',lz:null,rec:null,rate:null,noBer:false,kim:false,cmp:'',n:null,end:'',ref:'',note:''})})});
+  return out;
+}
+function prDate(bk){var cur=monthKey();if(bk===cur)return todayISO();if(bk<cur)return iso(new Date(+bk.slice(0,4),+bk.slice(5),0));return bk+'-01'}
+function prVp(c,t){return PR_ITEMS[t].reduce(function(a,x){return a+(c[x[0]]||0)*x[2]},0)}
+function prBooked(coh){return S.deals.filter(function(d){return d.pr===coh}).reduce(function(a,d){return a+dealVP(d,d.d.slice(0,7))},0)}
+function prRec(coh){return L().pr[coh]||{c:{},n:{},q:{},split:true}}
+/* Stückzahlen (Info) je Zeitraum: Reporting-Wert, sonst aus Abschlüssen */
+function lemStkCalc(ms){var r={},keys=['gi','gl','gs','kz','ki','ks'];keys.forEach(function(k){r[k]=null});
+  ms.forEach(function(mk){var st=(lemMon(mk)||{}).stk||{};keys.forEach(function(k){var v=st[k];if(v==null&&k==='gi'){v=prSold(S.deals,mk,'gk')||null}if(v==null&&k==='ki'){v=prSold(S.deals,mk,'kk')||null}if(v!=null)r[k]=(r[k]||0)+v})});return r}
+
+function openPr(mk){
+  var cur=monthKey();mk=mk&&mk<=cur?mk:cur;UI.prMk=mk;var coh=shiftMonth(mk,-6),r=prRec(coh),sg=prSold(S.deals,coh,'gk'),sk=prSold(S.deals,coh,'kk');
+  function rows(t){return PR_ITEMS[t].map(function(x){return '<div class="lem-in one"><span><b>'+esc(x[1])+'</b><small>'+(x[2]>0?'+':'')+num(x[2])+' VP je Stück</small></span>'+lemIn('c_'+x[0],r.c[x[0]],'0',x[1]).replace('<input ','<input data-input="pr-calc" ')+'</div>'}).join('')}
+  var nav='<div class="pr-nav"><button type="button" class="btn sm ghost" data-act="pr-m" data-k="-1">'+ic('left',14)+' '+esc(monthLabel(shiftMonth(mk,-1)).split(' ')[0])+'</button><span class="muted small">Eingebucht im '+esc(monthLabel(mk))+'</span>'+(mk<cur?'<button type="button" class="btn sm ghost" data-act="pr-m" data-k="1">'+esc(monthLabel(shiftMonth(mk,1)).split(' ')[0])+' '+ic('right',14)+'</button>':'<span></span>')+'</div>';
+  sheet('Einbuchungen aus '+esc(monthLabel(coh)),nav+'<form class="lemf" data-form="pr"><input type="hidden" name="mk" value="'+mk+'">'+
+    '<p class="muted small" style="margin:4px 0 8px">Anzahlen aus dem Reporting, Spalte „Prämien aus '+esc(monthLabel(coh))+'“. Die Punkte zählen im '+esc(monthLabel(mk).split(' ')[0])+'.</p>'+
+    '<h6 class="ml-h">Girokonto</h6><div class="lem-in one"><span><b>Verkaufte Konten im '+esc(monthLabel(coh).split(' ')[0])+'</b><small>'+(sg?'aus Abschlüssen: '+sg:'laut Reporting, für die Quoten')+'</small></span>'+lemIn('n_gk',r.n.gk,sg?String(sg):'Anzahl','Verkaufte Konten').replace('<input ','<input data-input="pr-calc" ')+'</div>'+rows('gk')+
+    '<div class="lem-in one"><span><b>AST Termin</b><small>Quote in %, Info</small></span>'+lemIn('q_ast',(r.q||{}).ast,'%','AST Termin')+'</div>'+
+    '<div class="lem-in one"><span><b>Gehaltseingang Privat</b><small>Quote in %, Info</small></span>'+lemIn('q_geh',(r.q||{}).geh,'%','Gehaltseingang Privat')+'</div>'+
+    '<div class="lem-in one"><span><b>Aktivierung SME</b><small>Quote in %, Info</small></span>'+lemIn('q_sme',(r.q||{}).sme,'%','Aktivierung SME')+'</div>'+
+    '<h6 class="ml-h">Kreditkarte</h6><div class="lem-in one"><span><b>Verkaufte Karten im '+esc(monthLabel(coh).split(' ')[0])+'</b><small>'+(sk?'aus Abschlüssen: '+sk:'Stück Verkauf laut Reporting')+'</small></span>'+lemIn('n_kk',r.n.kk,sk?String(sk):'Anzahl','Verkaufte Karten').replace('<input ','<input data-input="pr-calc" ')+'</div>'+rows('kk')+
+    '<label class="fld sw-l full" style="margin-top:10px"><span class="sw-t"><b>Auf die Verkäufer verteilen</b><small>Anteilig nach den erfassten Abschlüssen aus '+esc(monthLabel(coh).split(' ')[0])+(sg||sk?'':' (keine vorhanden, die Punkte zählen für die Filiale)')+'</small></span><input type="checkbox" class="sw" name="split" value="1"'+(r.split!==false?' checked':'')+'></label>'+
+    '<div class="deal-vp" id="prVp" style="margin-top:12px">'+prPreview(r.c,r.n,sg,sk)+'</div>'+
+    formFoot()+'</form>');
+}
+function prFromForm(){var f=$('#modal-root form[data-form=pr]'),c={},n={};if(!f)return {c:c,n:n};PR_ALL.forEach(function(id){var el=f.elements['c_'+id],v=el?lemN(el.value):null;if(v!=null&&v>=0)c[id]=Math.round(v)});['gk','kk'].forEach(function(t){var el=f.elements['n_'+t],v=el?lemN(el.value):null;if(v!=null&&v>=0)n[t]=Math.round(v)});return {c:c,n:n}}
+function prPreview(c,n,sg,sk){
+  var vg=prVp(c,'gk'),vk=prVp(c,'kk'),ng=n.gk!=null?n.gk:sg,nk=n.kk!=null?n.kk:sk;
+  var gi=ng>0?ng-(c.gk_del1||0)-(c.gk_del2||0):0,ki=nk>0?nk-(c.kk_del1||0)-(c.kk_del2||0):0;
+  function q(a,b){return b>0?dec(a/b*100,1)+' %':'–'}
+  return '<b>'+(vg+vk>=0?'+':'')+num(vg+vk)+' VP</b><span>Girokonto '+num(vg)+' · Kreditkarte '+num(vk)+'</span>'+
+    (ng>0?'<span>Konten: '+num(gi)+' aktiv · Gehaltseingang '+q((c.gk_gel||0)+(c.gk_ge||0),gi)+'</span>':'')+
+    (nk>0?'<span>Karten: Stück Ist '+num(ki)+' · genutzt '+q(c.kk_use||0,ki)+' · Revolver '+q(c.kk_rev||0,ki)+'</span>':'');
+}
+function savePr(f,d){
+  var mk=d.get('mk')||monthKey(),coh=shiftMonth(mk,-6),x=prFromForm(),q={};['ast','geh','sme'].forEach(function(t){var v=lemN(d.get('q_'+t));if(v!=null&&v>=0&&v<=300)q[t]=v});var rec={c:x.c,n:x.n,q:q,split:!!d.get('split')};
+  if(['gk','kk'].some(function(t){var n=rec.n[t]!=null?rec.n[t]:prSold(S.deals,coh,t);var del=(rec.c[t+'_del1']||0)+(rec.c[t+'_del2']||0);return n>0&&del>n})){toast('Mehr Löschungen als verkaufte Stück','err');return}
+  S.deals=S.deals.filter(function(z){return z.pr!==coh});
+  var any=PR_ALL.some(function(id){return rec.c[id]>0});
+  if(any||Object.keys(rec.n).length||Object.keys(q).length){L().pr[coh]=rec}else delete L().pr[coh];
+  if(any)S.deals=S.deals.concat(normDeals(prMake(S.deals,coh,rec,prDate(mk))));
+  save();closeModal();rerender();var v=prVp(rec.c,'gk')+prVp(rec.c,'kk');toast(any?'Einbuchungen '+monthLabel(coh).split(' ')[0]+': '+(v>=0?'+':'')+num(v)+' VP im '+monthLabel(mk).split(' ')[0]:'Einbuchungen entfernt');
+}
+
+/* ===================== Verlauf wie im Monatsreport ===================== */
+function openLemHist(){
+  var mk=lemMk(),y=mk.slice(0,4),ms=lemMonths(mk,'y'),Y={},M={};ms.forEach(function(k){Y[k]=lemCalc(k,'y');M[k]=lemCalc(k,'m')});
+  function ml(k){return new Date(+k.slice(0,4),+k.slice(5)-1,1).toLocaleDateString('de-DE',{month:'short'})}
+  function tb(h,rows){return '<div class="lem-tw"><table class="lem-t lem-h"><thead><tr>'+h.map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>'}
+  function tr(k,cells){return '<tr'+(k===mk?' class="on"':'')+'><td>'+ml(k)+'</td>'+cells.map(function(c){return '<td>'+c+'</td>'}).join('')+'</tr>'}
+  function pc(z){return z==null?'–':dec(z*100,z*100>=1000?0:1)+'&nbsp;%'}
+  var prods=L().prods.filter(function(p){return ms.some(function(k){var m=lemMon(k);return m&&m.v[p.id]&&m.v[p.id].z!=null})}),sh={};LEM_MET.forEach(function(x){sh[x[0]]=x[2]});
+  var t1=tb(['','LEM YTD','Verkauf','Qualität','Wachstum'],ms.map(function(k){var R=Y[k];return tr(k,[lemF(R.tot),lemF(R.v.pts),lemF(R.q.pts),lemF(R.w.pts)])}));
+  var t2=tb(['','Ziel','Ist','ZE','ZE YTD'],ms.map(function(k){var R=M[k];return tr(k,[R.v.ziel==null?'–':num(Math.round(R.v.ziel)),num(Math.round(R.v.ist)),pc(R.v.ze),pc(Y[k].v.zeN)])}));
+  var t3=prods.length?tb([''].concat(prods.map(function(p){return sh[p.id]||esc(p.n)})).concat(['TK Umsatz']),ms.map(function(k){var R=M[k];return tr(k,prods.map(function(p){var x=R.v.prods.filter(function(z){return z.p.id===p.id})[0];return pc(x&&x.ze)}).concat([pc(R.v.um.ze)]))})):'<p class="muted small">Noch keine Produktziele erfasst.</p>';
+  var t4=tb(['','TKE','TKO','KUKI','TBOL','Score'],ms.map(function(k){var w=M[k].w;return tr(k,[pc(w.tke.ze),pc(w.tko.ze),w.kuki.v==null?'–':num(w.kuki.v),pc(w.ob.ze),lemF(w.pts)])}));
+  var t5=tb(['','GK','Limit','SME','Karten','Ziel','ZE'],ms.map(function(k){var c=lemStkCalc([k]);return tr(k,[c.gi==null?'–':num(c.gi),c.gl==null?'–':num(c.gl),c.gs==null?'–':num(c.gs),c.ki==null?'–':num(c.ki),c.kz==null?'–':num(Math.round(c.kz)),pc(c.kz>0&&c.ki!=null?c.ki/c.kz:null)])}));
+  sheet('Verlauf '+y,'<p class="muted small">LEM-Scores jeweils im Jahr bis zum Monat (wie „Score LEM YTD“), Zielerreichungen je Monat.</p>'+
+    '<h6 class="ml-h">LEM Verkauf & Gesamt</h6>'+t1+'<h6 class="ml-h">Verkaufsleistung</h6>'+t2+'<h6 class="ml-h">Zielerreichung Produkte</h6>'+t3+'<h6 class="ml-h">Wachstum je Monat</h6>'+t4+'<h6 class="ml-h">Stückzahlen Girokonto und Kreditkarte</h6>'+t5,
+    '<div class="m-foot"><button class="btn primary" data-act="modal-close">Fertig</button></div>');
+}
+
+/* ===================== Gebiet: Vorlage „Wachstum je Filiale“ wie in der Bereichsauswertung ===================== */
+var REG_TPL_W=[['Gesamt Score Wachstum normiert','Punkte','__lemw'],['Conv. TKE IST Anzahl','Stück','__tke_i'],['Conv. TKE Ziel Anzahl','Stück','__tke_z'],['Conv. TKE ZE','%','__tke_ze'],['Conv. TKE LEM Score','Punkte','__tke_p'],['Conv. TKO IST Anzahl','Stück','__tko_i'],['Conv. TKO Ziel Anzahl','Stück','__tko_z'],['Conv. TKO ZE','%','__tko_ze'],['Conv. TKO LEM Score','Punkte','__tko_p'],['KUKI Punkte','Punkte','__kuki'],['KUKI LEM Score','Punkte','__kuki_p'],['TBOL IST Anzahl','Stück','__ob_i'],['TBOL ZIEL Anzahl','Stück','__ob_z'],['TBOL ZE','%','__ob_ze'],['TBOL LEM Score','Punkte','__ob_p']];
+function regTplW(){
+  var R=R_(),have={};R.kpis.forEach(function(k){if(k.set==='lemw')have[k.metric]=1});
+  var add=REG_TPL_W.filter(function(x){return !have[x[2]]}).map(function(x){return {id:'k'+uid(),n:x[0],unit:x[1],hi:true,metric:x[2],set:'lemw'}});
+  if(!add.length){toast('Die Vorlage ist schon angelegt');return}
+  R.kpis=R.kpis.concat(add);save();rerender();toast(add.length+' Kennzahlen ergänzt. Die Wachstumsliste lässt sich jetzt scannen.');
+}
+/* Import: Spalten einer Vorlage zuordnen, wenn die Liste genau deren Spaltenzahl hat */
+function regSetOf(n){var R=R_(),sets={};R.kpis.forEach(function(k){if(k.set)(sets[k.set]=sets[k.set]||[]).push(k)});for(var s in sets)if(sets[s].length===n)return sets[s];return null}
+function impFromText(text,src){
+  var R=R_(),lines=String(text).split(/\r?\n/).map(function(l){return l.replace(/\s+/g,' ').trim()}).filter(Boolean),rows=[],header=null;
+  function okLen(n){return n===R.kpis.length||!!regSetOf(n)}
+  lines.forEach(function(l){
+    var bm=matchBranchNr(l),b=bm?bm.b:matchBranch(l),nums=lineNums(bm?bm.rest:l),guess='';
+    if(!bm&&b&&!b.nr){var gm=/^\s*(\d{3,6})\s+\D/.exec(l);if(gm&&okLen(nums.length-1)){guess=gm[1];nums=nums.slice(1)}}
+    if(!b){var nm=/^\s*(\d{2,6})\s+[A-Za-zÄÖÜäöü]/.exec(l);if(nm&&okLen(nums.length-1)){rows.push({bid:'',nums:nums.slice(1),raw:l,newNr:nm[1]});return}}
+    if(!b){
+      var pos=R.kpis.map(function(k){var t=normTxt(k.n).split(' ').filter(function(x){return x.length>=4})[0];var nl=normTxt(l);var idx=t?nl.indexOf(t.slice(0,Math.min(t.length,7))):-1;return {k:k,i:idx}}).filter(function(x){return x.i>-1});
+      if(pos.length>=2&&(!header||pos.length>header.length))header=pos.sort(function(a,b){return a.i-b.i});
+      if(nums.length>=2&&!(pos.length>=2))rows.push({bid:'',nums:nums,raw:l});
+      return;
+    }
+    var rm=/^\s*(\d{1,2})[.)]?\s+\D/.exec(l);if(rm&&+rm[1]<=Math.max(30,R.branches.length+2)&&nums.length>1)nums=nums.slice(1);
+    rows.push({bid:b.id,nums:nums,raw:l,byNr:!!bm,nrGuess:guess});
+  });
+  var map={},cnt={},nc=0;
+  rows.forEach(function(r){if(r.bid)cnt[r.nums.length]=(cnt[r.nums.length]||0)+1});
+  Object.keys(cnt).forEach(function(k){if(!nc||cnt[k]>cnt[nc])nc=+k});
+  if(!nc)rows.forEach(function(r){cnt[r.nums.length]=(cnt[r.nums.length]||0)+1}),Object.keys(cnt).forEach(function(k){if(!nc||cnt[k]>cnt[nc])nc=+k});
+  var set=nc!==R.kpis.length?regSetOf(nc):null;
+  if(set){header=null;R.kpis.forEach(function(k){map[k.id]=-1});set.forEach(function(k,i){map[k.id]=i})}
+  else if(header&&(header.length===R.kpis.length||header.length===nc)){R.kpis.forEach(function(k){map[k.id]=-1});header.forEach(function(h,i){map[h.k.id]=i})}
+  else{header=null;R.kpis.forEach(function(k,i){map[k.id]=i})}
+  rows.forEach(function(r){r.vals={};R.kpis.forEach(function(k){var c=map[k.id];r.vals[k.id]=c>-1&&r.nums[c]!==undefined?r.nums[c]:null})});
+  if(src!=='ocr')impPhotoFree();
+  UI.imp={step:'review',mk:(UI.imp&&UI.imp.mk)||regMk(),src:src,text:text,rows:rows,map:map,header:!!header||!!set,photo:src==='ocr'?UI.impPhoto:''};
+  renderImp();
+}
+
+function registerPr(){
+  Object.assign(ACTIONS,{
+    'pr-open':function(t){closeModal();openPr(t&&t.dataset&&(t.dataset.v||t.dataset.id)||monthKey())},
+    'pr-m':function(t){openPr(shiftMonth(UI.prMk||monthKey(),+t.dataset.k))},
+    'lem-hist':openLemHist,'reg-tpl-w':regTplW,
+    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'swap',label:'Einbuchungen nach 6 Monaten (Girokonto, Karte)',fn:function(){openPr(lemMk())}},{icon:'trend',label:'Wachstum: Conversions, KUKI, TBOL',fn:function(){openLemW(lemMk())}},{icon:'star',label:'Qualität: KuBiS und Cross-Sell',fn:function(){openLemQ(lemMk())}},{icon:'edit',label:'Korrektur laut LEM-Übersicht',fn:function(){openLemK(lemMk())}}]})}
+  });
+  INPUTS['pr-calc']=function(){var x=prFromForm(),coh=shiftMonth(UI.prMk||monthKey(),-6),el=$('#prVp');if(el)el.innerHTML=prPreview(x.c,x.n,prSold(S.deals,coh,'gk'),prSold(S.deals,coh,'kk'))};
+  FORMS.pr=savePr;
+  var reg=PAGE_ACTS.region;if(reg)PAGE_ACTS.region=function(){var o=reg();o.menu=(o.menu||[]).concat([{icon:'trend',label:'Vorlage: Wachstum je Filiale',fn:regTplW}]);return o};
+  var sal=PAGE_ACTS.sales;if(sal)PAGE_ACTS.sales=function(){var o=sal();(o.menu||[]).splice(1,0,{icon:'swap',label:'Einbuchungen nach 6 Monaten',fn:function(){openPr(UI.salesMonth||monthKey())}});return o};
+  QA_ALL.pr=['swap','Einbuchung 6. Monat'];
+}
 
 /* ============ Formulare (Modals) ============ */
 function X(){return '<button type="button" class="btn icon" data-act="modal-close" aria-label="Schließen">'+ic('x')+'</button>'}
@@ -6953,7 +7131,7 @@ Object.assign(CHANGES,{
   'staff-me':function(v,t){S.staff.me=!!t.checked;save();rerender()}
 });
 
-registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();registerVp();
+registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();registerVp();registerPr();
 /* ============ Events ============ */
 document.addEventListener('click',function(e){
   var el=e.target;if(!el||!el.closest)return;

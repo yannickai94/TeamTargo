@@ -1196,6 +1196,20 @@ form.quick[data-form=qtask]{display:flex;gap:10px;flex-wrap:nowrap;align-items:c
 .lem-t.lem-h{font-size:13px;min-width:100%}.lem-t.lem-h th,.lem-t.lem-h td{text-align:right;white-space:nowrap;padding:6px 7px;font-variant-numeric:tabular-nums}.lem-t.lem-h th:first-child,.lem-t.lem-h td:first-child{text-align:left;position:sticky;left:0;background:var(--bg1);font-weight:600}
 .lem-t.lem-h tr.on td{font-weight:700;color:var(--accent,inherit)}
 .pr-nav{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:-4px 0 6px}.pr-nav .btn{min-height:36px}
+/* r15: Hochrechnung, Erfassung, Beitrag, Urlaub-Jahr, Kalender-Liste */
+.fc-box{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:10px 0 6px;border-radius:14px;background:rgba(28,126,214,.10);color:var(--text)}.fc-box>span{color:#1c7ed6;margin-top:2px}.fc-box b{display:block;font-size:14px}.fc-box small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.fc-t{color:#1c7ed6;font-weight:700}
+.dgrp{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;margin-bottom:4px}.dgrp button{min-height:40px;padding:6px 8px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--text);font:inherit;font-size:13px;font-weight:600;line-height:1.15}.dgrp button.on{background:var(--brand,#002D5E);border-color:transparent;color:#fff}
+.conv-n{display:flex;align-items:center;gap:14px}.conv-n>div{display:flex;flex-direction:column;align-items:center;min-width:56px}.conv-n b{font-size:26px;line-height:1.1}.conv-n span{font-size:12px;color:var(--muted);font-weight:700}.conv-n .btn{margin-left:auto}
+.contrib{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:.5px solid var(--line)}.contrib:last-of-type{border-bottom:0}.contrib .cb-t{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:5px}.contrib .cb-t span{text-align:right}
+.ay{padding:10px 0;border-bottom:.5px solid var(--line)}.ay:last-of-type{border-bottom:0}.ay-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}.ay-h b.grow{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ay-h>span{white-space:nowrap}
+.ay-m{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}.ay-m i{font-style:normal;display:flex;flex-direction:column;align-items:center;justify-content:center;height:34px;border-radius:7px;background:rgba(123,135,148,.10);font-size:10px;color:var(--muted)}.ay-m i small{font-size:9px;line-height:1}.ay-m i b{font-size:12px;line-height:1.1;color:#fff}.ay-m i.on{background:var(--c)}.ay-m i.on small{color:rgba(255,255,255,.85)}.ay-m i.op{outline:2px dashed var(--c);outline-offset:-2px;opacity:.75}
+.cal-top .cal-v{margin-left:6px}.cal-top .cal-v button{min-width:40px;min-height:36px;display:inline-flex;align-items:center;justify-content:center}
+.cal-dh{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cal-list{padding:6px 12px}.cl-i{display:flex;gap:12px;align-items:stretch;width:100%;text-align:left;padding:10px 0;border:0;border-bottom:.5px solid var(--line);background:none;color:var(--text);font:inherit}.cl-i:last-child{border-bottom:0}
+.cl-t{width:50px;flex:none;font-weight:700;font-size:14px;display:flex;flex-direction:column;font-variant-numeric:tabular-nums}.cl-t small{font-weight:500;color:var(--muted);font-size:12px}
+.cl-b{flex:1;min-width:0;border-left:3px solid var(--c);padding-left:10px;display:flex;flex-direction:column;justify-content:center}.cl-b b{font-size:15px}.cl-b small{color:var(--muted);font-size:12.5px}
+.abs .grow{display:flex;flex-direction:column;min-width:0}
 
 </style>
 </head>
@@ -1341,7 +1355,7 @@ var TALK_TYPES=['1:1-Gespräch','Entwicklungsgespräch','Jahresgespräch','Feedb
 var REF_STATUS=[{id:'handed',l:'Übergeben',c:'#1c7ed6'},{id:'appt',l:'Termin vereinbart',c:'#d9780a'},{id:'won',l:'Abschluss',c:'#1f9d55'},{id:'lost',l:'Kein Abschluss',c:'#7b8794'}];
 var NINE_LABELS=[['Fragezeichen','Aufsteiger','Top-Talent'],['Beobachten','Kernspieler','Leistungsträger'],['Handlungsbedarf','Solide Kraft','Experte']];
 var GROUPS=['Fachlich','Überleitung','Persönlich'];
-var SHIFTS={F:{l:'Beratung',c:'#2f9e44'},S:{l:'Service',c:'#1c7ed6'},HO:{l:'Homeoffice',c:'#7048e8'},SC:{l:'Schulung',c:'#d9780a'},BS:{l:'Berufsschule',c:'#0c8599'},U:{l:'Urlaub',c:'#e8590c'},K:{l:'Krank',c:'#c92a3a'},FR:{l:'Frei',c:'#7b8794'}};
+var SHIFTS={F:{l:'Anwesend',c:'#2f9e44'},S:{l:'Service Manager',c:'#1c7ed6'},HO:{l:'Homeoffice',c:'#7048e8'},SC:{l:'Schulung',c:'#d9780a'},BS:{l:'Berufsschule',c:'#0c8599'},U:{l:'Urlaub',c:'#e8590c'},K:{l:'Krank',c:'#c92a3a'},FR:{l:'Frei',c:'#7b8794'}};
 var ABS_CODE={Urlaub:'U',Krank:'K',Schulung:'SC',Sonderurlaub:'U',Gleitzeit:'FR'};
 var ABS_COLOR={Urlaub:'#e8590c',Krank:'#c92a3a',Schulung:'#d9780a',Sonderurlaub:'#d6336c',Gleitzeit:'#7b8794'};
 var ABS_STATUS={offen:'#d9780a',genehmigt:'#1f9d55',abgelehnt:'#c92a3a'};
@@ -1789,7 +1803,7 @@ var DEF_ROUTINES=[
   {id:'r3',t:'Wochenplanung und Besetzung prüfen',f:'w'},{id:'r4',t:'Offene Überleitungen nachfassen',f:'w'},{id:'r5',t:'Mindestens ein 1:1-Gespräch führen',f:'w'},
   {id:'r6',t:'Monatsergebnisse auswerten und Ziele setzen',f:'m'},{id:'r7',t:'Nachweise und Fristen prüfen',f:'m'},{id:'r8',t:'Backup von myTeamz sichern',f:'m'}
 ];
-var DEF_KPIS=[{id:'k_kred',n:'Kredit-Neugeschäft',unit:'T€',hi:true,metric:''},{id:'k_nk',n:'Neukunden',unit:'Stück',hi:true,metric:''},{id:'k_gk',n:'Girokonten',unit:'Stück',hi:true,metric:'__cnt:gk'},{id:'k_vers',n:'Versicherungen',unit:'Stück',hi:true,metric:'__cnt:ver'},{id:'k_ze',n:'Zielerreichung',unit:'%',hi:true,metric:''},{id:'k_lem',n:'LEM-Punkte',unit:'Punkte',hi:true,metric:'__lem'}];
+var DEF_KPIS=[{id:'k_lem',n:'LEM gesamt',unit:'Punkte',hi:true,metric:'__lem'},{id:'k_lv',n:'Verkauf',unit:'Punkte',hi:true,metric:'__lemvp'},{id:'k_lw',n:'Wachstum',unit:'Punkte',hi:true,metric:'__lemw'},{id:'k_lq',n:'KuBiS',unit:'Punkte',hi:true,metric:'__lemq'}];
 function defReviews(st){return {cfg:{name:'TARGOBANK '+((st&&st.branch)||'Lünen'),query:'TARGOBANK Münsterstraße 23, 44534 Lünen',placeId:'',url:''},snaps:[],list:[]}}
 function defRegion(st){return {name:'Mein Gebiet',branches:[{id:'b_own',n:(st&&st.branch)||'Lünen',lead:(st&&st.manager)||'',phone:'',mail:'',own:true}],kpis:DEF_KPIS.map(function(k){return Object.assign({},k)}),data:{},imports:[]}}
 function str(v,n){return String(v==null?'':v).slice(0,n||200)}
@@ -1869,7 +1883,7 @@ function seedExtra(st,by,td){
     {t:'Gebietsrunde Filialleitungen',date:W[3],start:'13:00',end:'16:30',cat:'gebiet',loc:'Dortmund'},
     {t:'Zahnarzt',date:W[4],start:'17:30',end:'18:30',cat:'privat'}
   ]);
-  seedKls(st,by);seedLem(st,by);st.metrics=lemMetrics().concat(st.metrics.filter(function(m){return !m.lem&&['m_kre','m_kon','m_ver'].indexOf(m.id)<0}));st.lemMig=2;st.goals=[{id:uid(),name:'Girokonto laut LEM',unit:'VP',target:0,actual:0,metric:'__lp:gk'},{id:uid(),name:'Neue Google-Bewertungen',unit:'Stück',target:10,actual:4,metric:''}];
+  seedKls(st,by);seedLem(st,by);st.metrics=lemMetrics().concat(st.metrics.filter(function(m){return !m.lem&&['m_kre','m_kon','m_ver'].indexOf(m.id)<0}));st.lemMig=3;st.metrics.forEach(function(m){if(!m.lem)m.t=m.t*Math.max(1,st.employees.length)});st.settings.refTarget=(st.settings.refTarget||3)*Math.max(1,st.employees.length);st.goals=[{id:uid(),name:'Girokonto laut LEM',unit:'VP',target:0,actual:0,metric:'__lp:gk'},{id:uid(),name:'Neue Google-Bewertungen',unit:'Stück',target:10,actual:4,metric:''}];
   st.reviews=defReviews(st.settings);
   st.reviews.snaps=[[-170,4.1,61],[-140,4.1,64],[-110,4.2,68],[-80,4.2,71],[-50,4.3,75],[-20,4.3,79]].map(function(x){return {date:td(x[0]),rating:x[1],count:x[2]}});
   st.reviews.list=[
@@ -1886,13 +1900,11 @@ function seedExtra(st,by,td){
   st.region.branches=st.region.branches.concat([
     ['Dortmund-City','Petra Lange'],['Unna','Michael Brandt'],['Kamen','Julia Hoffmann'],['Hamm','Stefan Krüger'],['Castrop-Rauxel','Anna Wolff'],['Dortmund-Hörde','Daniel Schulz']
   ].map(function(b,i){return {id:'b'+i,nr:['3104','3135','3121','3142','3118','3109'][i],n:b[0],lead:b[1],phone:'0231 000 2'+pad(i)+'0',mail:b[1].toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(' ','.')+'@example.de',own:false}}));
-  var base={b_own:[1850,34,52,21,96,146],b0:[3100,58,81,30,104,171],b1:[1620,29,47,18,88,138],b2:[1240,25,40,17,92,129],b3:[2050,38,55,24,99,157],b4:[1380,22,38,14,81,118],b5:[1710,31,49,20,94,142]};
+  var base={b0:[74,44,55],b1:[55,38,57],b2:[49,36,52],b3:[66,43,54],b4:[41,33,53],b5:[58,40,55]};
   [-4,-3,-2,-1].forEach(function(o){
-    var m=shiftMonth(mk,o),f=1;st.region.data[m]={};
-    Object.keys(base).forEach(function(bid){st.region.data[m][bid]={};st.region.kpis.forEach(function(k,i){
-      var v=base[bid][i]*(1+((hseed(bid+m+k.id)%21)-10)/100);
-      st.region.data[m][bid][k.id]=k.unit==='%'?Math.round(v):(k.unit==='T€'?Math.round(v*f/10)*10:Math.round(v*f));
-    })});
+    var m=shiftMonth(mk,o);st.region.data[m]={};
+    Object.keys(base).forEach(function(bid){var r=function(i,sp){return Math.round(base[bid][i]*(1+((hseed(bid+m+i)%21)-10)/100*sp)*100)/100};var v=r(0,1),w=Math.min(50,r(1,.6)),q=Math.min(65,r(2,.3));
+      st.region.data[m][bid]={k_lv:v,k_lw:w,k_lq:q,k_lem:Math.round((v+w+q)*100)/100}});
   });
 }
 
@@ -2086,7 +2098,6 @@ function paletteItems(){
   items.push({k:'Aktion',t:'Gespräch erfassen',icon:'chat',run:function(){openTalkForm('')}});
   items.push({k:'Aktion',t:'Anerkennung festhalten',icon:'award',run:function(){openKudosForm('')}});
   items.push({k:'Aktion',t:'Entwicklungsmaßnahme anlegen',icon:'trend',run:function(){openMeasForm('')}});
-  items.push({k:'Aktion',t:'Arbeitszeit heute eintragen',icon:'clock',run:function(){openDayForm('me',todayISO())}});
   items.push({k:'Aktion',t:'Abschluss erfassen (Verkaufspunkte)',icon:'chart',run:function(){openDealForm({})}});
   items.push({k:'Aktion',t:'Gespräch beobachten',icon:'eye',run:function(){openObsForm('')}});
   items.push({k:'Aktion',t:'Nachweis eintragen',icon:'shield',run:function(){openQrecForm('','')}});
@@ -2432,10 +2443,10 @@ function viewRefs(){
   }).join('');
   var list=refsOf({ch:UI.refCh,status:UI.refStatus,emp:UI.refEmp}).sort(function(a,b){return b.date.localeCompare(a.date)});
   var listCard='<section class="card glass rise s8"><div class="card-h"><h2>Überleitungen</h2><span class="sub">'+list.length+' Einträge</span></div>'+fbar([dd('ref-ch','Alle Kanäle',UI.refCh||'',[['','Alle Kanäle']].concat(S.channels.map(function(c){return [c.id,c.n]})),function(v){UI.refCh=v;rerender()},{title:'Kanal',icon:'filter'}),dd('ref-st','Alle Status',UI.refStatus||'',[['','Alle Status']].concat(REF_STATUS.map(function(s){return [s.id,s.l]})),function(v){UI.refStatus=v;rerender()},{title:'Status'}),dd('ref-emp','Alle Personen',UI.refEmp||'',[['','Alle Personen']].concat(S.employees.map(function(e){return [e.id,e.name]})),function(v){UI.refEmp=v;rerender()},{title:'Person'})])+''+(list.length?list.slice(0,UI.refAll?60:8).map(function(r){return refRow(r)}).join('')+(list.length>8?'<button class="btn sm ghost more-l" data-act="ref-all">'+(UI.refAll?'Weniger anzeigen':'Alle '+Math.min(60,list.length)+' anzeigen')+'</button>':''):empty('send','Keine Überleitungen','Erfasse, wer wann welchen Kundenbedarf an welchen Kanal übergeben hat.'))+'<p class="muted small" style="margin-top:12px">Datenschutz: keine Kundennamen und keine Kundennummern erfassen, nur eine neutrale interne Referenz (z. B. Ü-014).</p></section>';
-  var goalCard='<section class="card glass rise s4"><div class="card-h"><h2>Ziel im Monat</h2><span class="sub">'+tgt+' je Person</span></div>'+(S.employees.length?S.employees.map(function(e){
-    var n=refsOf({emp:e.id,month:mk}).length,p=tgt>0?Math.min(100,Math.round(n/tgt*100)):0;
-    return '<div class="prow"><div class="l"><span class="who">'+avatar(e.name,'sm')+esc(e.name.split(' ')[0])+'</span><span class="muted">'+n+' / '+tgt+'</span></div><div class="bar"><i class="'+(n>=tgt?'good':'')+'" data-w="'+p+'"></i></div></div>';
-  }).join(''):'<p class="muted">Keine Mitarbeitenden.</p>')+'<p class="muted small" style="margin-top:8px">Anzahl-Ziel aus den Einstellungen. Die Verkaufspunkte für One Bank stehen unter LEM-Ziele und Ergebnisse.</p></section>';
+  var tn=refsOf({month:mk}).length,cnt=S.employees.map(function(e){return {e:e,n:refsOf({emp:e.id,month:mk}).length}}),mx=Math.max.apply(null,cnt.map(function(x){return x.n}).concat([1]));
+  var goalCard='<section class="card glass rise s4"><div class="card-h"><h2>Teamziel im Monat</h2><span class="sub">'+tn+(tgt?' von '+tgt:'')+' Überleitungen</span></div>'+(tgt?'<div class="bar" style="margin-bottom:12px"><i class="'+(tn>=tgt?'good':'')+'" data-w="'+Math.min(100,Math.round(tn/tgt*100))+'"></i></div>':'')+(S.employees.length?cnt.map(function(x){
+    return '<div class="prow"><div class="l"><span class="who">'+avatar(x.e.name,'sm')+esc(x.e.name.split(' ')[0])+'</span><span class="muted">'+x.n+'</span></div><div class="bar"><i data-w="'+Math.round(x.n/mx*100)+'"></i></div></div>';
+  }).join(''):'<p class="muted">Keine Mitarbeitenden.</p>')+'<p class="muted small" style="margin-top:8px">Teamziel aus den Einstellungen. Je Person nur die Anzahl, ohne Einzelziel.</p></section>';
   return '<div class="grid">'+staleCard()+chs+listCard+goalCard+refMatrix()+'</div>';
 }
 
@@ -2464,7 +2475,7 @@ function viewSchedule(){
   var legend=Object.keys(SHIFTS).map(function(k){return chipC(SHIFTS[k].l,SHIFTS[k].c)}).join('');
   var kw='KW '+isoWeek(ws)+' · '+fmt(UI.weekStart,{day:'2-digit',month:'short'})+' – '+fmt(iso(addDays(ws,4)),{day:'2-digit',month:'short',year:'numeric'});
   return '<div class="toolbar rise"><button class="btn icon" data-act="week-prev" aria-label="Vorherige Woche">'+ic('left')+'</button><button class="btn" data-act="week-today">Heute</button><button class="btn icon" data-act="week-next" aria-label="Nächste Woche">'+ic('right')+'</button><b style="font-size:17px;margin-left:6px">'+esc(kw)+'</b></div>'+
-    '<section class="card glass rise">'+(S.employees.length?'<div class="scroll-x"><div class="sched">'+head+rows+cov+'</div></div><div class="chips" style="margin-top:18px">'+legend+'</div><p class="muted small" style="margin-top:10px">Feld antippen, um die Schicht zu wählen. Feiertage (NRW) sind gesperrt. Mindestbesetzung: '+S.settings.minCoverage+' Personen (Beratung und Service). Die Zeiten je Tag stellst du unter Einstellungen → Beratungs- und Servicezeiten ein.</p>':empty('users','Noch keine Mitarbeitenden','Lege zuerst dein Team an.','<button class="btn primary" data-act="emp-new">'+ic('plus',16)+' Mitarbeiter anlegen</button>'))+'</section>';
+    '<section class="card glass rise">'+(S.employees.length?'<div class="scroll-x"><div class="sched">'+head+rows+cov+'</div></div><div class="chips" style="margin-top:18px">'+legend+'</div><p class="muted small" style="margin-top:10px">Feld antippen, um die Schicht zu wählen. Feiertage (NRW) sind gesperrt. Mindestbesetzung: '+S.settings.minCoverage+' Personen (Anwesend und Service Manager). Die Zeiten je Tag stellst du unter ⋯ → Beratungs- und Servicezeiten ein.</p>':empty('users','Noch keine Mitarbeitenden','Lege zuerst dein Team an.','<button class="btn primary" data-act="emp-new">'+ic('plus',16)+' Mitarbeiter anlegen</button>'))+'</section>';
 }
 function viewAbsences(){
   var f=UI.absFilter,y=new Date().getFullYear();
@@ -2522,7 +2533,7 @@ function viewSettings(){
   return '<div class="set-grid">'+
   '<section class="card glass rise"><div class="card-h"><h2>Filiale &amp; Rhythmus</h2></div><div class="form">'+
     '<label class="fld"><span>Filiale</span><input id="sBranch" value="'+esc(st.branch)+'"></label><label class="fld"><span>Dein Name</span><input id="sManager" value="'+esc(st.manager)+'"></label>'+
-    '<label class="fld"><span>Gesprächsrhythmus (Tage)</span><input id="sRhythm" type="number" min="7" max="365" value="'+esc(st.rhythm)+'"></label><label class="fld"><span>Überleitungs-Ziel pro Person und Monat</span><input id="sRef" type="number" min="0" max="50" value="'+esc(st.refTarget)+'"></label>'+
+    '<label class="fld"><span>Gesprächsrhythmus (Tage)</span><input id="sRhythm" type="number" min="7" max="365" value="'+esc(st.rhythm)+'"></label><label class="fld"><span>Überleitungen: Teamziel pro Monat</span><input id="sRef" type="number" min="0" max="500" value="'+esc(st.refTarget)+'"></label>'+
     '<label class="fld"><span>Mindestbesetzung (Personen)</span><input id="sMin" type="number" min="1" max="30" value="'+esc(st.minCoverage)+'"></label><label class="fld"><span>Nachfassen bei Überleitungen nach (Tagen)</span><input id="sFollow" type="number" min="1" max="60" value="'+esc(st.refFollow||7)+'"></label>'+
     '<label class="fld"><span>Frühdienst</span><input id="sTimeF" value="'+esc(st.timeF)+'"></label><label class="fld"><span>Spätdienst</span><input id="sTimeS" value="'+esc(st.timeS)+'"></label>'+
     '<label class="fld"><span>Beobachtungsrhythmus (Tage)</span><input id="sObs" type="number" min="14" max="365" value="'+esc(st.obsDays||120)+'"></label><label class="fld"><span>Ziele anteilig zur Wochenarbeitszeit</span><select id="sProrate"><option value="1"'+(st.prorate!==false?' selected':'')+'>Ja</option><option value="0"'+(st.prorate===false?' selected':'')+'>Nein, für alle gleich</option></select></label></div>'+
@@ -2989,6 +3000,7 @@ function quickAct(k,pid){
   if(k==='kls')openKlsImport(todayISO());
   else if(k==='lem')ACTIONS['lem-add']();
   else if(k==='pr')openPr(monthKey());
+  else if(k==='conv')openConvForm({emp:pid});
   else if(k==='appt')openApptForm('',{emp:pid,cat:pid?'ma':''});
   else if(k==='todo')openTodoForm('',{due:todayISO()});
   else if(k==='wv')openWvForm('',{emp:pid});
@@ -3580,7 +3592,7 @@ function briefExtra(e){
   if(S.metrics.length){
     var res=personRes(e,mk);
     if(res.entered){
-      o.facts.push('Ergebnisse '+monthLabel(mk)+': Ø '+pctTxt(res.avg)+' Zielerreichung ('+res.st.l.toLowerCase()+')');
+      var tv=teamVP(mk);o.facts.push('Beitrag zum Teamziel '+monthLabel(mk)+': '+num(Math.round(res.vp.a))+' Verkaufspunkte'+(tv>0?' ('+Math.round(res.vp.a/tv*100)+' % des Teams)':'')+' · TKE '+convCount(mk,'tke',e.id)+' · TKO '+convCount(mk,'tko',e.id));
       res.rows.filter(function(r){return r.st.k==='done'||r.st.k==='ahead'}).slice(0,2).forEach(function(r){o.pos.push('Ergebnis '+r.m.n+': '+fmtV(r.m,r.a)+' von '+fmtV(r.m,r.t.v))});
       res.rows.filter(function(r){return (r.st.k==='bad'||r.st.k==='late')&&monthPace(mk)>=.3}).slice(0,2).forEach(function(r){o.themes.push('Ergebnis '+r.m.n+': '+(r.a==null?'0':fmtV(r.m,r.a))+' von '+fmtV(r.m,r.t.v)+' ('+r.st.l.toLowerCase()+')')});
       var lw=res.rows.filter(function(r){return r.st.k==='bad'||r.st.k==='late'})[0];
@@ -4670,8 +4682,7 @@ function homeTeam(){
   var rows=S.employees.map(function(e){return {e:e,d:tDay(e.id,ds)}}),inN=rows.filter(function(r){return r.d.ist>0&&r.d.kind!=='abs'&&r.d.kind!=='off'}).length;
   var meTxt=rec&&rec.mode==='dev'?rec.from+'–'+rec.to:(work?'Soll '+tPlanStr(me):(me.lab||'Heute frei'));
   return '<section class="card glass rise s5 home-team"><a class="card-h wg-lh" href="#/plan"><h2>Team heute</h2><span class="muted small">'+inN+' von '+rows.length+' da</span>'+ic('right',16)+'</a>'+
-    '<div class="ht-row scrollx">'+rows.map(function(r){var on=r.d.ist>0&&r.d.kind!=='abs'&&r.d.kind!=='off';return '<button type="button" class="ht'+(on?'':' out')+'" data-act="person" data-id="'+esc(r.e.id)+'" data-lp="emp">'+avatar(r.e.name,'md')+'<span>'+esc(r.e.name.split(' ')[0])+'</span><small>'+esc(on?tTimes(r.d)||'da':(r.d.lab||'frei'))+'</small></button>'}).join('')+'</div>'+
-    '<div class="ht-me"><span class="muted small">Ich: '+esc(meTxt)+'</span><span class="sp"></span>'+(work||rec?'<button class="btn sm" data-act="t-stamp" data-w="in" data-pid="me">Kommen</button><button class="btn sm" data-act="t-stamp" data-w="out" data-pid="me">Gehen</button>':'<button class="btn sm" data-act="t-day" data-pid="me" data-d="'+ds+'">Zeit eintragen</button>')+'</div></section>';
+    '<div class="ht-row scrollx">'+rows.map(function(r){var on=r.d.ist>0&&r.d.kind!=='abs'&&r.d.kind!=='off';return '<button type="button" class="ht'+(on?'':' out')+'" data-act="person" data-id="'+esc(r.e.id)+'" data-lp="emp">'+avatar(r.e.name,'md')+'<span>'+esc(r.e.name.split(' ')[0])+'</span><small>'+esc(on?tTimes(r.d)||'da':(r.d.lab||'frei'))+'</small></button>'}).join('')+'</div></section>';
 }
 function homeMe(){
   var td=todayISO(),l=S.todos.filter(function(t){return !t.done&&(t.focus||(t.due&&t.due<=td))}).sort(function(a,b){return (b.focus-a.focus)||(a.due||'9').localeCompare(b.due||'9')});
@@ -4717,7 +4728,7 @@ function viewSettings2(){
       li({icon:'tasks',c:'#7048e8',t:'Führungsroutinen',s:S.routines.length+' Routinen',act:'rout-edit'}),
       li({icon:'shield',c:'#7048e8',t:'Nachweise und Pflichtschulungen',s:S.quals.length+' im Katalog',act:'qual-cat'})])+
     lgroup('Vertrieb',[
-      li({icon:'target',c:'#1c7ed6',t:'LEM-Zielsystem',s:'Zielverteilung · Baufi-Phase · TBOL-Ziel',act:'lem-share'}),
+      li({icon:'target',c:'#1c7ed6',t:'LEM-Zielsystem',s:'Baufi-Phase',act:'lem-share'}),
       li({icon:'chart',c:'#1c7ed6',t:'Kennzahlen und Ziele',s:S.metrics.map(function(m){return m.s||m.n}).slice(0,3).join(', ')+(S.metrics.length>3?' …':''),act:'set-mets'}),
       li({icon:'send',c:'#1c7ed6',t:'Kanäle und Ansprechpartner',s:S.channels.map(function(c){return c.s||c.n}).join(', '),act:'set-chans'})])+
     lgroup('Darstellung',[li({icon:'moon',c:'#3d5a80',t:'Design',s:{auto:'Automatisch',light:'Hell',dark:'Dunkel'}[st.theme]+' · Hausfarben',act:'set-design'})])+
@@ -4786,7 +4797,7 @@ function saveSetForm(kind,f,d){
     var a=tm(d.get('fFrom')),b=tm(d.get('fTo')),c=tm(d.get('sFrom')),e=tm(d.get('sTo'));if(a&&b)st.timeF=a+'–'+b;if(c&&e)st.timeS=c+'–'+e}
   else if(kind==='staff'){st.minCoverage=Math.round(clampNum(d.get('min'),3,1,30));S.staff.me=d.get('me')==='1'}
   else if(kind==='rhythm'){st.rhythm=Math.round(clampNum(d.get('rhythm'),42,7,365));st.obsDays=Math.round(clampNum(d.get('obs'),120,14,365));st.refFollow=Math.round(clampNum(d.get('follow'),7,1,60))}
-  else if(kind==='sales'){st.prorate=d.get('prorate')==='1';st.refTarget=Math.round(clampNum(d.get('ref'),3,0,50))}
+  else if(kind==='sales'){st.prorate=d.get('prorate')==='1';st.refTarget=Math.round(clampNum(d.get('ref'),3,0,500))}
   save();closeModal();rerender();toast('Gespeichert');
 }
 function saveCompEd(f,d){var n=(d.get('n')||'').trim();if(!n){toast('Bitte einen Namen eingeben','err');return}
@@ -5576,7 +5587,7 @@ var HUBS=[
   {id:'team',t:'Team',icon:'users',tabs:[['team','Mitarbeiter'],['skills','Kompetenzen'],['syn','Synergien']]},
   {id:'dev',t:'Entwicklung',icon:'trend',tabs:[['dev','Gespräche'],['obs','Beobachtung'],['qual','Nachweise'],['kudos','Anerkennung']]},
   {id:'sales',t:'Vertrieb',icon:'chart',tabs:[['sales','Ergebnisse'],['goals','Ziele'],['refs','Überleitungen'],['reviews','Google']]},
-  {id:'plan',t:'Planung',icon:'grid',tabs:[['plan','Dienstplan','shift'],['plan','Urlaub','abs'],['plan','Besetzung','staff'],['kls','KLS'],['time','Zeit']]},
+  {id:'plan',t:'Planung',icon:'grid',tabs:[['plan','Dienstplan','shift'],['plan','Urlaub','abs'],['plan','Besetzung','staff'],['kls','KLS']]},
   {id:'life',t:'Team-Leben',icon:'flag',tabs:[['events','Events'],['media','Fotos & Videos']]},
   {id:'region',t:'Mein Gebiet',icon:'map',tabs:[['region','']]},
   {id:'settings',t:'Einstellungen',icon:'settings',tabs:[['settings','']]}
@@ -5630,7 +5641,7 @@ function openMore(){
 
 /* ---- Erfassen: häufige Aktionen sichtbar, der Rest aufklappbar ---- */
 var QA_ALL={appt:['calendar','Termin'],todo:['brief','To-Do'],talk:['chat','Gespräch'],kls:['scan','KLS-Foto'],wv:['inbox','Wiedervorlage'],kudos:['award','Anerkennung'],ref:['send','Überleitung'],sales:['chart','Ergebnisse'],
-  time:['clock','Arbeitszeit'],obs:['eye','Beobachtung'],qrec:['shield','Nachweis'],meas:['trend','Maßnahme'],abs:['sun','Abwesenheit'],task:['tasks','Team-Aufgabe'],media:['camera','Foto / Video'],event:['flag','Team-Event'],review:['star','Rezension'],ocr:['map','Gebiets-KPIs'],emp:['user','Mitarbeiter']};
+  obs:['eye','Beobachtung'],qrec:['shield','Nachweis'],meas:['trend','Maßnahme'],abs:['sun','Abwesenheit'],task:['tasks','Team-Aufgabe'],media:['camera','Foto / Video'],event:['flag','Team-Event'],review:['star','Rezension'],ocr:['map','Gebiets-KPIs'],emp:['user','Mitarbeiter']};
 var QA_TOP=['appt','todo','talk','kls','wv','kudos','ref','sales'];
 function openQuickAdd(){
   var pid=(UI.route==='person'&&emp(UI.param))?UI.param:'';
@@ -5678,7 +5689,7 @@ function registerExt5(){
     time:function(){return {menu:[{icon:'clock',label:'Meine Zeit eintragen',fn:function(){openDayForm('me',todayISO())}},{icon:'settings',label:'Beratungs- und Servicezeiten',fn:openSetHrs}]}},
     plan:function(){var p=UI.planTab;return p==='abs'?{add:{label:'Abwesenheit erfassen',fn:function(){openAbsForm()}}}:p==='staff'?{menu:[{icon:'settings',label:'Mindestbesetzung',fn:openSetStaff}]}:{menu:[{icon:'copy',label:'Vorwoche übernehmen',fn:function(){ACTIONS['week-copy']()}},{icon:'settings',label:'Beratungs- und Servicezeiten',fn:openSetHrs}]}},
     kls:function(){return {add:{label:'KLS fotografieren',icon:'camera',fn:function(){openKlsImport(UI.klsDay||todayISO())}},menu:klsMenuItems()}},
-    sales:function(){return {add:{label:'Abschluss erfassen',fn:function(){openDealForm({})}},menu:[{icon:'tasks',label:'Abschlüsse dieses Monats',fn:function(){openDealList(UI.salesMonth||monthKey(),null)}},{icon:'edit',label:'Weitere Kennzahlen eintragen',fn:function(){openSalesForm('')}},{icon:'users',label:'Zielverteilung',fn:openLemShare},{icon:'target',label:'LEM-Ziele',fn:function(){go('goals')}},{icon:'settings',label:'Kennzahlen',fn:openSetMets}]}},
+    sales:function(){return {add:{label:'Abschluss erfassen',fn:function(){openDealForm({})}},menu:[{icon:'tasks',label:'Abschlüsse dieses Monats',fn:function(){openDealList(UI.salesMonth||monthKey(),null)}},{icon:'edit',label:'Weitere Kennzahlen eintragen',fn:function(){openSalesForm('')}},{icon:'plus',label:'Conversions TKE/TKO erfassen',fn:function(){openConvForm({})}},{icon:'target',label:'LEM-Ziele',fn:function(){go('goals')}},{icon:'settings',label:'Kennzahlen',fn:openSetMets}]}},
     goals:function(){return {add:{label:'Neues Ziel',fn:function(){ACTIONS['goal-new']({dataset:{}})}},menu:[{icon:'sparkle',label:'Neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}]}},
     refs:function(){return {add:{label:'Überleitung erfassen',fn:function(){openRefForm('')}},menu:[{icon:'settings',label:'Kanäle und Ansprechpartner',fn:openSetChans}]}},
     reviews:function(){return {add:{label:'Rezension erfassen',fn:function(){openRvForm('')}},menu:rvMenuItems()}},
@@ -5731,7 +5742,7 @@ function registerExt5b(){
     {icon:'user',label:'Profil öffnen',fn:function(){go('person/'+e.id)}}]}};
 }
 /* ===================== Startseite aus Widgets ===================== */
-var HOME_IDS=['agenda','att','myday','team','kls','goals','region','sales','reviews','event','wv','bday','clock','refs','qual','links'];
+var HOME_IDS=['agenda','att','myday','team','kls','goals','region','sales','reviews','event','wv','bday','refs','qual','links'];
 var HOME_DEF=[{id:'kls',sz:'s'},{id:'goals',sz:'s'},{id:'agenda',sz:'l'},{id:'att',sz:'l'},{id:'myday',sz:'l'},{id:'team',sz:'l'}];
 function normHome(a){
   if(!Array.isArray(a))return HOME_DEF.map(function(x){return {id:x.id,sz:x.sz}});
@@ -5987,14 +5998,20 @@ function normLem(o){
   if(o.pr&&typeof o.pr==='object')Object.keys(o.pr).filter(function(k){return /^\d{4}-\d{2}$/.test(k)}).sort().slice(-36).forEach(function(k){var x=o.pr[k]||{},cc={},nn={};Object.keys(x.c||{}).forEach(function(id){var v=lemN(x.c[id]);if(PR_ALL.indexOf(id)>-1&&v!=null&&v>=0)cc[id]=Math.round(v)});['gk','kk'].forEach(function(t){var v=lemN((x.n||{})[t]);if(v!=null&&v>=0)nn[t]=Math.round(v)});var qq={};['ast','geh','sme'].forEach(function(t){var v=lemN((x.q||{})[t]);if(v!=null&&v>=0&&v<=300)qq[t]=v});d.pr[k]={c:cc,n:nn,q:qq,split:x.split!==false}});
   if(o.mon&&typeof o.mon==='object')Object.keys(o.mon).filter(function(k){return /^\d{4}-\d{2}$/.test(k)}).sort().slice(-36).forEach(function(mk){
     var m=o.mon[mk]||{},v={},ob=m.ob||{},ag=m.agb||{};Object.keys(m.v||{}).forEach(function(pid){if(LEM_PRODS.some(function(p){return p[0]===pid}))v[pid]=lemZI(m.v[pid])});
-    d.mon[mk]={vz:lemN(m.vz),v:v,um:lemZI(m.um),kv:lemN(m.kv),tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemKukiN(lemN(m.kuki)),ob:{z:lemN(ob.z),i:lemN(ob.i)},agb:{c:lemN(ag.c),e:lemN(ag.e),s:lemN(ag.s),a:lemN(ag.a)},stk:lemStk(m.stk),ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs),korr:lemN(m.korr)};
+    d.mon[mk]={vz:lemN(m.vz),v:v,um:lemZI(m.um),kv:lemN(m.kv),tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemKukiN(lemN(m.kuki)),ob:{z:lemN(ob.z),i:lemN(ob.i)},agb:{c:lemN(ag.c),e:lemN(ag.e),s:lemN(ag.s),a:lemN(ag.a)},stk:lemStk(m.stk),wp:lemWp(m),qp:lemQp(m),ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs),korr:lemN(m.korr)};
   });
   return d;
 }
 function L(){return S.lem}
 function lemMon(mk,create){var m=L().mon[mk];if(!m&&create)m=L().mon[mk]=lemBlankMon();return m||null}
+function lemPts(v,max){var n=lemN(v);return n!=null&&n>=0&&n<=max?Math.round(n*100)/100:null}
+/* LEM-Punkte direkt aus dem Reporting; ältere Einträge (Ziel/Ist) werden einmalig in Punkte umgerechnet */
+function lemWp(m){var w=m.wp;if(w&&typeof w==='object')return {tke:lemPts(w.tke,18),tko:lemPts(w.tko,18),kuki:lemPts(w.kuki,8),ob:lemPts(w.ob,6)};
+  var r={tke:null,tko:null,kuki:null,ob:null};['tke','tko'].forEach(function(k){var x=lemZI(m[k]);if(x.z>0&&x.i!=null)r[k]=lemConvPts(x.i/x.z)});var ku=lemKukiN(lemN(m.kuki));if(ku!=null)r.kuki=lemKukiPts(ku);var ob=lemZI(m.ob);if(ob.z>0&&ob.i!=null)r.ob=lemObPts(ob.i/ob.z);return r}
+function lemQp(m){var q=m.qp;if(q&&typeof q==='object')return {kub:lemPts(q.kub,55),cs:lemPts(q.cs,10)};
+  var ts=lemN(m.ts),bk=lemN(m.bank),cs=lemN(m.cs),k=lemKubis(ts,bk);return {kub:k?k.pts:null,cs:cs!=null?lemCsPts(cs):null}}
 function lemStk(o){o=o||{};var r={};['gi','gl','gs','kz','ki','ks'].forEach(function(k){var v=lemN(o[k]);r[k]=v!=null&&v>=0?v:null});return r}
-function lemBlankMon(){return {stk:lemStk(),vz:null,v:{},um:{z:null,i:null},kv:null,tke:{z:null,i:null},tko:{z:null,i:null},kuki:null,ob:{z:null,i:null},agb:{c:null,e:null,s:null,a:null},ts:null,tsF:null,bank:null,cs:null,korr:null}}
+function lemBlankMon(){return {wp:{tke:null,tko:null,kuki:null,ob:null},qp:{kub:null,cs:null},stk:lemStk(),vz:null,v:{},um:{z:null,i:null},kv:null,tke:{z:null,i:null},tko:{z:null,i:null},kuki:null,ob:{z:null,i:null},agb:{c:null,e:null,s:null,a:null},ts:null,tsF:null,bank:null,cs:null,korr:null}}
 /* Arbeitstage: im laufenden Monat wird das Ziel wie im Reporting nach vergangenen Arbeitstagen heruntergerechnet */
 function lemWd(mk){var p=mk.split('-'),a=iso(new Date(+p[0],+p[1]-1,1)),b=iso(new Date(+p[0],+p[1],0)),all=workdaysBetween(a,b),td=todayISO();if(td<a||td>b||!all.length)return {past:td>b?all.length:0,all:all.length,f:1,cur:false};var past=all.filter(function(d){return d<td}).length;return {past:past,all:all.length,f:past/all.length,cur:true}}
 function lemUmApp(mk){var s=0,h=false;S.deals.forEach(function(d){if(d.d.slice(0,7)!==mk||d.kons||!(d.vol>0)||dealProd(d)!=='kre')return;s+=d.vol;h=true});return h?s:null}
@@ -6007,32 +6024,28 @@ function lemLast(ms,f){for(var i=ms.length-1;i>=0;i--){var m=lemMon(ms[i]);if(m)
 
 /* --- Berechnung für Monat (per 'm') oder Jahr bis Monat (per 'y') --- */
 function lemCalc(mk,per){
-  var ms=lemMonths(mk,per),R={mk:mk,per:per,months:ms},pace=monthPace(mk);
+  var ms=lemMonths(mk,per),R={mk:mk,per:per,months:ms},pace=monthPace(mk),cm=monthKey();
   /* Verkauf: Ist aus Abschlüssen, ein Reporting-Wert hat Vorrang */
   var prods=L().prods.map(function(p){var z=0,zi=false,i=0,ii=false,app=0,ah=false,src={};ms.forEach(function(k){var m=lemMon(k),x=m&&m.v[p.id];if(x&&x.z!=null){z+=x.z;zi=true}var r=lemProdIst(k,p);if(r.v!=null){i+=r.v;ii=true;src[r.src]=1}if(r.app!=null){app+=r.app;ah=true}});
-    return {p:p,z:zi?z:null,i:ii?i:null,app:ah?Math.round(app):null,ze:zi&&z>0?(ii?i:0)/z:null,src:src.rep&&src.auto?'mix':src.rep?'rep':src.auto?'auto':''}});
+    return {p:p,z:zi?z:null,i:ii?i:null,app:ah?Math.round(app):null,ze:zi&&z>0?(ii?i:0)/z:null,fc:null,src:src.rep&&src.auto?'mix':src.rep?'rep':src.auto?'auto':''}});
   var zt=0,zh=false,it=0,kv=0,kvh=false,uz=0,uzh=false,ui=0,uih=false,ua=0,uah=false;
   ms.forEach(function(k){var m=lemMon(k);var a=lemUmApp(k);if(m&&m.um.i!=null){ui+=m.um.i;uih=true}else if(a!=null){ui+=a;uih=true}if(a!=null){ua+=a;uah=true}if(!m)return;if(m.um.z!=null){uz+=m.um.z;uzh=true}if(m.kv!=null){kv+=m.kv;kvh=true}var s=0,h=false;if(m.vz!=null){s=m.vz;h=true}else{L().prods.forEach(function(p){var x=m.v[p.id];if(x&&x.z!=null){s+=x.z;h=true}})}if(h){zt+=s;zh=true}});
   prods.forEach(function(x){if(x.i!=null)it+=x.i});it+=kv;
-  var vze=zh&&zt>0?it/zt:null,nv=L().norm.v,vzeN=vze!=null&&nv!=null&&nv>0&&nv<100?vze/(nv/100):vze;
-  /* Prognose (ZE FC): laufender Monat hochgerechnet, ratierliche Versicherungspunkte aus Vormonaten nicht hochgerechnet */
-  var fc=null;if(zh&&zt>0&&pace>=.2&&pace<1&&mk===monthKey()){var cur=0,carry=0,mv=lemMon(mk);prods.forEach(function(x){var r=lemProdIst(mk,x.p);if(r.v!=null)cur+=r.v});
-    S.deals.forEach(function(d){var c=cat(d.it);if(!c||!(c.u==='beitrag'||c.u==='einmal')||d.d.slice(0,7)>=mk)return;var pp=dealProd(d);if(mv&&mv.v[pp]&&mv.v[pp].i!=null)return;carry+=dealVP(d,mk)});
-    carry=Math.min(carry,cur);fc=(it-cur+(cur-carry)/pace+carry)/zt*(vzeN!=null&&vze?vzeN/vze:1)}
-  R.v={prods:prods,ziel:zh?zt:null,ist:it,kv:kvh?kv:null,um:{z:uzh?uz:null,i:uih?ui:null,app:uah?ua:null,ze:uzh&&uz>0&&uih?ui/uz:null},ze:vze,zeN:vzeN,fc:fc,fcPts:lemVScore(fc),norm:vzeN!==vze,pts:lemVScore(vzeN)};
-  /* Wachstum: Ist-Anzahl ÷ Ziel-Anzahl; im laufenden Monat Ziel anteilig nach vergangenen Arbeitstagen */
-  function cnt(key,auto){var z=0,zf=0,i=0,h=false,ih=false,au=false,wd=null;ms.forEach(function(k){var m=lemMon(k),x=m&&m[key],f=lemWd(k);if(x&&x.z!=null){z+=x.z*f.f;zf+=x.z;h=true;if(f.f<1)wd=f}var ii=x&&x.i!=null?x.i:null;if(ii==null&&auto){var cc=convCount(k,key);if(cc){ii=cc;au=true}}if(ii!=null){i+=ii;ih=true}});
-    var ze=h&&z>0?i/z:null;return {z:h?Math.round(z*100)/100:null,zFull:h?zf:null,wd:wd,i:ih?i:(h?0:null),auto:au,ze:ze}}
-  var tke=cnt('tke',true),tko=cnt('tko',true),ob=cnt('ob',false),kv2=lemLast(ms,function(m){return m.kuki});
-  tke.pts=lemConvPts(tke.ze);tko.pts=lemConvPts(tko.ze);ob.pts=lemObPts(ob.ze);
-  var agb=lemLast(ms,function(m){var a=m.agb;return a&&(a.a!=null||a.c!=null||a.e!=null||a.s!=null)?a:null});
-  var parts=[tke.pts,tko.pts,lemKukiPts(kv2),ob.pts],wh=parts.some(function(x){return x!=null}),wp=parts.reduce(function(a,x){return a+(x||0)},0);
-  var nw=L().norm.w,wze=wh?wp/LEM_EXP.w:null,wzeN=wze!=null&&nw!=null&&nw>0&&nw<100?wze/(nw/100):wze;
-  R.w={tke:tke,tko:tko,kuki:{v:kv2,pts:lemKukiPts(kv2)},ob:ob,agb:agb,pts:wh?Math.min(LEM_MAX.w,Math.round(wzeN*LEM_EXP.w*100)/100):null,ze:wze,zeN:wzeN,norm:wzeN!==wze,raw:wh?wp:null};
-  /* Qualität (zählt der Bereichswert; letzter erfasster Stand) */
-  var ts=lemLast(ms,function(m){return m.ts}),tsF=lemLast(ms,function(m){return m.tsF}),bank=lemLast(ms,function(m){return m.bank}),cs=lemLast(ms,function(m){return m.cs});
-  var kub=lemKubis(ts,bank),csp=lemCsPts(cs),qh=kub!=null||csp!=null;
-  R.q={ts:ts,tsF:tsF,bank:bank,cs:cs,kub:kub,cs_pts:csp,pts:qh?(kub?kub.pts:0)+(csp||0):null};
+  var vze=zh&&zt>0?it/zt:null,nv=L().norm.v,vzeN=vze!=null&&nv!=null&&nv>0&&nv<100?vze/(nv/100):vze,nf=vzeN!=null&&vze?vzeN/vze:1;
+  /* Hochrechnung laufender Monat: Monatswerte nach Arbeitstagen hochgerechnet, ratierliche Versicherungspunkte aus Vormonaten nicht */
+  var fc=null,fcVP=null;if(pace>0&&pace<1&&ms.indexOf(cm)>-1){var cur=0,carry=0,mv=lemMon(cm),cb={};
+    S.deals.forEach(function(d){var c=cat(d.it);if(!c||!(c.u==='beitrag'||c.u==='einmal')||d.d.slice(0,7)>=cm)return;var pp=dealProd(d);if(mv&&mv.v[pp]&&mv.v[pp].i!=null)return;var v=dealVP(d,cm);carry+=v;cb[pp]=(cb[pp]||0)+v});
+    prods.forEach(function(x){var r=lemProdIst(cm,x.p),ci=r.v==null?0:r.v,cc=Math.min(cb[x.p.id]||0,ci);cur+=ci;var px=(x.i||0)-ci+(ci-cc)/pace+cc;if(x.z>0)x.fc=px/x.z;x.fcVP=px});
+    carry=Math.min(carry,cur);fcVP=it-cur+(cur-carry)/pace+carry;if(zh&&zt>0)fc=fcVP/zt*nf}
+  R.v={prods:prods,ziel:zh?zt:null,ist:it,kv:kvh?kv:null,um:{z:uzh?uz:null,i:uih?ui:null,app:uah?ua:null,ze:uzh&&uz>0&&uih?ui/uz:null},ze:vze,zeN:vzeN,fc:fc,fcVP:fcVP,pace:pace,fcPts:lemVScore(fc),norm:vzeN!==vze,pts:lemVScore(vzeN)};
+  /* Wachstum und Qualität: LEM-Punkte laut Reporting (letzter erfasster Stand im Zeitraum) */
+  function lp(o,k){return lemLast(ms,function(m){return m[o]&&m[o][k]!=null?m[o][k]:null})}
+  function cn(k){var n=0;ms.forEach(function(x){n+=convCount(x,k)});return n}
+  var w={tke:{pts:lp('wp','tke'),n:cn('tke')},tko:{pts:lp('wp','tko'),n:cn('tko')},kuki:{pts:lp('wp','kuki')},ob:{pts:lp('wp','ob')}};
+  var parts=[w.tke.pts,w.tko.pts,w.kuki.pts,w.ob.pts],wh=parts.some(function(x){return x!=null}),wp=parts.reduce(function(a,x){return a+(x||0)},0);
+  var nw=L().norm.w,wf=nw!=null&&nw>0&&nw<100?100/nw:1;
+  w.raw=wh?wp:null;w.norm=wh&&wf!==1;w.pts=wh?Math.min(LEM_MAX.w,Math.round(wp*wf*100)/100):null;w.ze=w.pts==null?null:w.pts/LEM_EXP.w;w.zeN=w.ze;R.w=w;
+  var kub=lp('qp','kub'),csp=lp('qp','cs');R.q={kub:{pts:kub},cs_pts:csp,pts:kub!=null||csp!=null?Math.round(((kub||0)+(csp||0))*100)/100:null};
   /* Korrektur laut LEM-Übersicht */
   var kr=0,kh=false;ms.forEach(function(k){var m=lemMon(k);if(m&&m.korr!=null){kr+=m.korr;kh=true}});R.korr=kh?kr:null;
   var have=['q','v','w'].filter(function(k){return R[k].pts!=null});
@@ -6041,19 +6054,15 @@ function lemCalc(mk,per){
 }
 /* --- Hebel: was bringt der nächste Schritt? --- */
 function lemLevers(R){
-  var o=[];
-  var v=R.v;if(v.ziel>0&&v.pts!=null&&v.pts<100){
+  var o=[],v=R.v;if(v.ziel>0&&v.pts!=null&&v.pts<100){
     var f=v.zeN&&v.ze?v.zeN/v.ze:1,p=Math.floor(v.zeN*100+LEM_EPS),need=function(pc){return Math.max(1,Math.ceil(pc/100*v.ziel/f-v.ist-LEM_EPS))};
     if(p<70)o.push({k:'v',g:30,t:'Verkauf auf 70 % bringen',s:'Noch '+num(need(70))+' Verkaufspunkte · darunter gibt es 0 Punkte',u:need(70)});
     else{o.push({k:'v',g:Math.round((p+1-v.zeN*100)*100)/100,t:'Verkauf: +1 % Zielerreichung',s:'Noch '+num(need(p+1))+' Verkaufspunkte bis '+(p+1)+' %',u:need(p+1)});
       var ms=[100,110,120,130,140].filter(function(x){return x>p+1})[0];if(ms)o.push({k:'v',g:Math.round((lemVScore(ms/100)-v.pts)*100)/100,t:'Verkauf auf '+ms+' %',s:'Noch '+num(need(ms))+' Verkaufspunkte',u:need(ms)})}
   }
-  [['tke','Conversion TKE'],['tko','Conversion TKO']].forEach(function(x){var c=R.w[x[0]];if(!(c.z>0)||c.pts==null)return;var p=lemPct(c.ze),nx=LEM_CONV.slice().reverse().filter(function(t){return t[0]>p})[0];if(!nx)return;var nd=Math.max(1,Math.ceil(nx[0]/100*c.z-c.i-LEM_EPS));o.push({k:'w',g:nx[1]-c.pts,t:x[1]+' auf '+nx[0]+' %',s:'Noch '+nd+' '+plural(nd,'Conversion','Conversions')+(c.wd?' (Ziel anteilig bis heute)':''),u:nd})});
-  var ku=R.w.kuki;if(ku.v!=null){var nk=LEM_KUKI.slice().reverse().filter(function(t){return t[0]>ku.v+1e-6})[0];if(nk)o.push({k:'w',g:nk[1]-ku.pts,t:'KUKI auf '+num(nk[0])+' Punkte',s:'Aktuell '+num(ku.v)+' · Einwilligung für Telefon, SMS und E-Mail aktiv erfragen',u:nk[0]-ku.v})}
-  var ob=R.w.ob;if(ob.z>0&&ob.pts!=null&&ob.pts<6){var p2=ob.ze*100,nb=LEM_OB.slice().reverse().filter(function(t){return t[0]>p2+LEM_EPS||(t[0]===70&&p2<=70)})[0];if(nb){var nd2=Math.max(1,Math.ceil((nb[0]===70?70.01:nb[0])/100*ob.z-ob.i-LEM_EPS));o.push({k:'w',g:nb[1]-ob.pts,t:'TBOL auf '+(nb[0]===70?'über 70':nb[0])+' %',s:'Noch '+nd2+' TBOL'+(ob.wd?' (Ziel anteilig bis heute)':''),u:nd2})}}
-  var q=R.q;if(q.ts!=null&&q.kub&&q.kub.pts<55){var t1=q.ts;for(var s=0;s<200&&lemKubis(t1,q.bank).pts<=q.kub.pts;s++)t1=Math.round((t1+0.1)*10)/10;if(lemKubis(t1,q.bank).pts>q.kub.pts)o.push({k:'q',g:lemKubis(t1,q.bank).pts-q.kub.pts,t:'KuBiS-Teamscore auf '+dec(t1,1),s:'Bereichswert aktuell '+dec(q.ts,1)+(q.bank!=null?' · Bank Ø '+dec(q.bank,1):''),u:t1-q.ts})}
-  if(q.cs!=null&&q.cs_pts<10){var nc=q.cs<62?62:62+2*(q.cs_pts);o.push({k:'q',g:1,t:'Cross-Sell auf '+nc+' %',s:'Aktuell '+dec(q.cs,1)+' % ohne Druckverkauf',u:nc-q.cs})}
-  return o.filter(function(x){return x.g>0}).sort(function(a,b){return b.g-a.g||a.u-b.u});
+  var w=R.w;[['tke','Conversion TKE',18],['tko','Conversion TKO',18],['kuki','KUKI',8],['ob','TBOL',6]].forEach(function(x){var c=w[x[0]];if(c.pts!=null&&c.pts<x[2])o.push({k:'w',g:x[2]-c.pts,t:x[1]+': bis zu '+lemF(x[2]-c.pts)+' Punkte offen',s:'Aktuell '+lemF(c.pts)+' von '+x[2]+(c.n!=null?' · '+c.n+' Conversions erfasst':''),u:99})});
+  var q=R.q;if(q.cs_pts!=null&&q.cs_pts<10)o.push({k:'q',g:10-q.cs_pts,t:'Cross-Sell: bis zu '+lemF(10-q.cs_pts)+' Punkte offen',s:'Aktuell '+lemF(q.cs_pts)+' von 10 · je 2 %-Punkte Cross-Sell +1',u:99});
+  return o.filter(function(x){return x.g>0}).sort(function(a,b){return (a.k==='v'?0:1)-(b.k==='v'?0:1)||b.g-a.g||a.u-b.u});
 }
 function lemPillarState(pts,exp){if(pts==null)return {c:'#7b8794',l:'offen'};var r=pts/exp;return r>=1?{c:'#1f9d55',l:'über Erwartung'}:r>=.9?{c:'#1c7ed6',l:'knapp darunter'}:r>=.75?{c:'#d9780a',l:'unter Erwartung'}:{c:'#c92a3a',l:'deutlich darunter'}}
 
@@ -6064,7 +6073,7 @@ function lemF(v,d){return v==null?'–':dec(v,d==null?(Math.abs(v%1)>1e-9?(Math.
 function lemPctTxt(z){return z==null?'–':Math.round(z*100)+' %'}
 function lemBar(pts,exp,max,c){var w=pts==null?0:Math.min(100,pts/max*100);return '<div class="lem-bar"><i style="width:'+w.toFixed(1)+'%;background:'+c+'"></i><b style="left:'+(exp/max*100).toFixed(1)+'%" title="Erwartungswert '+exp+'"></b></div>'}
 function lemHero(R){
-  var st=lemPillarState(R.tot,R.exp),seg=[['q','Qualität','#0c8599'],['v','Verkauf','#1c7ed6'],['w','Wachstum','#7048e8']];
+  var st=lemPillarState(R.tot,R.exp),seg=[['v','Verkauf','#1c7ed6'],['w','Wachstum','#7048e8'],['q','KuBiS','#0c8599']];
   return '<section class="card glass rise lem-hero"><div class="lh-top"><div><small>LEM brutto '+(R.per==='y'?R.mk.slice(0,4)+' bis '+monthLabel(R.mk).split(' ')[0]:monthLabel(R.mk))+'</small><b class="lh-v">'+(R.tot==null?'–':lemF(R.tot))+'<span> / '+R.exp+'</span></b><span class="muted small">Erwartungswert '+R.exp+' · maximal '+R.max+(R.korr?' · Korrektur '+(R.korr>0?'+':'')+dec(R.korr,R.korr%1?1:0):'')+(R.complete?'':' · noch nicht alle Säulen erfasst')+'</span></div>'+chipC(st.l,st.c)+'</div>'+
     '<div class="lh-stack">'+seg.map(function(s){var p=R[s[0]].pts;return p?'<i style="width:'+(p/R.max*100).toFixed(1)+'%;background:'+s[2]+'" title="'+s[1]+' '+p+'"></i>':''}).join('')+'<b style="left:'+(R.exp/R.max*100).toFixed(1)+'%"></b></div>'+
     '<div class="lh-leg">'+seg.map(function(s){var p=R[s[0]].pts;return '<span><i style="background:'+s[2]+'"></i>'+s[1]+' <b>'+lemF(p)+'</b><small>/'+LEM_EXP[s[0]]+'</small></span>'}).join('')+'</div></section>';
@@ -6076,31 +6085,28 @@ function lemCardV(R){
   if(v.kv)rows+='<div class="lem-r"><span class="lr-n"><b>Korrekturen</b><small>'+(v.kv>0?'+':'')+num(Math.round(v.kv))+' VP laut Reporting</small></span><div class="bar"></div><em></em></div>';
   var sc=lemStkCalc(R.months),stl=sc.gi!=null||sc.ki!=null?'<p class="muted small lp-s">Stück: '+(sc.gi!=null?num(sc.gi)+' Girokonten'+(sc.gl!=null?', davon '+num(sc.gl)+' mit Limit':''):'')+(sc.gi!=null&&sc.ki!=null?' · ':'')+(sc.ki!=null?num(sc.ki)+(sc.kz!=null?' / '+num(Math.round(sc.kz))+' Kreditkarten · '+lemPctTxt(sc.kz>0?sc.ki/sc.kz:null):' Kreditkarten'):'')+'</p>':'';
   var um=v.um.z!=null||v.um.i!=null?'<p class="muted small lp-s">TK Umsatz: '+(v.um.i==null?'–':num(Math.round(v.um.i)))+' €'+(v.um.z!=null?' von '+num(Math.round(v.um.z))+' € · '+lemPctTxt(v.um.ze):'')+' (Info, zählt nicht für die Punkte)</p>':'';
-  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="v" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#1c7ed6">'+ic('chart',18)+'</span><div class="grow"><h2>Verkauf</h2><small class="muted">Zielerreichung '+(v.zeN==null?'–':dec(v.zeN*100,2)+' %')+(v.norm?' (normiert)':'')+(v.fc!=null&&R.mk===monthKey()?' · Prognose '+lemPctTxt(v.fc):'')+'</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(v.pts)+'<span>/'+LEM_EXP.v+'</span></b></div>'+lemBar(v.pts,LEM_EXP.v,LEM_MAX.v,st.c)+
-    '<p class="muted small lp-s">'+(v.ziel?num(Math.round(v.ist))+' von '+num(Math.round(v.ziel))+' Verkaufspunkten'+(v.fc!=null&&R.mk===monthKey()&&v.fcPts!=null?' · bei gleichem Tempo '+lemF(v.fcPts)+' Punkte':''):'Noch kein Verkaufsziel erfasst. Antippen zum Eintragen.')+'</p>'+rows+um+stl+'</section>';
+  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="v" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#1c7ed6">'+ic('chart',18)+'</span><div class="grow"><h2>Verkauf</h2><small class="muted">Zielerreichung '+(v.zeN==null?'–':dec(v.zeN*100,2)+' %')+(v.norm?' (normiert)':'')+'</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(v.pts)+'<span>/'+LEM_EXP.v+'</span></b></div>'+lemBar(v.pts,LEM_EXP.v,LEM_MAX.v,st.c)+
+    '<p class="muted small lp-s">'+(v.ziel?num(Math.round(v.ist))+' von '+num(Math.round(v.ziel))+' Verkaufspunkten':'Noch kein Verkaufsziel erfasst. Antippen zum Eintragen.')+'</p>'+lemFcBox(R)+rows+um+stl+'</section>';
 }
 function lemCardW(R){
-  var w=R.w,st=lemPillarState(w.pts,LEM_EXP.w),ag=w.agb;
+  var w=R.w,st=lemPillarState(w.pts,LEM_EXP.w);
   function row(n,sub,pts,max){return '<div class="lem-r"><span class="lr-n"><b>'+n+'</b><small>'+sub+'</small></span><div class="bar"><i class="'+(pts==null?'':pts>=max*.75?'good':pts>0?'':'bad')+'" data-w="'+(pts==null?0:Math.round(pts/max*100))+'"></i></div><em>'+lemF(pts)+'<small>/'+max+'</small></em></div>'}
-  function cs(c,au){return c.z==null?'kein Ziel':lemF(c.i)+' / '+dec(c.z,c.z%1?2:0)+' · '+lemPctTxt(c.ze)+(c.wd?' · Ziel anteilig ('+c.wd.past+' von '+c.wd.all+' Arbeitstagen)':'')+(au&&c.auto?' · aus Abschlüssen':'')}
-  var wd=w.tke.wd||w.tko.wd||w.ob.wd;
-  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="w" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#7048e8">'+ic('trend',18)+'</span><div class="grow"><h2>Wachstum</h2><small class="muted">Zielerreichung '+lemPctTxt(w.zeN)+(w.norm?' (normiert)':'')+' · 40 Punkte = 100 %</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(w.pts)+'<span>/'+LEM_EXP.w+'</span></b></div>'+lemBar(w.pts,LEM_EXP.w,LEM_MAX.w,st.c)+
-    row('Conversion TKE',cs(w.tke,1),w.tke.pts,18)+
-    row('Conversion TKO',cs(w.tko,1),w.tko.pts,18)+
-    row('KUKI',w.kuki.v==null?'kein Wert':num(w.kuki.v)+' Punkte · ab 1.525 volle Punkte',w.kuki.pts,8)+
-    row('TBOL',cs(w.ob),w.ob.pts,6)+
-    (ag?'<p class="muted small lp-s">AGB-Chance '+lemF(ag.a)+' % · OK 2 Call '+lemF(ag.c)+' % · E-Mail '+lemF(ag.e)+' % · SMS '+lemF(ag.s)+' % (ohne Punkte)</p>':'')+'</section>';
+  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="w" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#7048e8">'+ic('trend',18)+'</span><div class="grow"><h2>Wachstum</h2><small class="muted">LEM-Punkte laut Reporting'+(w.norm?' · normiert (roh '+lemF(w.raw)+')':'')+'</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(w.pts)+'<span>/'+LEM_EXP.w+'</span></b></div>'+lemBar(w.pts,LEM_EXP.w,LEM_MAX.w,st.c)+
+    row('Conversion TKE',w.tke.n+' '+plural(w.tke.n,'Conversion','Conversions')+' in der App erfasst',w.tke.pts,18)+
+    row('Conversion TKO',w.tko.n+' '+plural(w.tko.n,'Conversion','Conversions')+' in der App erfasst',w.tko.pts,18)+
+    row('KUKI','Erwartung 8 Punkte',w.kuki.pts,8)+
+    row('TBOL','Erwartung 4 Punkte',w.ob.pts,6)+'</section>';
 }
 function lemCardQ(R){
-  var q=R.q,st=lemPillarState(q.pts,LEM_EXP.q),k=q.kub;
+  var q=R.q,st=lemPillarState(q.pts,LEM_EXP.q);
   function row(n,sub,pts,max){return '<div class="lem-r"><span class="lr-n"><b>'+n+'</b><small>'+sub+'</small></span><div class="bar"><i class="'+(pts==null?'':pts>=max*.8?'good':pts>=max*.6?'':'bad')+'" data-w="'+(pts==null?0:Math.round(pts/max*100))+'"></i></div><em>'+lemF(pts)+'<small>/'+max+'</small></em></div>'}
-  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="q" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#0c8599">'+ic('star',18)+'</span><div class="grow"><h2>Qualität</h2><small class="muted">KuBiS (Bereichswert) und Cross-Sell</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(q.pts)+'<span>/'+LEM_EXP.q+'</span></b></div>'+lemBar(q.pts,LEM_EXP.q,LEM_MAX.q,st.c)+
-    row('KuBiS-Teamscore',q.ts==null?'kein Wert':'Bereich '+dec(q.ts,1)+(q.tsF!=null?' · Filiale '+dec(q.tsF,1):'')+(q.bank!=null?' · Bank Ø '+dec(q.bank,1):'')+(k&&k.best==='diff'?' · zählt über Bankdurchschnitt':''),k?k.pts:null,55)+
-    row('Cross-Sell ohne Druckverkauf',q.cs==null?'kein Wert':dec(q.cs,1)+' % · Erwartung 70 %',q.cs_pts,10)+'</section>';
+  return '<section class="card glass rise lem-p s4" data-act="lem-edit" data-v="q" role="button" tabindex="0"><div class="lp-h"><span class="lp-ic" style="--c:#0c8599">'+ic('star',18)+'</span><div class="grow"><h2>KuBiS</h2><small class="muted">LEM-Punkte laut Reporting</small></div><b class="lp-v" style="color:'+st.c+'">'+lemF(q.pts)+'<span>/'+LEM_EXP.q+'</span></b></div>'+lemBar(q.pts,LEM_EXP.q,LEM_MAX.q,st.c)+
+    row('Teamscore','Erwartung 45 Punkte',q.kub.pts,55)+
+    row('Cross-Sell ohne Druckverkauf','Erwartung 5 Punkte',q.cs_pts,10)+'</section>';
 }
 function lemLeverCard(R){
   var l=lemLevers(R).slice(0,UI.lemAllLev?12:5);if(!l.length)return '';
-  var nm={v:'Verkauf',w:'Wachstum',q:'Qualität'};
+  var nm={v:'Verkauf',w:'Wachstum',q:'KuBiS'};
   return '<section class="card glass rise s12"><div class="card-h"><div><h2>Hebel</h2><span class="sub">Was der nächste Schritt an LEM-Punkten bringt</span></div></div>'+l.map(function(x){return '<div class="row lev"><span class="lev-g">+'+dec(x.g,x.g%1?1:0)+'</span><div class="grow"><b>'+esc(x.t)+'</b><span class="muted small">'+nm[x.k]+' · '+esc(x.s)+'</span></div></div>'}).join('')+
     (lemLevers(R).length>5?'<button class="btn sm ghost more-l" data-act="lem-lev-all">'+(UI.lemAllLev?'Weniger':'Alle Hebel')+'</button>':'')+'</section>';
 }
@@ -6135,33 +6141,24 @@ function openLemV(mk){
     '<div class="lem-in"><span><b>GK SME</b><small>laut Reporting</small></span><span></span>'+lemIn('st_gs',st.gs,'Ist','GK SME')+'</div>'+
     '<div class="lem-in"><span><b>Kreditkarten Stück</b><small>'+(sk?'aus Abschlüssen: '+sk:'laut Reporting')+'</small></span>'+lemIn('st_kz',st.kz,'Ziel','Kreditkarten Stück Ziel')+lemIn('st_ki',st.ki,sk?String(sk):'Ist','Kreditkarten Stück Ist')+'</div>'+
     '<div class="lem-in"><span><b>Kreditkarten SME</b><small>laut Reporting</small></span><span></span>'+lemIn('st_ks',st.ks,'Ist','Kreditkarten SME')+'</div>'+
-    '<p class="muted small" style="margin:10px 0">Wie im Monatsreport: Kredit-Überleitungen über BzH und LbP zählen in der TK Verkaufsleistung. Die Produktziele werden nach der Zielverteilung auf das Team verteilt. Ist leer lassen, dann zählt die App die erfassten Abschlüsse. Ein Ist aus dem Reporting hat Vorrang.</p>'+
+    '<p class="muted small" style="margin:10px 0">Wie im Monatsreport: Kredit-Überleitungen über BzH und LbP zählen in der TK Verkaufsleistung. Die Produktziele sind die Teamziele. Ist leer lassen, dann zählt die App die erfassten Abschlüsse. Ein Ist aus dem Reporting hat Vorrang.</p>'+
     formFoot('<button type="button" class="btn left" data-act="lem-cat">'+ic('tasks',15)+' Katalog</button>')+'</form>');
 }
 function lemKlsAppts(mk){var n=0;Object.keys(K().days).forEach(function(ds){if(ds.slice(0,7)===mk)n+=klsAnalyze(ds).kpi.appts});return n}
 function openLemW(mk){
-  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),ce=convCount(mk,'tke'),co=convCount(mk,'tko'),wd=lemWd(mk),ag=m.agb||{};
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),w=m.wp||{},ce=convCount(mk,'tke'),co=convCount(mk,'tko');
+  function r(n,k,max,sub){return '<div class="lem-in one"><span><b>'+n+'</b><small>'+sub+' · 0 bis '+max+'</small></span>'+lemIn('p_'+k,w[k],'Punkte',n+' Punkte')+'</div>'}
   sheet(lemSheetHead(mk,'Wachstum'),'<form class="lemf" data-form="lem-w"><input type="hidden" name="mk" value="'+mk+'">'+
-    '<div class="lem-ih"><span></span><small>Monatsziel</small><small>Ist</small></div>'+
-    '<div class="lem-in"><span><b>Conversion TKE</b><small>Erfolgreiche Conversions'+(ce?' · aus Abschlüssen: '+ce:'')+'</small></span>'+lemIn('tke_z',m.tke.z,'Ziel')+lemIn('tke_i',m.tke.i,ce?String(ce):'Ist')+'</div>'+
-    '<div class="lem-in"><span><b>Conversion TKO</b><small>POS-Zusatzkredit, GK mit Limit oder Gehaltseingang · kein LiA'+(co?' · aus Abschlüssen: '+co:'')+'</small></span>'+lemIn('tko_z',m.tko.z,'Ziel')+lemIn('tko_i',m.tko.i,co?String(co):'Ist')+'</div>'+
-    '<div class="lem-in"><span><b>TBOL</b><small>Ist-Anzahl und Ziel-Anzahl laut Reporting</small></span>'+lemIn('ob_z',m.ob.z,'Ziel')+lemIn('ob_i',m.ob.i,'Ist')+'</div>'+
-    '<p class="muted small" style="margin:8px 0 12px">Volle Monatsziele eintragen. '+(wd.cur?'Im laufenden Monat rechnet die App sie wie das Reporting nach vergangenen Arbeitstagen herunter (heute '+wd.past+' von '+wd.all+').':'Im laufenden Monat rechnet die App sie wie das Reporting nach vergangenen Arbeitstagen herunter.')+'</p>'+
-    '<div class="lem-in one"><span><b>KUKI-Punkte</b><small>Laut Reporting, z. B. 1551 · ab 1.345 = 5 bis ab 1.525 = 8 LEM-Punkte</small></span>'+lemIn('kuki',m.kuki,'z. B. 1551')+'</div>'+
-    '<h6 class="ml-h">AGB & Einwilligungen · Info, ohne LEM-Punkte</h6>'+
-    '<div class="lem-in one"><span><b>AGB-Chance</b><small>in %</small></span>'+lemIn('agb_a',ag.a,'z. B. 99,3')+'</div>'+
-    '<div class="lem-in one"><span><b>OK 2 Call</b><small>in %</small></span>'+lemIn('agb_c',ag.c,'%')+'</div>'+
-    '<div class="lem-in one"><span><b>OK 2 E-Mail</b><small>in %</small></span>'+lemIn('agb_e',ag.e,'%')+'</div>'+
-    '<div class="lem-in one"><span><b>OK 2 SMS</b><small>in %</small></span>'+lemIn('agb_s',ag.s,'%')+'</div>'+
-    formFoot()+'</form>');
+    '<p class="muted small" style="margin:2px 0 8px">LEM-Punkte so eintragen, wie sie im Reporting stehen (Stand im Jahr).</p>'+
+    r('Conversion TKE','tke',18,'In der App erfasst: '+ce)+r('Conversion TKO','tko',18,'In der App erfasst: '+co)+r('KUKI','kuki',8,'LEM Score')+r('TBOL','ob',6,'LEM Score')+
+    formFoot('<button type="button" class="btn left" data-act="conv-new">'+ic('plus',15)+' Conversions</button>')+'</form>');
 }
 function openLemQ(mk){
-  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon();
-  sheet(lemSheetHead(mk,'Qualität'),'<form class="lemf" data-form="lem-q"><input type="hidden" name="mk" value="'+mk+'">'+
-    '<div class="lem-in one"><span><b>KuBiS-Teamscore Bereich</b><small>Für die LEM zählt der Bereichswert · 74,0 = 45 Punkte, je 0,4 ± 1</small></span>'+lemIn('ts',m.ts,'z. B. 75,2')+'</div>'+
-    '<div class="lem-in one"><span><b>Bank-Durchschnitt</b><small>Für „Punkte zum Durchschnitt“ (Best of 2)</small></span>'+lemIn('bank',m.bank,'z. B. 76,6')+'</div>'+
-    '<div class="lem-in one"><span><b>Teamscore Filiale</b><small>Nur zur Info</small></span>'+lemIn('tsF',m.tsF,'optional')+'</div>'+
-    '<div class="lem-in one"><span><b>Cross-Sell gesamt</b><small>ohne Druckverkauf, in % · ab 62 % = 1, je 2 %-Punkte +1</small></span>'+lemIn('cs',m.cs,'z. B. 74')+'</div>'+
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),q=m.qp||{};
+  sheet(lemSheetHead(mk,'KuBiS'),'<form class="lemf" data-form="lem-q"><input type="hidden" name="mk" value="'+mk+'">'+
+    '<p class="muted small" style="margin:2px 0 8px">LEM-Punkte laut Reporting. Es zählt der Bereichswert.</p>'+
+    '<div class="lem-in one"><span><b>Teamscore</b><small>KuBiS Gesamtzufriedenheitsfaktor · 0 bis 55</small></span>'+lemIn('p_kub',q.kub,'Punkte','Teamscore Punkte')+'</div>'+
+    '<div class="lem-in one"><span><b>Cross-Sell ohne Druckverkauf</b><small>0 bis 10</small></span>'+lemIn('p_cs',q.cs,'Punkte','Cross-Sell Punkte')+'</div>'+
     formFoot()+'</form>');
 }
 function openLemProds(){openLemShare()}
@@ -6186,22 +6183,18 @@ function openLemRules(){
 }
 function lemSaveForm(kind,f,d){
   var mk=d.get('mk')||lemMk(),m=lemMon(mk,true),g=function(n){return lemN(d.get(n))};
+  function chk(v,max,n){if(v!=null&&(v<0||v>max)){toast(n+': 0 bis '+max+' Punkte','err');return false}return true}
   if(kind==='v'){m.stk=lemStk({gi:g('st_gi'),gl:g('st_gl'),gs:g('st_gs'),kz:g('st_kz'),ki:g('st_ki'),ks:g('st_ks')});m.vz=g('vz');m.kv=g('kv');m.um={z:g('um_z'),i:g('um_i')};L().prods.forEach(function(p){var z=g('z_'+p.id),i=g('i_'+p.id);if(z==null&&i==null)delete m.v[p.id];else m.v[p.id]={z:z,i:i}})}
-  if(kind==='w'){m.tke={z:g('tke_z'),i:g('tke_i')};m.tko={z:g('tko_z'),i:g('tko_i')};m.ob={z:g('ob_z'),i:g('ob_i')};m.kuki=lemKukiN(g('kuki'));m.agb={a:g('agb_a'),c:g('agb_c'),e:g('agb_e'),s:g('agb_s')};
-    if([m.tke.z,m.tke.i,m.tko.z,m.tko.i,m.ob.z,m.ob.i].some(function(x){return x!=null&&x<0})){toast('Bitte keine negativen Anzahlen','err');return}
-    if(['a','c','e','s'].some(function(k){return m.agb[k]!=null&&(m.agb[k]<0||m.agb[k]>100)})){toast('Quoten liegen zwischen 0 und 100 %','err');return}}
+  if(kind==='w'){var w={tke:g('p_tke'),tko:g('p_tko'),kuki:g('p_kuki'),ob:g('p_ob')};if(!chk(w.tke,18,'TKE')||!chk(w.tko,18,'TKO')||!chk(w.kuki,8,'KUKI')||!chk(w.ob,6,'TBOL'))return;m.wp=w}
+  if(kind==='q'){var q={kub:g('p_kub'),cs:g('p_cs')};if(!chk(q.kub,55,'Teamscore')||!chk(q.cs,10,'Cross-Sell'))return;m.qp=q}
   if(kind==='k'){m.korr=g('korr')}
-  if(kind==='q'){m.ts=g('ts');m.bank=g('bank');m.tsF=g('tsF');m.cs=g('cs');
-    if(m.ts!=null&&(m.ts<0||m.ts>100)||m.cs!=null&&(m.cs<0||m.cs>100)){toast('Teamscore und Cross-Sell liegen zwischen 0 und 100','err');return}}
   UI.lemMk=mk;save();closeModal();if(UI.route!=='goals')go('goals');else rerender();
-  var R=lemCalc(mk,lemPer());toast(kind==='k'?'Korrektur gespeichert':{v:'Verkauf',w:'Wachstum',q:'Qualität'}[kind]+': '+lemF(R[kind].pts)+' LEM-Punkte');
+  var R=lemCalc(mk,lemPer());toast(kind==='k'?'Korrektur gespeichert':{v:'Verkauf',w:'Wachstum',q:'KuBiS'}[kind]+': '+lemF(R[kind].pts)+' LEM-Punkte');
 }
 /* Verkaufspunkte je Person (aus Ergebnissen) */
 function lemPersonVP(e,mk){var r=personRes(e,mk);return {a:r.vp.a||null,t:r.vp.t}}
-function lemRegionVal(mk,id){var R=lemCalc(mk,'m'),w=R.w;if(id==='__lem')return R.complete?R.tot:null;if(id==='__lemv')return R.v.zeN==null?null:Math.round(R.v.zeN*10000)/100;if(id==='__lemw')return w.pts;if(id==='__lemq')return R.q.pts;if(id==='__kubis')return R.q.ts;
-  var m=/^__(tke|tko|ob)_(i|z|ze|p)$/.exec(id);if(m){var c=w[m[1]];if(c.z==null&&c.i==null)return null;return m[2]==='i'?c.i:m[2]==='z'?c.z:m[2]==='ze'?(c.ze==null?null:Math.round(c.ze*100)):c.pts}
-  if(id==='__kuki')return w.kuki.v;if(id==='__kuki_p')return w.kuki.pts;return null}
-var LEM_REG_OPTS=[['__tke_i','Conv. TKE Ist-Anzahl'],['__tke_z','Conv. TKE Ziel-Anzahl'],['__tke_ze','Conv. TKE ZE %'],['__tke_p','Conv. TKE LEM-Score'],['__tko_i','Conv. TKO Ist-Anzahl'],['__tko_z','Conv. TKO Ziel-Anzahl'],['__tko_ze','Conv. TKO ZE %'],['__tko_p','Conv. TKO LEM-Score'],['__kuki','KUKI-Punkte'],['__kuki_p','KUKI LEM-Score'],['__ob_i','TBOL Ist-Anzahl'],['__ob_z','TBOL Ziel-Anzahl'],['__ob_ze','TBOL ZE %'],['__ob_p','TBOL LEM-Score'],['__cnt:kre','Kredite (Stück aus Abschlüssen)'],['__cnt:gk','Girokonten (Stück aus Abschlüssen)'],['__cnt:kk','Kreditkarten (Stück aus Abschlüssen)'],['__cnt:ver','Versicherungen (Stück aus Abschlüssen)'],['__lem','LEM-Punkte gesamt'],['__lemv','LEM Verkauf: Zielerreichung %'],['__lemw','Score Wachstum normiert'],['__lemq','LEM Qualität: Punkte'],['__kubis','KuBiS-Teamscore Bereich']];
+function lemRegionVal(mk,id){var R=lemCalc(mk,'y');if(id==='__lem')return R.complete?R.tot:null;if(id==='__lemvp')return R.v.pts;if(id==='__lemv')return R.v.zeN==null?null:Math.round(R.v.zeN*10000)/100;if(id==='__lemw')return R.w.pts;if(id==='__lemq')return R.q.pts;return null}
+var LEM_REG_OPTS=[['__lem','LEM-Punkte gesamt (Jahr)'],['__lemvp','LEM Verkauf (Punkte)'],['__lemq','LEM KuBiS (Punkte)'],['__lemw','LEM Wachstum (Punkte)']];
 function lemAttention(){
   var o=[],mk=monthKey(),d=new Date();if(!S.employees.length)return o;
   if(!lemMon(mk)&&d.getDate()>=3)o.push({sev:1,icon:'target',c:'#1c7ed6',t:'LEM-Werte für '+monthLabel(mk).split(' ')[0]+' fehlen',s:'Ziele und Stand aus dem Reporting eintragen',act:'go',to:'goals'});
@@ -6222,6 +6215,7 @@ function seedLem(st,by){
     m.v={kre:{z:11000,i:null},ver:{z:400+220*(i-1),i:null},gk:{z:9000,i:null},kk:{z:3000,i:null},bf:{z:1200,i:null}};m.um={z:70000,i:null};
     m.tke={z:3,i:null};m.tko={z:3,i:null};m.kuki=Math.round(1490+(rnd(mk+'ku')-.5)*80);
     m.ob={z:28,i:Math.round(28*f*(.92+rnd(mk+'oi')*.25))};m.agb={a:Math.round((99+rnd(mk+'ag')*.7)*100)/100,c:Math.round((96+rnd(mk+'c')*3)*100)/100,e:Math.round((94+rnd(mk+'e')*3)*100)/100,s:Math.round((95+rnd(mk+'s')*3)*100)/100};
+    m.wp={tke:12+Math.floor(rnd(mk+'wt')*5),tko:12+Math.floor(rnd(mk+'wo')*6),kuki:7+Math.floor(rnd(mk+'wk')*2),ob:3+Math.floor(rnd(mk+'wb')*3)};m.qp={kub:45+Math.floor(rnd(mk+'qk')*6),cs:6+Math.floor(rnd(mk+'qc')*4)};
     m.ts=Math.round((75.2+(rnd(mk+'ts')-.5)*3)*10)/10;m.tsF=Math.round((m.ts+1.4)*10)/10;m.bank=76.6;m.cs=Math.round(73+(rnd(mk+'cs')-.5)*8);
     d.mon[mk]=m;
     var nk=8+Math.floor(rnd(mk+'nk')*4);for(var j=0;j<nk;j++)add(mk,mk+'k'+j,{it:j<6?'kr_neu':'kr_zus',a:Math.round(1200+rnd(mk+'z'+j)*2000),pgf:Math.round((.85+rnd(mk+'p'+j)*.4)*100)/100,vol:Math.round(8000+rnd(mk+'v'+j)*14000),ch:j===7?'ds':'fil',conv:j<6&&j%2===0?'tke':(j>=6&&j<9?'tko':'')});
@@ -6240,13 +6234,13 @@ function seedLem(st,by){
   if(cm>2)d.mon[y+'-'+pad(cm-1)].korr=-1;
 }
 function registerLem(){
-  ROUTES.goals.t='LEM-Ziele';ROUTES.goals.icon='target';ROUTES.goals.fn=function(){return viewLem()};ROUTES.goals.sub=function(){return 'Qualität, Verkauf und Wachstum nach LEM 2026'};
+  ROUTES.goals.t='LEM-Ziele';ROUTES.goals.icon='target';ROUTES.goals.fn=function(){return viewLem()};ROUTES.goals.sub=function(){return 'Verkauf, Wachstum und KuBiS nach LEM 2026'};
   var h=hubById('sales');h.tabs=[['goals','LEM-Ziele'],['sales','Ergebnisse'],['refs','Überleitungen'],['reviews','Google']];
   Object.assign(ACTIONS,{
     'lem-per':function(t){UI.lemPer=t.dataset.v;rerender()},
     'lem-m':function(t){var k=+t.dataset.k;UI.lemMk=k===0?monthKey():shiftMonth(lemMk(),k);rerender()},
     'lem-edit':function(t){var k=t.dataset.v;(k==='v'?openLemV:k==='w'?openLemW:openLemQ)(lemMk())},
-    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'trend',label:'Wachstum: Conversions, KUKI, TBOL',fn:function(){openLemW(lemMk())}},{icon:'star',label:'Qualität: KuBiS und Cross-Sell',fn:function(){openLemQ(lemMk())}},{icon:'edit',label:'Korrektur laut LEM-Übersicht',fn:function(){openLemK(lemMk())}}]})},
+    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'trend',label:'Wachstum: LEM-Punkte',fn:function(){openLemW(lemMk())}},{icon:'star',label:'KuBiS: LEM-Punkte',fn:function(){openLemQ(lemMk())}},{icon:'edit',label:'Korrektur laut LEM-Übersicht',fn:function(){openLemK(lemMk())}}]})},
     'lem-prods':openLemProds,'lem-norm':openLemNorm,'lem-rules':openLemRules,
     'lem-lev-all':function(){UI.lemAllLev=!UI.lemAllLev;rerender()}
   });
@@ -6259,12 +6253,12 @@ function registerLem(){
 }
 function lemVpRow(e,mk){return ''}
 function wgLemS(){var R=lemCalc(monthKey(),'y');if(R.tot==null)return {v:'–',s:'LEM-Werte eintragen',act:'lem-add'};var st=lemPillarState(R.tot,R.exp);return {v:lemF(R.tot),s:'von 150 · '+(R.complete?st.l:'unvollständig'),cls:R.tot>=R.exp?'good-txt':R.tot>=135?'warn-txt':'bad-txt',to:'goals'}}
-function wgLemL(){var R=lemCalc(monthKey(),'y'),c={q:'#0c8599',v:'#1c7ed6',w:'#7048e8'},n={q:'Qualität',v:'Verkauf',w:'Wachstum'};
+function wgLemL(){var R=lemCalc(monthKey(),'y'),c={q:'#0c8599',v:'#1c7ed6',w:'#7048e8'},n={q:'KuBiS',v:'Verkauf',w:'Wachstum'};
   return '<section class="card glass"><a class="card-h wg-lh" href="#/goals"><h2>LEM-Punkte '+monthKey().slice(0,4)+'</h2><span class="muted small">'+(R.tot==null?'–':lemF(R.tot))+' / 150</span>'+ic('right',16)+'</a>'+
-    ['q','v','w'].map(function(k){var p=R[k].pts,st=lemPillarState(p,LEM_EXP[k]);return '<div class="prow"><div class="l"><span>'+n[k]+'</span><span class="muted">'+lemF(p)+' / '+LEM_EXP[k]+'</span></div>'+lemBar(p,LEM_EXP[k],LEM_MAX[k],st.c)+'</div>'}).join('')+
+    ['v','w','q'].map(function(k){var p=R[k].pts,st=lemPillarState(p,LEM_EXP[k]);return '<div class="prow"><div class="l"><span>'+n[k]+'</span><span class="muted">'+lemF(p)+' / '+LEM_EXP[k]+'</span></div>'+lemBar(p,LEM_EXP[k],LEM_MAX[k],st.c)+'</div>'}).join('')+
     (lemLevers(R)[0]?'<p class="muted small" style="margin-top:8px">Größter Hebel: '+esc(lemLevers(R)[0].t)+' (+'+lemLevers(R)[0].g+')</p>':'')+'</section>'}
 function registerLemPage(){
-  PAGE_ACTS.goals=function(){return {add:{label:'LEM-Werte erfassen',fn:function(){ACTIONS['lem-add']()}},menu:[{icon:'swap',label:'Einbuchungen nach 6 Monaten (Girokonto, Karte)',fn:function(){openPr(lemMk())}},{icon:'chart',label:'Verlauf wie im Monatsreport',fn:openLemHist},{icon:'users',label:'Zielverteilung und Baufi-Phase',fn:openLemShare},{icon:'tasks',label:'Verkaufspunkte-Katalog',fn:openLemCatalog},{icon:'chart',label:'Abschlüsse dieses Monats',fn:function(){openDealList(lemMk(),null)}},{icon:'swap',label:'Normierung (Bank-Zielerreichung)',fn:openLemNorm},{icon:'tasks',label:'LEM-Regeln und Tabellen',fn:openLemRules},{icon:'plus',label:'Eigenes Monatsziel',fn:function(){openGoalForm()}},S.goals.length?{icon:'sparkle',label:'Eigene Ziele: neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}:null]}};
+  PAGE_ACTS.goals=function(){return {add:{label:'LEM-Werte erfassen',fn:function(){ACTIONS['lem-add']()}},menu:[{icon:'swap',label:'Einbuchungen nach 6 Monaten (Girokonto, Karte)',fn:function(){openPr(lemMk())}},{icon:'chart',label:'Verlauf wie im Monatsreport',fn:openLemHist},{icon:'settings',label:'Baufi-Phase',fn:openLemShare},{icon:'tasks',label:'Verkaufspunkte-Katalog',fn:openLemCatalog},{icon:'chart',label:'Abschlüsse dieses Monats',fn:function(){openDealList(lemMk(),null)}},{icon:'swap',label:'Normierung (Bank-Zielerreichung)',fn:openLemNorm},{icon:'tasks',label:'LEM-Regeln und Tabellen',fn:openLemRules},{icon:'plus',label:'Eigenes Monatsziel',fn:function(){openGoalForm()}},S.goals.length?{icon:'sparkle',label:'Eigene Ziele: neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}:null]}};
 }
 /* ===================== Filialleiter im KLS ===================== */
 /* Eigene Spalte vorbelegen: Arbeitszeit, Mittag, Termine aus dem App-Kalender */
@@ -6356,6 +6350,8 @@ var LEM_CAT=[
   {id:'ob_kr',p:'kre',g:'Überleitung',n:'Kredit über BzH/LbP',u:'zins',bonus:500,f:0.75,d:'Nach KLS-Überleitung: 75 % eines vergleichbaren Filialkredits, zählt in der TK Verkaufsleistung'},
   {id:'ob_cmp',p:'',g:'Überleitung',n:'Konto oder Karte über BzH/LbP',u:'cmp',d:'100 % eines vergleichbaren Filialabschlusses, zählt beim Produkt'},
   {id:'ob_tav',p:'inv',g:'Überleitung',n:'AB/VB: TAV CNR',d:'500 VP je 1.000 €, Überleitungsquartal + 2 Folgequartale',u:'tsd',vp:500},
+  {id:'cv_tke',p:'',g:'Wachstum',n:'Conversion TKE',u:'cv',conv:'tke'},
+  {id:'cv_tko',p:'',g:'Wachstum',n:'Conversion TKO',u:'cv',conv:'tko'},
   {id:'ob_fonds',p:'inv',g:'Überleitung',n:'AB/VB: Fondsvolumen',d:'10 VP je 1.000 €, Überleitungsquartal + 2 Folgequartale',u:'tsd',vp:10}
 ];
 var LEM_ZW=[['m','monatlich',1],['q','vierteljährlich',3],['h','halbjährlich',6],['j','jährlich',12]];
@@ -6399,8 +6395,8 @@ function dealOnce(d){var c=cat(d.it);if(!c)return 0;if(c.u==='beitrag'||c.u==='e
 function dealsIn(mk,f){f=f||{};return S.deals.filter(function(d){var c=cat(d.it);if(!c)return false;if(f.p&&dealProd(d)!==f.p)return false;if(f.emp!=null&&d.emp!==f.emp)return false;if(c.u==='beitrag'||c.u==='einmal')return dealVP(d,mk)!==0||d.d.slice(0,7)===mk;return d.d.slice(0,7)===mk})}
 function dealSum(mk,f){var s=0,any=false;dealsIn(mk,f).forEach(function(d){s+=dealVP(d,mk);any=true});return any?Math.round(s*10)/10:null}
 function dealCount(mk,f){return dealsIn(mk,f).filter(function(d){return d.d.slice(0,7)===mk&&!d.pr&&dealOnce(d)>0}).reduce(function(a,d){var c=cat(d.it);return a+(c.u==='stk'?(d.a==null?1:d.a):c.u==='cmp'?(d.n||1):1)},0)}
-function convCount(mk,k){return S.deals.filter(function(d){return d.d.slice(0,7)===mk&&d.conv===k&&d.it!=='kr_lia'}).length}
-function normDeals(a){return (Array.isArray(a)?a:[]).filter(function(x){return x&&cat(x.it)&&validISO(x.d)}).slice(-4000).map(function(x){var n=function(v){var r=lemN(v);return r};return {id:str(x.id||uid(),40),pr:/^\d{4}-\d{2}$/.test(x.pr||'')?x.pr:'',d:x.d,emp:str(x.emp,40),it:x.it,a:n(x.a),pgf:n(x.pgf),ch:['fil','ds','onl'].indexOf(x.ch)>-1?x.ch:'fil',conv:['tke','tko'].indexOf(x.conv)>-1?x.conv:'',kons:!!x.kons,vol:n(x.vol),zw:['m','q','h','j'].indexOf(x.zw)>-1?x.zw:'m',lz:n(x.lz),rec:n(x.rec),rate:n(x.rate),noBer:!!x.noBer,kim:!!x.kim,cmp:str(x.cmp,20),n:n(x.n),end:/^\d{4}-\d{2}$/.test(x.end||'')?x.end:'',ref:str(x.ref,30),note:str(x.note,200)}})}
+function convCount(mk,k,emp){var n=0;S.deals.forEach(function(d){if(d.d.slice(0,7)!==mk||(emp!=null&&d.emp!==emp))return;if(d.it==='cv_'+k)n+=(d.a==null?1:d.a);else if(d.conv===k&&d.it!=='kr_lia'&&d.it.indexOf('cv_')!==0)n++});return n}
+function normDeals(a){return (Array.isArray(a)?a:[]).filter(function(x){return x&&cat(x.it)&&validISO(x.d)}).slice(-4000).map(function(x){var n=function(v){var r=lemN(v);return r};return {id:str(x.id||uid(),40),pr:/^\d{4}-\d{2}$/.test(x.pr||'')?x.pr:'',d:x.d,emp:str(x.emp,40),it:x.it,a:n(x.a),pgf:n(x.pgf),ch:['fil','ds','onl'].indexOf(x.ch)>-1?x.ch:'fil',conv:['tke','tko'].indexOf(x.conv)>-1?x.conv:'',kons:!!x.kons,vol:n(x.vol),zw:['m','q','h','j'].indexOf(x.zw)>-1?x.zw:'m',lz:n(x.lz),rec:n(x.rec),rate:n(x.rate),noBer:!!x.noBer,kim:!!x.kim,cmp:str(x.cmp,20),n:n(x.n),end:/^\d{4}-\d{2}$/.test(x.end||'')?x.end:'',ref:str(x.ref,30),note:str(x.note,200),kn:Array.isArray(x.kn)?x.kn.map(function(k){return String(k).replace(/[^0-9A-Za-z-]/g,'').slice(0,20)}).filter(Boolean).slice(0,300):[]}})}
 
 /* ---------- Kennzahlen: LEM-Produkte sind Kennzahlen in Verkaufspunkten ---------- */
 var LEM_MET=[['kre','Kredit (TK Verkaufsleistung)','Kredit','#BC123D','kre'],['rsv','Versicherung Kreditschutz','RSV','#e8590c','vor'],['ver','Versicherung (Netto)','Vers.','#7048e8','vor'],['gk','Girokonto','Giro','#1c7ed6','kon'],['kk','Kreditkarte','Karte','#0c8599','kon'],['fg','Termineinlagen','Anlage','#1f9d55','bed'],['bf','Bauspar/Baufi','Baufi','#3d5a80','kre'],['inv','Überleitung Investment','Invest','#d9780a','zusatz'],['lia','Loan in APP','LiA','#868e96','kre']];
@@ -6462,10 +6458,13 @@ function teamMetricSum(mk,mid){
 
 /* ---------- Abschluss erfassen ---------- */
 function dealWho(id){return id==='me'?'Ich (Filialleitung)':emp(id)?emp(id).name:'Nicht zugeordnet'}
+var DEAL_GRPS=[['kre','Kredit (TK)'],['rsv','Kreditschutz'],['ver','Versicherung'],['gk','Girokonto'],['kk','Kreditkarte'],['fg','Termineinlagen'],['bf','Bauspar/Baufi'],['inv','Investment'],['lia','Loan in App'],['cv','TKE / TKO']];
+function catInGrp(c,p){return !p||c.p===p||(c.id==='ob_cmp'&&(p==='gk'||p==='kk'))}
 function catOptions(sel,p){
-  var gs=[];LEM_CAT.forEach(function(c){if(!catVisible(c)||(p&&c.p!==p))return;if(gs.indexOf(c.g)<0)gs.push(c.g)});
-  return gs.map(function(g){return '<optgroup label="'+esc(g)+'">'+LEM_CAT.filter(function(c){return c.g===g&&catVisible(c)&&(!p||c.p===p)}).map(function(c){return '<option value="'+c.id+'"'+(c.id===sel?' selected':'')+'>'+esc(c.n)+(c.u==='stk'?' · '+num(c.id==='bf_olb'?lemBfVp():c.vp)+' VP':'')+'</option>'}).join('')+'</optgroup>'}).join('');
+  var gs=[];LEM_CAT.forEach(function(c){if(c.u==='cv'||!catVisible(c)||!catInGrp(c,p))return;if(gs.indexOf(c.g)<0)gs.push(c.g)});
+  return gs.map(function(g){return '<optgroup label="'+esc(g)+'">'+LEM_CAT.filter(function(c){return c.g===g&&c.u!=='cv'&&catVisible(c)&&catInGrp(c,p)}).map(function(c){return '<option value="'+c.id+'"'+(c.id===sel?' selected':'')+'>'+esc(c.n)+(c.u==='stk'?' · '+num(c.id==='bf_olb'?lemBfVp():c.vp)+' VP':'')+'</option>'}).join('')+'</optgroup>'}).join('');
 }
+function dealGrpBar(cur){return '<div class="full dgrp" role="group" aria-label="LEM-Bereich">'+DEAL_GRPS.map(function(g){return '<button type="button" class="'+(g[0]===cur?'on':'')+'" data-act="deal-grp" data-v="'+g[0]+'">'+esc(g[1])+'</button>'}).join('')+'</div>'}
 function dIn(name,val,lbl,ph,cls,extra){return '<label class="fld '+(cls||'')+'"><span>'+esc(lbl)+'</span><input name="'+name+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':esc(String(val).replace('.',',')))+'" placeholder="'+esc(ph||'')+'" data-input="deal-calc" '+(extra||'')+'></label>'}
 function dSel(name,opts,val,lbl,cls){return '<label class="fld '+(cls||'')+'"><span>'+esc(lbl)+'</span><select name="'+name+'" data-change="deal-calc">'+opts.map(function(o){return '<option value="'+esc(o[0])+'"'+(String(o[0])===String(val)?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select></label>'}
 function dChk(name,on,lbl,cls){return '<label class="fld sw-l '+(cls||'full')+'"><span class="sw-t"><b>'+esc(lbl)+'</b></span><input type="checkbox" class="sw" name="'+name+'" value="1"'+(on?' checked':'')+' data-change="deal-calc"></label>'}
@@ -6473,7 +6472,7 @@ function openDealForm(pre,id){
   var d=id?byId(S.deals,id):null;pre=pre||{};
   var it=pre.it||(d&&d.it)||(pre.p?LEM_CAT.filter(function(c){return c.p===pre.p&&catVisible(c)})[0].id:'gk_std');
   d=d?Object.assign({},d):{d:pre.d||todayISO(),emp:pre.emp!=null?pre.emp:'',it:it,a:null,pgf:1,ch:'fil',conv:'',zw:'m',ref:pre.ref||'',note:''};
-  if(pre.it)d.it=pre.it;UI.dealDraft=d;UI.dealId=id||'';renderDealForm();
+  if(pre.it)d.it=pre.it;if(cat(d.it)&&cat(d.it).u==='cv'){openConvForm({emp:d.emp,d:d.d},id);return}d.grp=pre.p||dealProd(d)||'kre';UI.dealDraft=d;UI.dealId=id||'';renderDealForm();
 }
 function renderDealForm(){
   var d=UI.dealDraft,c=cat(d.it)||cat('gk_std'),id=UI.dealId;
@@ -6493,10 +6492,10 @@ function renderDealForm(){
   if(c.u==='cmp')f='<label class="fld full"><span>Vergleichbarer Filialabschluss</span><select name="cmp" data-change="deal-calc">'+LEM_CAT.filter(function(x){return (x.p==='gk'||x.p==='kk')&&x.vp>0}).map(function(x){return '<option value="'+x.id+'"'+(x.id===d.cmp?' selected':'')+'>'+esc(x.g+': '+x.n)+' · '+x.vp+' VP</option>'}).join('')+'</select></label>'+dIn('n',d.n==null?1:d.n,'Anzahl','1','');
   var vp=dealPreview();
   openModal('<div class="m-head"><div><h3>'+(id?'Abschluss bearbeiten':'Abschluss erfassen')+'</h3><span class="muted small">Verkaufspunkte nach LEM 2026</span></div>'+X()+'</div><form class="form dealf" data-form="deal">'+
-    '<label class="fld full"><span>Produkt</span><select name="it" data-change="deal-it">'+catOptions(d.it)+'</select></label>'+(c.d?'<p class="full muted small" style="margin-top:-6px">'+esc(c.d)+'</p>':'')+
+    (id?'':dealGrpBar(d.grp||dealProd(d)))+'<label class="fld full"><span>Produkt</span><select name="it" data-change="deal-it">'+catOptions(d.it,id?'':(d.grp||dealProd(d)))+'</select></label>'+(c.d?'<p class="full muted small" style="margin-top:-6px">'+esc(c.d)+'</p>':'')+
     dSel('emp',who,d.emp,'Wer','')+'<label class="fld"><span>Datum</span><input name="d" type="date" value="'+esc(d.d)+'" required data-change="deal-calc"></label>'+f+
     '<label class="fld"><span>Interne Referenz</span><input name="ref" value="'+esc(d.ref||'')+'" maxlength="30" placeholder="z. B. A-112" autocomplete="off"></label><label class="fld"><span>Notiz</span><input name="note" value="'+esc(d.note||'')+'" maxlength="200" autocomplete="off"></label>'+
-    '<p class="full muted small">Keine Kundennamen oder Kundennummern erfassen.</p>'+
+    '<p class="full muted small">Keine Kundennamen erfassen.</p>'+
     '<div class="full deal-vp" id="dealVp">'+vp+'</div>'+
     formFoot((id?'<button type="button" class="btn danger left" data-act="deal-del" data-id="'+esc(id)+'" aria-label="Löschen">'+ic('trash',15)+'</button>':'')+'<button type="button" class="btn" data-act="modal-close">Abbrechen</button>')+'</form>','sm');
 }
@@ -6529,7 +6528,7 @@ function openDealList(mk,empId){
   var rat=S.deals.filter(function(d){var c=cat(d.it);return (c.u==='beitrag'||c.u==='einmal')&&d.d.slice(0,7)<mk&&dealVP(d,mk)>0&&(empId==null||d.emp===empId)});
   var sum=l.concat(rat).reduce(function(a,d){return a+dealVP(d,mk)},0);
   sheet('Abschlüsse · '+esc(monthLabel(mk)),'<p class="muted small" style="margin-bottom:10px">'+(empId!=null?esc(dealWho(empId))+' · ':'')+num(Math.round(sum))+' VP in diesem Monat'+(rat.length?' · davon '+num(Math.round(rat.reduce(function(a,d){return a+dealVP(d,mk)},0)))+' VP ratierlich aus früheren Versicherungen':'')+'</p>'+
-    (l.length?lgroup('',l.slice(0,80).map(function(d){var c=cat(d.it);return li({t:esc(c.n)+(d.pr?' · '+(d.a||1)+'×':''),s:esc(fmt(d.d,{day:'2-digit',month:'2-digit'})+' · '+dealWho(d.emp)+(d.pr?' · Einbuchung aus '+monthLabel(d.pr):'')+(d.ref?' · '+d.ref:'')),v:'<b>'+(c.u==='beitrag'||c.u==='einmal'?dec(dealVP(d,mk),2):num(Math.round(dealVP(d,mk))))+'</b> VP',act:'deal-open',id:d.id})})):'<p class="muted">Noch keine Abschlüsse in diesem Monat.</p>'),
+    (l.length?lgroup('',l.slice(0,80).map(function(d){var c=cat(d.it);return li({t:esc(c.n)+(d.pr||c.u==='cv'?' · '+(d.a||1)+'×':''),s:esc(fmt(d.d,{day:'2-digit',month:'2-digit'})+' · '+dealWho(d.emp)+(d.pr?' · Einbuchung aus '+monthLabel(d.pr):'')+(d.ref?' · '+d.ref:'')),v:'<b>'+(c.u==='beitrag'||c.u==='einmal'?dec(dealVP(d,mk),2):num(Math.round(dealVP(d,mk))))+'</b> VP',act:'deal-open',id:d.id})})):'<p class="muted">Noch keine Abschlüsse in diesem Monat.</p>'),
     '<div class="m-foot"><button class="btn" data-act="modal-close">Schließen</button><button class="btn primary" data-act="deal-new" data-emp="'+(empId||'')+'">'+ic('plus',15)+' Abschluss</button></div>');
 }
 function openLemCatalog(){
@@ -6537,11 +6536,11 @@ function openLemCatalog(){
   sheet('Verkaufspunkte-Katalog',gs.map(function(g){return '<h6 class="ml-h">'+esc(g)+'</h6><table class="lem-t"><tbody>'+LEM_CAT.filter(function(c){return c.g===g}).map(function(c){var v=c.u==='stk'?num(c.id==='bf_olb'?lemBfVp():c.vp)+' VP':c.u==='zins'?(c.f?'75 %':'Formel'):c.u==='tsd'?num(c.vp)+' VP / 1.000 €':c.u==='beitrag'||c.u==='einmal'?'1 VP / 1 € mtl.':c.u==='cmp'?'100 %':'Reporting';return '<tr'+(catVisible(c)?'':' class="muted"')+'><td>'+esc(c.n)+(c.d?'<small class="muted" style="display:block">'+esc(c.d)+'</small>':'')+'</td><td>'+v+'</td></tr>'}).join('')+'</tbody></table>'}).join('')+
     '<h6 class="ml-h">Kredit-Wertung</h6><p class="muted small">Es zählen Filial- und BzH-Kredite, keine Konsolidierungen. Filial-Telefonkredite über Direct Sales 100 %. Überleitung an Online: keine Punkte. BzH- oder LbP-Kredit nach KLS-Überleitung: 75 % (Ausnahme: stark verflochtene Kunden direkt bei LbP). Zusatzkredite nur mit dem neuen Anteil. 500 Bonus je Neukredit, TKE-Conversions zählen als Neukredit, TKO-Conversions erhalten den Bonus ebenfalls.</p>'+
     '<h6 class="ml-h">Versicherungen</h6><p class="muted small">Punkte auf die Prämie je Zahlweise, ratierlich jeden Monat. Stand-alone: Punkte für Empfehlungen aus dem System; über der Empfehlung keine Punkte, darunter 75 %. Ohne Beratung im 1. und 2. Jahr keine Punkte, ab dem 3. Jahr auf die tatsächliche Prämie. Kredit-RSV höchstens 34 % der Monatsrate, fließt nicht in die Bestandskomponente. Keine Punkte für kapitalbildende Versicherungen nach KIM-Kreditablehnung (3 Monate).</p>'+
-    '<h6 class="ml-h">Baufinanzierung</h6><p class="muted small">Vor der Umstellung über Planet Home (Punkte wie 2025). Nach der Umstellung nur noch Überleitung an OLB über die Baufi-Hubs, gebucht von qualifizierten Beratern: Erprobungsphase 750, Roll-Out 1.000 Punkte je gebuchtem Kredit für die überleitende Filiale. Einstellung unter ⋯ → Zielverteilung.</p>',
+    '<h6 class="ml-h">Baufinanzierung</h6><p class="muted small">Vor der Umstellung über Planet Home (Punkte wie 2025). Nach der Umstellung nur noch Überleitung an OLB über die Baufi-Hubs, gebucht von qualifizierten Beratern: Erprobungsphase 750, Roll-Out 1.000 Punkte je gebuchtem Kredit für die überleitende Filiale. Einstellung unter LEM-Ziele → ⋯ → Baufi-Phase.</p>',
     '<div class="m-foot"><button class="btn primary" data-act="modal-close">Fertig</button></div>');
 }
 /* Zielverteilung, Baufi-Phase, Online-Banking-Ziel */
-function openLemShare(){
+function openLemShareOld(){
   var c=lemCfg(),ppl=[{id:'me',n:'Ich (Filialleitung)'}].concat(S.employees.map(function(e){return {id:e.id,n:e.name,h:e.hours}}));
   sheet('Zielverteilung','<form class="form" data-form="lem-share"><p class="full muted small">Das Filialziel je Produkt wird nach diesen Anteilen auf das Team verteilt. Standard: Wochenstunden ÷ 39. Leer = Standard, 0 = kein persönliches Verkaufsziel.</p>'+
     ppl.map(function(p){var s=(L().share||{})[p.id];return '<div class="full lem-sh"><span><b>'+esc(p.n)+'</b><small>'+(p.id==='me'?'Standard 0':'Standard '+dec((p.h||39)/39,2))+' · aktuell '+Math.round(lemShareOf(p.id)*100)+' %</small></span><input name="s_'+esc(p.id)+'" type="text" inputmode="decimal" value="'+(s==null?'':String(s).replace('.',','))+'" placeholder="'+(p.id==='me'?'0':dec((p.h||39)/39,2))+'" aria-label="Anteil '+esc(p.n)+'"></div>'}).join('')+
@@ -6557,6 +6556,14 @@ function saveLemShare(f,d){
 function migrateLemMetrics(b){
   if(!Array.isArray(b.metrics))b.metrics=[];
   var dup={m_kre:'kre',m_kon:'gk',m_ver:'ver'};
+  if(b.lemMig===2||(b.lemMig<3&&b.lemMig>0)){
+    /* Nur Teamziele: weitere Kennzahlen und Überleitungen vom Personen- auf das Teamziel umrechnen, Einzelziele entfernen */
+    var emps=b.employees||[],pr=!b.settings||b.settings.prorate!==false;
+    b.metrics.forEach(function(m){if(m.lem)return;var t=0;emps.forEach(function(e){var v=m.t;if(pr&&e.hours>0&&e.hours<39)v=v*e.hours/39;t+=v});if(emps.length)m.t=Math.round(t*10)/10});
+    if(b.sales)b.sales.targets={};if(b.settings&&emps.length&&b.settings.refTarget>0)b.settings.refTarget=b.settings.refTarget*emps.length;
+    if(b.region){var keep={};b.region.kpis=DEF_KPIS.map(function(k){return Object.assign({},k)});b.region.kpis.forEach(function(k){keep[k.id]=1});Object.keys(b.region.data||{}).forEach(function(mk){Object.keys(b.region.data[mk]).forEach(function(bid){var o=b.region.data[mk][bid];Object.keys(o).forEach(function(k){if(!keep[k])delete o[k]})})})}
+    b.lemMig=3;
+  }
   if(!b.lemMig){
     b.metrics=b.metrics.filter(function(m){return !dup[m.id]});
     (b.goals||[]).forEach(function(g){if(dup[g.metric]){g.metric='__lp:'+dup[g.metric];g.unit='VP'}});
@@ -6569,6 +6576,7 @@ function migrateLemMetrics(b){
     (b.goals||[]).forEach(function(g){if(g.metric==='__lp:ob')g.metric='__lp:inv'});
     b.lemMig=2;
   }
+  if(b.lemMig===2)migrateLemMetrics(b);
   var ids=LEM_MET.map(function(x){return x[0]}),seen={};
   b.metrics=b.metrics.filter(function(m){if(!m.lem)return true;if(seen[m.lem]||ids.indexOf(m.lem)<0)return false;seen[m.lem]=1;return true});
   var lm=lemMetrics().map(function(n){var o=b.metrics.filter(function(m){return m.lem===n.lem})[0];if(o){o.n=n.n;o.s=n.s;o.unit='VP';return o}return n});
@@ -6577,7 +6585,8 @@ function migrateLemMetrics(b){
 function registerVp(){
   Object.assign(ACTIONS,{
     'deal-new':function(t){closeModal();openDealForm({emp:t&&t.dataset?t.dataset.emp||'':'',p:t&&t.dataset?t.dataset.p:''})},
-    'deal-open':function(t){var x=byId(S.deals,t.dataset.id);if(x&&x.pr){closeModal();openPr(shiftMonth(x.pr,6));return}openDealForm(null,t.dataset.id)},
+    'deal-open':function(t){var x=byId(S.deals,t.dataset.id);if(x&&x.pr){closeModal();openPr(shiftMonth(x.pr,6));return}if(x&&x.it.indexOf('cv_')===0){openConvForm(null,x.id);return}openDealForm(null,t.dataset.id)},
+    'deal-grp':function(t){var g=t.dataset.v;if(!$('#modal-root form[data-form=deal]')){if(g==='cv')return;openDealForm({p:g});return}UI.dealDraft=dealFromForm();if(g==='cv'){openConvForm({emp:UI.dealDraft.emp,d:UI.dealDraft.d});return}UI.dealDraft.grp=g;var c=LEM_CAT.filter(function(x){return x.u!=='cv'&&catVisible(x)&&catInGrp(x,g)})[0];if(c){UI.dealDraft.it=c.id;if(c.u==='stk'&&UI.dealDraft.a==null)UI.dealDraft.a=1}keepScroll(renderDealForm)},
     'deal-del':function(t){var id=t.dataset.id;confirmBox('Abschluss löschen?','Die Verkaufspunkte werden wieder abgezogen.','Löschen',function(){S.deals=S.deals.filter(function(x){return x.id!==id});save();closeModal();rerender();toast('Abschluss gelöscht')})},
     'deal-list':function(t){openDealList(UI.salesMonth||monthKey(),t&&t.dataset&&t.dataset.emp!=null&&t.dataset.emp!==''?t.dataset.emp:null)},
     'lem-cat':openLemCatalog,'lem-share':openLemShare
@@ -6597,8 +6606,6 @@ function lemCheck(mk){
   var coh=shiftMonth(mk,-6);if(mk<=monthKey()&&!L().pr[coh]&&(prSold(S.deals,coh,'gk')||prSold(S.deals,coh,'kk')))o.push({c:'#1c7ed6',t:'Einbuchungen nach 6 Monaten für '+monthLabel(coh).split(' ')[0]+' fehlen',s:'Gehaltseingang, Limit, Kartennutzung und Löschungen aus den Verkäufen von '+monthLabel(coh)+' eintragen.',act:'pr-open',v:mk});
   if(m)L().prods.forEach(function(p){var x=m.v[p.id];if(!x||x.i==null)return;var a=dealSum(mk,{p:p.id});if(a!=null&&Math.abs(a-x.i)>=Math.max(50,x.i*.05))o.push({c:'#d9780a',t:p.n+': Reporting '+num(Math.round(x.i))+' VP, App '+num(Math.round(a))+' VP',s:'Abweichung '+(a>x.i?'+':'')+num(Math.round(a-x.i))+' VP. Für die LEM zählt das Reporting; fehlende oder doppelte Abschlüsse prüfen.',act:'deal-list'})});
   var un=S.deals.filter(function(d){return d.d.slice(0,7)===mk&&!d.emp}).length;if(un)o.push({c:'#7b8794',t:un+' '+plural(un,'Abschluss','Abschlüsse')+' ohne Person',s:'Zählen für die Filiale, aber für niemanden im Team.',act:'deal-list'});
-  if(S.employees.length&&lemShareSum()<=0)o.push({c:'#c92a3a',t:'Zielverteilung ergibt 0',s:'Niemand hat einen Anteil am Filialziel.',act:'lem-share'});
-  var me=lemShareOf('me');if(me>0)o.push({c:'#1c7ed6',t:'Du trägst '+Math.round(me*100)+' % des Filialziels',s:'Das Teamziel ist entsprechend kleiner.',act:'lem-share'});
   return o;
 }
 function lemCheckCard(mk){var l=lemCheck(mk);if(!l.length)return '';
@@ -6675,13 +6682,13 @@ function openLemHist(){
   function tr(k,cells){return '<tr'+(k===mk?' class="on"':'')+'><td>'+ml(k)+'</td>'+cells.map(function(c){return '<td>'+c+'</td>'}).join('')+'</tr>'}
   function pc(z){return z==null?'–':dec(z*100,z*100>=1000?0:1)+'&nbsp;%'}
   var prods=L().prods.filter(function(p){return ms.some(function(k){var m=lemMon(k);return m&&m.v[p.id]&&m.v[p.id].z!=null})}),sh={};LEM_MET.forEach(function(x){sh[x[0]]=x[2]});
-  var t1=tb(['','LEM YTD','Verkauf','Qualität','Wachstum'],ms.map(function(k){var R=Y[k];return tr(k,[lemF(R.tot),lemF(R.v.pts),lemF(R.q.pts),lemF(R.w.pts)])}));
+  var t1=tb(['','LEM YTD','Verkauf','Wachstum','KuBiS'],ms.map(function(k){var R=Y[k];return tr(k,[lemF(R.tot),lemF(R.v.pts),lemF(R.w.pts),lemF(R.q.pts)])}));
   var t2=tb(['','Ziel','Ist','ZE','ZE YTD'],ms.map(function(k){var R=M[k];return tr(k,[R.v.ziel==null?'–':num(Math.round(R.v.ziel)),num(Math.round(R.v.ist)),pc(R.v.ze),pc(Y[k].v.zeN)])}));
   var t3=prods.length?tb([''].concat(prods.map(function(p){return sh[p.id]||esc(p.n)})).concat(['TK Umsatz']),ms.map(function(k){var R=M[k];return tr(k,prods.map(function(p){var x=R.v.prods.filter(function(z){return z.p.id===p.id})[0];return pc(x&&x.ze)}).concat([pc(R.v.um.ze)]))})):'<p class="muted small">Noch keine Produktziele erfasst.</p>';
-  var t4=tb(['','TKE','TKO','KUKI','TBOL','Score'],ms.map(function(k){var w=M[k].w;return tr(k,[pc(w.tke.ze),pc(w.tko.ze),w.kuki.v==null?'–':num(w.kuki.v),pc(w.ob.ze),lemF(w.pts)])}));
+  var t4=tb(['','TKE','TKO','KUKI','TBOL','Summe','Stück TKE','Stück TKO'],ms.map(function(k){var w=M[k].w;return tr(k,[lemF(w.tke.pts),lemF(w.tko.pts),lemF(w.kuki.pts),lemF(w.ob.pts),lemF(w.pts),num(w.tke.n),num(w.tko.n)])}));
   var t5=tb(['','GK','Limit','SME','Karten','Ziel','ZE'],ms.map(function(k){var c=lemStkCalc([k]);return tr(k,[c.gi==null?'–':num(c.gi),c.gl==null?'–':num(c.gl),c.gs==null?'–':num(c.gs),c.ki==null?'–':num(c.ki),c.kz==null?'–':num(Math.round(c.kz)),pc(c.kz>0&&c.ki!=null?c.ki/c.kz:null)])}));
   sheet('Verlauf '+y,'<p class="muted small">LEM-Scores jeweils im Jahr bis zum Monat (wie „Score LEM YTD“), Zielerreichungen je Monat.</p>'+
-    '<h6 class="ml-h">LEM Verkauf & Gesamt</h6>'+t1+'<h6 class="ml-h">Verkaufsleistung</h6>'+t2+'<h6 class="ml-h">Zielerreichung Produkte</h6>'+t3+'<h6 class="ml-h">Wachstum je Monat</h6>'+t4+'<h6 class="ml-h">Stückzahlen Girokonto und Kreditkarte</h6>'+t5,
+    '<h6 class="ml-h">LEM Verkauf & Gesamt</h6>'+t1+'<h6 class="ml-h">Verkaufsleistung</h6>'+t2+'<h6 class="ml-h">Zielerreichung Produkte</h6>'+t3+'<h6 class="ml-h">Wachstum (LEM-Punkte)</h6>'+t4+'<h6 class="ml-h">Stückzahlen Girokonto und Kreditkarte</h6>'+t5,
     '<div class="m-foot"><button class="btn primary" data-act="modal-close">Fertig</button></div>');
 }
 
@@ -6730,13 +6737,192 @@ function registerPr(){
     'pr-open':function(t){closeModal();openPr(t&&t.dataset&&(t.dataset.v||t.dataset.id)||monthKey())},
     'pr-m':function(t){openPr(shiftMonth(UI.prMk||monthKey(),+t.dataset.k))},
     'lem-hist':openLemHist,'reg-tpl-w':regTplW,
-    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'swap',label:'Einbuchungen nach 6 Monaten (Girokonto, Karte)',fn:function(){openPr(lemMk())}},{icon:'trend',label:'Wachstum: Conversions, KUKI, TBOL',fn:function(){openLemW(lemMk())}},{icon:'star',label:'Qualität: KuBiS und Cross-Sell',fn:function(){openLemQ(lemMk())}},{icon:'edit',label:'Korrektur laut LEM-Übersicht',fn:function(){openLemK(lemMk())}}]})}
+    'lem-add':function(){openActions({title:'LEM-Werte · '+monthLabel(lemMk()),items:[{icon:'chart',label:'Verkauf: Ziele und Verkaufspunkte',fn:function(){openLemV(lemMk())}},{icon:'swap',label:'Einbuchungen nach 6 Monaten (Girokonto, Karte)',fn:function(){openPr(lemMk())}},{icon:'trend',label:'Wachstum: LEM-Punkte',fn:function(){openLemW(lemMk())}},{icon:'star',label:'KuBiS: LEM-Punkte',fn:function(){openLemQ(lemMk())}},{icon:'plus',label:'Conversions TKE/TKO erfassen',fn:function(){openConvForm({})}},{icon:'edit',label:'Korrektur laut LEM-Übersicht',fn:function(){openLemK(lemMk())}}]})}
   });
   INPUTS['pr-calc']=function(){var x=prFromForm(),coh=shiftMonth(UI.prMk||monthKey(),-6),el=$('#prVp');if(el)el.innerHTML=prPreview(x.c,x.n,prSold(S.deals,coh,'gk'),prSold(S.deals,coh,'kk'))};
   FORMS.pr=savePr;
-  var reg=PAGE_ACTS.region;if(reg)PAGE_ACTS.region=function(){var o=reg();o.menu=(o.menu||[]).concat([{icon:'trend',label:'Vorlage: Wachstum je Filiale',fn:regTplW}]);return o};
   var sal=PAGE_ACTS.sales;if(sal)PAGE_ACTS.sales=function(){var o=sal();(o.menu||[]).splice(1,0,{icon:'swap',label:'Einbuchungen nach 6 Monaten',fn:function(){openPr(UI.salesMonth||monthKey())}});return o};
   QA_ALL.pr=['swap','Einbuchung 6. Monat'];
+}
+/* ===================== Teamziele, Conversions, Hochrechnung, schlanke Planung (Runde 15) ===================== */
+
+/* ---------- Hochrechnung laufender Monat ---------- */
+function lemFcBox(R){
+  var v=R.v;if(v.fcVP==null)return '';var wd=lemWd(monthKey());
+  return '<div class="fc-box"><span>'+ic('trend',16)+'</span><div class="grow"><b>Hochrechnung Monatsende: '+num(Math.round(v.fcVP))+' VP'+(v.fc!=null?' · '+dec(v.fc*100,1)+' %':'')+(v.fcPts!=null?' · '+lemF(v.fcPts)+' Punkte':'')+'</b>'+
+    '<small>'+(R.per==='y'?'Jahr bis Monatsende, laufender Monat hochgerechnet':'Laufender Monat hochgerechnet')+' · nach '+wd.past+' von '+wd.all+' Arbeitstagen'+(v.pace<.2?' · noch unsicher':'')+'</small></div></div>';
+}
+
+/* ---------- Nur Teamziele ---------- */
+function metTarget(e,m,mk){return {v:0,own:false}}
+function teamTarget(m,mk){if(m.lem){var z=lemProdZiel(mk,m.lem);return z==null?0:z}return m.t||0}
+function teamAct(m,mk){if(m.lem)return dealSum(mk,{p:m.lem})||0;var a=0;S.employees.forEach(function(e){a+=metAct(mk,e,m)||0});return a}
+function teamRes(mk){var pace=monthPace(mk);return S.metrics.map(function(m){var a=teamAct(m,mk),t=teamTarget(m,mk);return {m:m,a:a,t:t,st:metState(a,t,pace)}})}
+function personRes(e,mk){
+  var pace=monthPace(mk),rows=S.metrics.map(function(m){var a=metAct(mk,e,m);return {m:m,t:{v:0,own:false},a:a,st:{k:'na',l:'',c:'#7b8794',p:0}}});
+  var va=rows.filter(function(r){return r.m.lem}).reduce(function(s,r){return s+(r.a||0)},0);
+  return {rows:rows,pace:pace,entered:rows.some(function(r){return r.a!=null&&r.a!==0}),avg:0,vp:{a:va,t:0},st:{k:'na',l:'Teamziel',c:'#7b8794',p:0}};
+}
+function salesHints(){return {low:[],high:[]}}
+function teamVP(mk){return dealSum(mk,{})||0}
+function salesRows(mk){
+  var pace=monthPace(mk),R=lemCalc(mk,'m'),cur=mk===monthKey(),fcBy={};R.v.prods.forEach(function(x){fcBy[x.p.id]=x.fc});
+  return teamRes(mk).filter(function(x){return x.t>0||x.a>0}).map(function(x){var p=x.t>0?Math.min(100,Math.round(x.a/x.t*100)):0,fc=cur&&x.m.lem?fcBy[x.m.lem]:null;
+    return '<div class="prow"><div class="l"><span>'+esc(x.m.n)+'</span><span class="muted">'+fmtV(x.m,x.a)+(x.t>0?' / '+fmtV(x.m,x.t):' · ohne Ziel')+(fc!=null?' · <b class="fc-t">→ '+Math.round(fc*100)+' %</b>':'')+'</span></div><div class="bar"><i class="'+(x.t>0?barCls(x.st):'')+'" data-w="'+p+'"></i>'+(pace>.03&&pace<.97&&x.t>0?'<b class="pace" style="left:'+Math.round(pace*100)+'%"></b>':'')+'</div></div>'}).join('');
+}
+function viewSales(){
+  var mk=UI.salesMonth||monthKey();UI.salesMonth=mk;
+  if(!S.employees.length)return '<section class="glass rise">'+empty('users','Noch keine Mitarbeitenden','Lege dein Team an, dann kannst du Ergebnisse erfassen.','<button class="btn primary" data-act="emp-new">'+ic('plus',16)+' Mitarbeiter anlegen</button>')+'</section>';
+  var pace=monthPace(mk),cur=mk===monthKey(),R=lemCalc(mk,'m');
+  var tool='<div class="toolbar rise">'+monthNav(mk,'sales-m')+'</div>';
+  var team='<section class="card glass rise s12"><div class="card-h"><h2>Teamziel</h2><span class="sub">'+(cur?'Monat zu '+Math.round(pace*100)+' % vorbei':(mk<monthKey()?'Monat abgeschlossen':'Zukünftiger Monat'))+'</span></div>'+
+    (R.v.ziel?'<a class="vp-sum link" href="#/goals"><b>'+num(Math.round(R.v.ist))+'</b><span>von '+num(Math.round(R.v.ziel))+' Verkaufspunkten · '+(R.v.ze==null?'–':dec(R.v.ze*100,1)+' %')+(cur?'':' = '+lemF(R.v.pts)+' Punkte im Monat')+'</span></a>':'<p class="muted small">Noch kein LEM-Ziel für diesen Monat. Unter LEM-Ziele eintragen.</p>')+
+    (cur?lemFcBox(R):'')+salesRows(mk)+'</section>';
+  var ce=convCount(mk,'tke'),co=convCount(mk,'tko');
+  var conv='<section class="card glass rise s12 conv-c"><div class="card-h"><h2>Wachstum</h2><span class="sub">Conversions im Monat</span></div><div class="conv-n"><div><b>'+ce+'</b><span>TKE</span></div><div><b>'+co+'</b><span>TKO</span></div><button class="btn sm primary" data-act="conv-new">'+ic('plus',14)+' Erfassen</button></div></section>';
+  var tot=teamVP(mk),people=[{id:'me',name:S.settings.manager||'Ich',role:'Filialleitung'}].concat(S.employees).map(function(e){var a=dealSum(mk,{emp:e.id})||0,te=convCount(mk,'tke',e.id),to=convCount(mk,'tko',e.id);return {e:e,a:a,te:te,to:to}}).filter(function(x){return x.e.id!=='me'||x.a||x.te||x.to});
+  var un=dealSum(mk,{emp:''})||0,mx=Math.max.apply(null,people.map(function(x){return x.a}).concat([1]));
+  var list='<section class="card glass rise s12"><div class="card-h"><h2>Beitrag im Team</h2><span class="sub">Verkaufspunkte und Conversions je Person</span></div>'+
+    people.sort(function(a,b){return b.a-a.a}).map(function(x){return '<div class="contrib click" data-act="deal-list" data-emp="'+esc(x.e.id)+'" tabindex="0">'+avatar(x.e.name,'sm')+'<div class="grow"><div class="cb-t"><b>'+esc(x.e.name.split(' ')[0])+'</b><span class="muted small">'+num(Math.round(x.a))+' VP'+(tot>0?' · '+Math.round(x.a/tot*100)+' %':'')+(x.te||x.to?' · TKE '+x.te+' · TKO '+x.to:'')+'</span></div><div class="bar"><i data-w="'+Math.max(0,Math.round(x.a/mx*100))+'"></i></div></div></div>'}).join('')+
+    (un?'<p class="muted small" style="margin-top:8px">Nicht zugeordnet: '+num(Math.round(un))+' VP</p>':'')+'</section>';
+  var note='<p class="muted small s12" style="padding:0 4px">Es gibt nur Teamziele. Der Beitrag je Person zeigt, wer was erfasst hat, ohne Einzelziel. Ergebnisdaten sind Leistungsdaten: Datenschutz und Mitbestimmung (Betriebsrat) beachten.</p>';
+  return tool+'<div class="grid">'+team+conv+list+note+'</div>';
+}
+function tabSales(e){
+  var mk=UI.salesMonth||monthKey();UI.salesMonth=mk;
+  var tot=teamVP(mk),a=dealSum(mk,{emp:e.id})||0,rows=S.metrics.map(function(m){return {m:m,a:metAct(mk,e,m)}}).filter(function(r){return r.a});
+  var main='<section class="card glass rise s7"><div class="card-h"><h2>Beitrag zum Teamziel</h2></div>'+monthNav(mk,'sales-m')+'<div style="height:10px"></div>'+
+    '<div class="vp-sum"><b>'+num(Math.round(a))+'</b><span>Verkaufspunkte'+(tot>0?' · '+Math.round(a/tot*100)+' % des Teams':'')+' · TKE '+convCount(mk,'tke',e.id)+' · TKO '+convCount(mk,'tko',e.id)+'</span></div>'+
+    (rows.length?rows.map(function(r){return '<div class="row"><div class="grow"><b>'+esc(r.m.n)+'</b></div><span>'+fmtV(r.m,r.a)+'</span></div>'}).join(''):'<p class="muted small">Noch nichts erfasst in diesem Monat.</p>')+
+    '<div class="btn-row" style="margin-top:14px"><button class="btn primary" data-act="sales-new" data-emp="'+esc(e.id)+'">'+ic('plus',15)+' Abschluss</button><button class="btn" data-act="conv-new" data-emp="'+esc(e.id)+'">'+ic('plus',15)+' Conversion</button><button class="btn" data-act="deal-list" data-emp="'+esc(e.id)+'">'+ic('tasks',15)+' Liste</button></div></section>';
+  var months=[];for(var k=-5;k<=0;k++)months.push(shiftMonth(monthKey(),k));
+  var vals=months.map(function(m){return dealSum(m,{emp:e.id})||0});
+  var trend='<section class="card glass rise s5"><div class="card-h"><h2>Verlauf</h2><span class="sub">Verkaufspunkte je Monat</span></div>'+(vals.some(function(v){return v})?'<div style="display:flex;justify-content:center;margin-bottom:10px">'+sparkline(vals,200,46)+'</div>'+months.map(function(m,i){return '<div class="row"><div class="grow"><b>'+esc(monthLabel(m))+'</b></div><span>'+num(Math.round(vals[i]))+' VP</span></div>'}).join(''):'<p class="muted small">Noch keine Abschlüsse.</p>')+'</section>';
+  return '<div class="grid">'+main+trend+'</div>';
+}
+function openSalesForm(empId,mk){
+  if(!S.employees.length){toast('Lege zuerst einen Mitarbeiter an','warn');return}
+  if(!manualMets().length){toast('Es gibt keine weiteren Kennzahlen. Verkäufe erfasst du als Abschluss.','warn');return}
+  mk=mk||UI.salesMonth||monthKey();var e=emp(empId)||S.employees[0];UI.salesMonth=mk;
+  var rows=manualMets().map(function(m){var a=metAct(mk,e,m);
+    return '<div class="full sf-row"><div class="sf-l"><b>'+esc(m.n)+'</b><span class="muted small">Teamziel '+fmtV(m,m.t)+' · Team bisher '+fmtV(m,teamAct(m,mk))+'</span></div><div class="stepper"><button type="button" class="cb" data-act="sf-step" data-n="'+esc(m.id)+'" data-s="-'+stepFor(m)+'" aria-label="weniger">−</button><input name="v_'+esc(m.id)+'" type="number" inputmode="decimal" min="0" step="any" value="'+(a==null?'':a)+'" aria-label="'+esc(m.n)+'"><button type="button" class="cb" data-act="sf-step" data-n="'+esc(m.id)+'" data-s="'+stepFor(m)+'" aria-label="mehr">+</button></div></div>'}).join('');
+  var sel=SEL('Mitarbeiter','emp',empOpts(false),e.id,'full').replace('<select name="emp"','<select name="emp" data-change="sf-person"');
+  openModal('<div class="m-head"><div><h3>Weitere Kennzahlen</h3><span class="muted small">'+esc(monthLabel(mk))+' · Summe des Monats je Person</span></div>'+X()+'</div><form data-form="sales" class="form"><input type="hidden" name="mk" value="'+mk+'">'+sel+rows+
+    '<div class="full m-foot" style="margin-top:6px"><button type="button" class="btn" data-act="modal-close">Abbrechen</button><button class="btn primary" type="submit">'+ic('check',15)+' Speichern</button></div></form>');
+}
+function openSetMets(){var st=S.settings;
+  sheet('Kennzahlen und Teamziele','<p class="muted small" style="margin-bottom:8px">Die LEM-Produkte laufen in Verkaufspunkten über Abschlüsse und das LEM-Teamziel. Hier stehen die weiteren Kennzahlen mit ihrem Teamziel.</p><div class="lbox">'+manualMets().map(function(m){return li({t:esc(m.n),s:'Teamziel '+num(m.t)+' '+esc(m.unit)+' pro Monat'+(m.comp&&comp(m.comp)?' · '+esc(comp(m.comp).s):''),act:'met-edit',id:m.id,lp:'met'})}).join('')+'</div>'+
+    '<button class="btn sm" data-act="met-new" style="margin:10px 0 4px">'+ic('plus',14)+' Kennzahl</button>'+
+    '<form class="form" data-form="set-sales" style="margin-top:12px"><input type="hidden" name="prorate" value="0">'+STP('Überleitungen: Teamziel pro Monat','ref',st.refTarget,0,500,1,'Ziel')+formFoot()+'</form>')}
+function openMetEdit(id){
+  var m=id?metric(id):null;m=m||{n:'',unit:'Stück',t:20,comp:''};
+  sheet(id?'Kennzahl bearbeiten':'Neue Kennzahl','<form class="form" data-form="met-ed"><input type="hidden" name="id" value="'+esc(id||'')+'">'+
+    F('Bezeichnung','n',m.n,'text','required maxlength="40"','full')+SEGR('Einheit','unit',METRIC_UNITS,m.unit)+
+    F('Teamziel pro Monat','t',m.t,'number','min="0" step="any" inputmode="decimal" required','full')+
+    SEL('Verknüpfte Kompetenz (für Vorschläge)','comp',compOpts(true),m.comp,'full')+
+    formFoot((id?'<button type="button" class="btn danger left" data-act="met-del2" data-id="'+esc(id)+'" aria-label="Löschen">'+ic('trash',15)+'</button>':'')+backBtn('set-mets'))+'</form>')}
+function openLemShare(){
+  var c=lemCfg();
+  sheet('Baufi-Phase','<form class="form" data-form="lem-share"><p class="full muted small">Bestimmt die Verkaufspunkte für Baufinanzierungen.</p>'+SEL('Stand im Bereich','bf',[['ph','Vor Umstellung (Planet Home)'],['olb1','OLB Erprobungsphase (750 je Kredit, ohne Ziele)'],['olb2','OLB Roll-Out (1.000 je Kredit, mit Zielen)']],c.bf,'full')+formFoot()+'</form>');
+}
+function saveLemShare(f,d){var c=lemCfg();c.bf=['ph','olb1','olb2'].indexOf(d.get('bf'))>-1?d.get('bf'):'ph';save();closeModal();rerender();toast('Baufi-Phase gespeichert')}
+
+/* ---------- Conversions TKE/TKO mit Kundennummern ---------- */
+function knParse(s){return String(s||'').split(/[\s,;]+/).map(function(k){return k.replace(/[^0-9A-Za-z-]/g,'').slice(0,20)}).filter(Boolean).slice(0,300)}
+function openConvForm(pre,id){
+  var d=id?byId(S.deals,id):null;pre=pre||{};
+  var k=d?d.it.slice(3):(pre.k||UI.convK||'tke'),who=[['','Nicht zugeordnet'],['me','Ich (Filialleitung)']].concat(S.employees.map(function(e){return [e.id,e.name]}));
+  var emp0=d?d.emp:(pre.emp!=null?pre.emp:''),ds=d?d.d:(pre.d||todayISO()),n=d?(d.a||1):1,kn=d?(d.kn||[]):[];
+  closeModal();
+  openModal('<div class="m-head"><div><h3>'+(d?'Conversion bearbeiten':'Conversions erfassen')+'</h3><span class="muted small">Wachstum · Stückzahl je Person und Tag</span></div>'+X()+'</div><form class="form" data-form="conv"><input type="hidden" name="id" value="'+esc(id||'')+'">'+
+    (d?'':dealGrpBar('cv'))+
+    '<div class="full seg segfull"><button type="button" class="'+(k==='tke'?'on':'')+'" data-act="conv-k" data-v="tke">TKE</button><button type="button" class="'+(k==='tko'?'on':'')+'" data-act="conv-k" data-v="tko">TKO</button></div><input type="hidden" name="k" value="'+k+'">'+
+    SEL('Wer','emp',who,emp0,'')+F('Datum','d',ds,'date','required')+
+    '<label class="fld full"><span>Anzahl</span><div class="stepper"><button type="button" class="cb" data-act="conv-step" data-s="-1" aria-label="weniger">−</button><input name="n" type="number" inputmode="numeric" min="1" max="300" value="'+n+'" aria-label="Anzahl"><button type="button" class="cb" data-act="conv-step" data-s="1" aria-label="mehr">+</button></div></label>'+
+    '<label class="fld full"><span>Kundennummern (optional)</span><textarea name="kn" rows="3" placeholder="Eine je Zeile oder mit Komma getrennt" data-input="conv-kn" autocomplete="off" autocapitalize="off" spellcheck="false">'+esc(kn.join('\n'))+'</textarea></label>'+
+    '<p class="full muted small" id="convKnHint">'+(kn.length?kn.length+' Kundennummern · Anzahl folgt der Liste':'Mit Kundennummern zählt die App die Anzahl selbst.')+' Keine Namen erfassen. Die Nummern bleiben nur auf diesem Gerät.</p>'+
+    formFoot((d?'<button type="button" class="btn danger left" data-act="deal-del" data-id="'+esc(id)+'" aria-label="Löschen">'+ic('trash',15)+'</button>':'')+'<button type="button" class="btn" data-act="modal-close">Abbrechen</button>')+'</form>','sm');
+}
+function saveConv(f,d){
+  var id=d.get('id'),k=d.get('k')==='tko'?'tko':'tke',ds=d.get('d'),kn=knParse(d.get('kn')),n=kn.length||Math.round(lemN(d.get('n'))||0);
+  if(!validISO(ds)){toast('Bitte ein Datum wählen','err');return}if(!(n>=1&&n<=300)){toast('Bitte eine Anzahl von 1 bis 300','err');return}
+  var dup=kn.filter(function(x,i){return kn.indexOf(x)!==i});if(dup.length){toast('Doppelte Kundennummer: '+dup[0],'err');return}
+  var rec=normDeals([{id:id||uid(),d:ds,emp:d.get('emp')||'',it:'cv_'+k,a:n,kn:kn}])[0];
+  if(id){var o=byId(S.deals,id);if(o)Object.assign(o,rec,{id:o.id})}else S.deals.push(rec);
+  UI.convK=k;save();closeModal();rerender();toast(n+' '+plural(n,'Conversion','Conversions')+' '+k.toUpperCase()+' · '+dealWho(rec.emp).split(' ')[0]);
+}
+
+/* ---------- Gebiet: nur LEM-Punkte ---------- */
+function regVal(mk,bid,kid){
+  var d=R_().data[mk],v=d&&d[bid]?d[bid][kid]:null;if(typeof v==='number')return v;
+  var b=regBranch(bid),k=regKpi(kid);if(!k)return null;
+  if(b&&b.own&&k.metric&&d&&Object.keys(d).length){var a=teamMetricSum(mk,k.metric);if(typeof a==='number')return a}
+  if(k.metric==='__lem'&&d&&d[bid]){var s=0,all=true;R_().kpis.forEach(function(x){if(['__lemvp','__lemw','__lemq'].indexOf(x.metric)<0)return;var y=d[bid][x.id];if(typeof y!=='number')all=false;else s+=y});if(all)return Math.round(s*100)/100}
+  return null;
+}
+
+/* ---------- Urlaub: Jahresübersicht je Mitarbeiter ---------- */
+function absYear(){return UI.absYear||new Date().getFullYear()}
+function absOf(id,y){return S.absences.filter(function(a){return a.empId===id&&a.status!=='abgelehnt'&&(a.from.slice(0,4)<=String(y)&&a.to.slice(0,4)>=String(y))})}
+function absMonthDays(id,y){var o=[];for(var i=0;i<12;i++)o.push({n:0,t:''});absOf(id,y).forEach(function(a){workdaysBetween(a.from,a.to).forEach(function(ds){if(+ds.slice(0,4)!==y)return;var m=+ds.slice(5,7)-1;o[m].n++;if(!o[m].t||a.type==='Urlaub')o[m].t=a.type;if(a.status==='offen')o[m].o=1})});return o}
+function viewAbsences(){
+  var y=absYear(),pend=S.absences.filter(function(a){return a.status==='offen'}).sort(function(a,b){return a.from.localeCompare(b.from)});
+  var tool='<div class="toolbar rise"><div class="mnav"><button class="btn icon sm" data-act="abs-y" data-k="-1" aria-label="Vorjahr">'+ic('left',16)+'</button><b>'+y+'</b><button class="btn icon sm" data-act="abs-y" data-k="1" aria-label="Folgejahr">'+ic('right',16)+'</button></div></div>';
+  var open=pend.length?'<section class="card glass rise s12"><div class="card-h"><h2>Offene Anträge</h2><span class="sub">'+pend.length+'</span></div>'+pend.map(function(a){var e=emp(a.empId);if(!e)return '';var n=workdaysBetween(a.from,a.to).length;return '<div class="abs">'+avatar(e.name,'sm')+'<div class="grow"><b>'+esc(e.name.split(' ')[0])+' · '+esc(a.type)+'</b><span class="muted small">'+fmtRange(a.from,a.to)+' · '+n+' '+plural(n,'Arbeitstag','Arbeitstage')+'</span></div><div class="acts"><button class="btn sm" data-act="abs-approve" data-id="'+esc(a.id)+'">'+ic('check',14)+' OK</button><button class="btn sm danger" data-act="abs-reject" data-id="'+esc(a.id)+'">Nein</button></div></div>'}).join('')+'</section>':'';
+  var ML='JFMAMJJASOND'.split('');
+  var rows=S.employees.map(function(e){var used=vacationUsed(e.id,y),pe=vacationPending(e.id,y),left=(e.vacation||0)-used,md=absMonthDays(e.id,y);
+    return '<div class="ay click" data-act="abs-emp" data-id="'+esc(e.id)+'" tabindex="0"><div class="ay-h">'+avatar(e.name,'sm')+'<b class="grow">'+esc(e.name)+'</b><span class="muted small">'+used+(pe?' (+'+pe+')':'')+' / '+num(e.vacation||0)+' · <b class="'+(left<0?'bad-txt':'')+'">'+left+' frei</b></span></div>'+
+      '<div class="ay-m">'+md.map(function(x,i){return '<i class="'+(x.n?'on':'')+(x.o?' op':'')+'" style="'+(x.n?'--c:'+(ABS_COLOR[x.t]||'#7b8794'):'')+'" title="'+esc(ML[i]+': '+x.n+' Tage')+'"><small>'+ML[i]+'</small>'+(x.n?'<b>'+x.n+'</b>':'')+'</i>'}).join('')+'</div></div>'}).join('');
+  var leg='<div class="chips" style="margin-top:10px">'+['Urlaub','Krank','Schulung','Sonderurlaub'].map(function(t){return chipC(t,ABS_COLOR[t])}).join('')+'</div>';
+  return tool+'<div class="grid">'+open+'<section class="card glass rise s12"><div class="card-h"><h2>Jahresübersicht '+y+'</h2><span class="sub">Arbeitstage je Monat · Urlaub genommen / Anspruch</span></div>'+(rows||'<p class="muted">Keine Mitarbeitenden.</p>')+leg+'</section></div>';
+}
+function openAbsEmp(id){
+  var e=emp(id);if(!e)return;var y=absYear(),l=absOf(id,y).concat(S.absences.filter(function(a){return a.empId===id&&a.status==='abgelehnt'&&a.from.slice(0,4)===String(y)})).sort(function(a,b){return a.from.localeCompare(b.from)});
+  sheet(esc(e.name)+' · '+y,'<p class="muted small" style="margin-bottom:8px">Urlaub '+vacationUsed(id,y)+' von '+num(e.vacation||0)+' Tagen genommen'+(vacationPending(id,y)?', '+vacationPending(id,y)+' beantragt':'')+'.</p>'+
+    (l.length?l.map(function(a){var n=workdaysBetween(a.from,a.to).length;return '<div class="abs"><div class="grow"><b>'+fmtRange(a.from,a.to)+'</b><span class="muted small">'+n+' '+plural(n,'Arbeitstag','Arbeitstage')+(a.note?' · '+esc(a.note):'')+'</span></div>'+chipC(esc(a.type),ABS_COLOR[a.type]||'#7b8794')+(a.status!=='genehmigt'?chipC(esc(a.status),ABS_STATUS[a.status]||'#7b8794'):'')+'<div class="acts">'+(a.status==='offen'?'<button class="btn sm" data-act="abs-approve" data-id="'+esc(a.id)+'">'+ic('check',14)+'</button>':'')+'<button class="btn icon sm ghost" data-act="abs-del" data-id="'+esc(a.id)+'" aria-label="Löschen">'+ic('trash',14)+'</button></div></div>'}).join(''):'<p class="muted">Keine Abwesenheiten in '+y+'.</p>'),
+    '<div class="m-foot"><button class="btn" data-act="modal-close">Schließen</button><button class="btn primary" data-act="abs-new-emp" data-id="'+esc(id)+'">'+ic('plus',15)+' Abwesenheit</button></div>');
+}
+
+/* ---------- Kalender: kompakt, Liste als Standard ---------- */
+function calItem(a,sel){var c=calCat(a.cat),e=emp(a.empId);
+  return '<button type="button" class="cl-i" style="--c:'+c[2]+'" '+(a.kls?'data-act="kls-open" data-v="'+sel+'"':'data-act="appt-open" data-id="'+esc(a.id)+'" data-lp="appt"')+'><span class="cl-t">'+(a.all?'ganztägig':a.start+'<small>'+apptEnd(a)+'</small>')+'</span><span class="cl-b"><b>'+(a.kls?ic('scan',12)+' ':'')+esc(a.t)+'</b>'+(a.loc||e?'<small>'+esc([a.loc,e?e.name.split(' ')[0]:''].filter(Boolean).join(' · '))+'</small>':'')+'</span></button>'}
+function viewCal(){
+  var sel=calSel(),list=apptsOn(sel).concat(klsMeAppts(sel)).sort(function(a,b){return (a.all?'':a.start).localeCompare(b.all?'':b.start)}),ex=calExtras(sel),d=parse(sel),grid=UI.calView==='grid';
+  var head='<div class="cal-top rise"><button type="button" class="cal-m" data-act="cal-month">'+esc(d.toLocaleDateString('de-DE',{month:'long'}))+' <span class="muted">'+d.getFullYear()+'</span> '+ic(UI.calMonth?'up':'down',15)+'</button><span class="sp"></span>'+(sel!==todayISO()?'<button class="btn sm" data-act="cal-day" data-v="'+todayISO()+'">Heute</button>':'')+
+    '<div class="seg cal-v"><button type="button" class="'+(grid?'':'on')+'" data-act="cal-view" data-v="list" aria-label="Liste">'+ic('tasks',15)+'</button><button type="button" class="'+(grid?'on':'')+'" data-act="cal-view" data-v="grid" aria-label="Tagesraster">'+ic('grid',15)+'</button></div></div>';
+  var nav=UI.calMonth?'<div class="card glass rise cal-card"><div class="cm-nav"><button class="btn icon sm ghost" data-act="cal-mshift" data-v="-1" aria-label="Vormonat">'+ic('left',16)+'</button><span></span><button class="btn icon sm ghost" data-act="cal-mshift" data-v="1" aria-label="Folgemonat">'+ic('right',16)+'</button></div>'+calMonth(sel)+'</div>':
+    '<div class="card glass rise cal-card cs-wrap"><button class="cs-a" data-act="cal-wshift" data-v="-7" aria-label="Vorige Woche">'+ic('left',16)+'</button>'+calStrip(sel)+'<button class="cs-a" data-act="cal-wshift" data-v="7" aria-label="Nächste Woche">'+ic('right',16)+'</button></div>';
+  var exH=ex.length?'<div class="cx-row rise">'+ex.map(function(x){return '<button type="button" class="cx" style="--c:'+x.c+'"'+(x.act?' data-act="'+x.act+'"':'')+(x.id?' data-id="'+esc(x.id)+'"':'')+(x.lp?' data-lp="'+x.lp+'"':'')+'>'+ic(x.icon,13)+'<span>'+esc(x.t)+'</span></button>'}).join('')+'</div>':'';
+  var dayH='<div class="cal-dh rise"><b>'+esc(d.toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'}))+'</b><button class="btn sm ghost" data-act="cal-new" data-d="'+sel+'" data-h="'+(new Date().getHours()+1)+'">'+ic('plus',14)+' Termin</button></div>';
+  if(!grid)return head+nav+dayH+exH+'<section class="card glass rise cal-list">'+(list.length?list.map(function(a){return calItem(a,sel)}).join(''):'<p class="muted small center" style="padding:10px 0">Keine Termine an diesem Tag.</p>')+'</section>';
+  var sp=hrsSpan(wdi(sel)),h0=sp?Math.floor(sp.a/60):8,h1=sp?Math.ceil(sp.b/60):18;
+  list.forEach(function(a){if(!a.all){h0=Math.min(h0,Math.floor(toMin(a.start)/60));h1=Math.max(h1,Math.ceil(toMin(apptEnd(a))/60))}});h0=Math.max(0,h0);h1=Math.min(24,Math.max(h1,h0+1));
+  var HH=42,slots='';for(var h=h0;h<h1;h++)slots+='<div class="cg-s" style="height:'+HH+'px" data-act="cal-new" data-d="'+sel+'" data-h="'+h+'" data-lp="slot"><span>'+pad(h)+':00</span></div>';
+  var blocks=layoutDay(list).map(function(it){var a=it.a,c=calCat(a.cat),top=(it.s-h0*60)/60*HH,ht=Math.max(22,(it.e-it.s)/60*HH-3),w=100/it.n;
+    return '<button type="button" class="cg-b sm" style="top:'+top.toFixed(1)+'px;height:'+ht.toFixed(1)+'px;left:calc(54px + (100% - 58px) * '+(it.col*w/100).toFixed(4)+');width:calc((100% - 58px) * '+(w/100).toFixed(4)+' - 3px);--c:'+c[2]+'" '+(a.kls?'data-act="kls-open" data-v="'+sel+'"':'data-act="appt-open" data-id="'+esc(a.id)+'" data-lp="appt"')+'><b>'+esc(a.t)+'</b></button>'}).join('');
+  var now='';if(sel===todayISO()){var n=new Date(),nm=n.getHours()*60+n.getMinutes();if(nm>=h0*60&&nm<=h1*60)now='<div class="cg-now" style="top:'+((nm-h0*60)/60*HH).toFixed(1)+'px"></div>'}
+  var allDay=list.filter(function(a){return a.all}).map(function(a){return calItem(a,sel)}).join('');
+  return head+nav+dayH+exH+(allDay?'<section class="card glass rise cal-list">'+allDay+'</section>':'')+'<section class="card glass rise cal-grid-card"><div class="cgrid" id="calGrid" style="height:'+((h1-h0)*HH)+'px">'+slots+blocks+now+'</div></section>';
+}
+
+/* ---------- Registrierung ---------- */
+function todayCard(){return ''}
+function registerR15(){
+  Object.assign(ACTIONS,{
+    'conv-new':function(t){closeModal();openConvForm({emp:t&&t.dataset&&t.dataset.emp||''})},
+    'conv-k':function(t){var f=$('#modal-root form[data-form=conv]');if(!f)return;f.elements.k.value=t.dataset.v;$$('#modal-root [data-act=conv-k]').forEach(function(b){b.classList.toggle('on',b===t)})},
+    'conv-step':function(t){var f=$('#modal-root form[data-form=conv]');if(!f)return;var el=f.elements.n;el.value=Math.max(1,Math.min(300,(parseInt(el.value,10)||0)+(+t.dataset.s)))},
+    'sales-targets':function(){toast('Es gibt nur Teamziele. Die Ziele kommen aus den LEM-Zielen.');go('goals')},
+    'abs-y':function(t){UI.absYear=absYear()+(+t.dataset.k);rerender()},
+    'abs-emp':function(t){openAbsEmp(t.dataset.id)},
+    'abs-new-emp':function(t){closeModal();openAbsForm({emp:t.dataset.id})},
+    'cal-view':function(t){UI.calView=t.dataset.v;rerender()}
+  });
+  INPUTS['conv-kn']=function(v){var n=knParse(v).length,f=$('#modal-root form[data-form=conv]'),h=$('#convKnHint');if(n&&f)f.elements.n.value=n;if(h)h.textContent=(n?n+' Kundennummern · Anzahl folgt der Liste':'Mit Kundennummern zählt die App die Anzahl selbst.')+' Keine Namen erfassen. Die Nummern bleiben nur auf diesem Gerät.'};
+  FORMS.conv=saveConv;
+  QA_ALL.conv=['trend','Conversion TKE/TKO'];
+  if(ROUTES.time){ROUTES.time.fn=function(){setTimeout(function(){go('plan')},0);return ''}}
+  if(ROUTES.sales)ROUTES.sales.sub=function(){return 'Teamziel nach LEM und Beitrag je Person'};
 }
 
 /* ============ Formulare (Modals) ============ */
@@ -6799,12 +6985,12 @@ function openChanForm(id){
     SEL('Kompetenz „Potenzial erkennen“ für diesen Kanal','comp',compOpts(true),c.comp,'full')+TA('Notiz (z. B. Erreichbarkeit, Übergabeprozess)','note',c.note,'full')+
     '<div class="full m-foot" style="margin-top:6px"><button type="button" class="btn" data-act="modal-close">Abbrechen</button><button class="btn primary" type="submit">'+ic('check',15)+' Speichern</button></div></form>');
 }
-function openAbsForm(){
+function openAbsForm(pre){pre=pre||{};
   if(!S.employees.length){toast('Lege zuerst einen Mitarbeiter an','warn');return}
   var nd=startOfToday(),gd=0;while(!isWorkday(nd)&&gd++<14)nd=addDays(nd,1);
   var t=iso(nd);
   openModal('<div class="m-head"><h3>Abwesenheit erfassen</h3>'+X()+'</div><form data-form="abs" class="form">'+
-    SEL('Mitarbeiter','emp',empOpts(false),'','full')+SEL('Art','type',Object.keys(ABS_CODE),'Urlaub')+SEL('Status','status',[['genehmigt','Genehmigt'],['offen','Offen (Antrag)']],'genehmigt')+
+    SEL('Mitarbeiter','emp',empOpts(false),pre.emp||'','full')+SEL('Art','type',Object.keys(ABS_CODE),'Urlaub')+SEL('Status','status',[['genehmigt','Genehmigt'],['offen','Offen (Antrag)']],'genehmigt')+
     F('Von','from',t,'date','required')+F('Bis','to',t,'date','required')+F('Notiz','note','','text','','full')+
     '<div class="full m-foot" style="margin-top:6px"><button type="button" class="btn" data-act="modal-close">Abbrechen</button><button class="btn primary" type="submit">'+ic('check',15)+' Speichern</button></div></form>');
 }
@@ -6969,7 +7155,7 @@ var ACTIONS={
   'save-settings':function(){
     var st=S.settings;
     st.branch=($('#sBranch').value||'').trim()||'Lünen';st.manager=($('#sManager').value||'').trim()||'Filialleitung';
-    st.minCoverage=Math.round(clampNum($('#sMin').value,3,1,30));st.rhythm=Math.round(clampNum($('#sRhythm').value,42,7,365));st.refTarget=Math.round(clampNum($('#sRef').value,3,0,50));
+    st.minCoverage=Math.round(clampNum($('#sMin').value,3,1,30));st.rhythm=Math.round(clampNum($('#sRhythm').value,42,7,365));st.refTarget=Math.round(clampNum($('#sRef').value,3,0,500));
     st.timeF=($('#sTimeF').value||'').trim();st.timeS=($('#sTimeS').value||'').trim();
     st.refFollow=Math.round(clampNum($('#sFollow').value,7,1,60));st.obsDays=Math.round(clampNum($('#sObs').value,120,14,365));st.prorate=$('#sProrate').value!=='0';
     save();rerender();toast('Einstellungen gespeichert');
@@ -7131,7 +7317,7 @@ Object.assign(CHANGES,{
   'staff-me':function(v,t){S.staff.me=!!t.checked;save();rerender()}
 });
 
-registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();registerVp();registerPr();
+registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();registerVp();registerPr();registerR15();
 /* ============ Events ============ */
 document.addEventListener('click',function(e){
   var el=e.target;if(!el||!el.closest)return;

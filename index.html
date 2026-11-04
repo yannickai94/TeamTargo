@@ -1210,6 +1210,13 @@ form.quick[data-form=qtask]{display:flex;gap:10px;flex-wrap:nowrap;align-items:c
 .cl-t{width:50px;flex:none;font-weight:700;font-size:14px;display:flex;flex-direction:column;font-variant-numeric:tabular-nums}.cl-t small{font-weight:500;color:var(--muted);font-size:12px}
 .cl-b{flex:1;min-width:0;border-left:3px solid var(--c);padding-left:10px;display:flex;flex-direction:column;justify-content:center}.cl-b b{font-size:15px}.cl-b small{color:var(--muted);font-size:12.5px}
 .abs .grow{display:flex;flex-direction:column;min-width:0}
+/* r16: LEM-Säulen, TKE/TKO */
+.lp-row{padding:10px 0;border-bottom:.5px solid var(--line)}.lp-row:last-of-type{border-bottom:0}.lp-rh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}.lp-rh>span b{font-size:20px}.lp-rh small{color:var(--muted);font-size:12px}
+.lem-t.lem-h tr.click{cursor:pointer}
+.cv-p{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--line)}.cv-p:last-child{border-bottom:0}.cv-p .grow{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-c{display:flex;align-items:center;gap:6px}.cv-c small{font-size:11px;color:var(--muted);font-weight:700}.cv-c>b{min-width:22px;text-align:right;font-variant-numeric:tabular-nums}.cv-c .btn{min-width:40px;min-height:40px;font-weight:700;font-size:13px}
+.cv-r{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid var(--line)}.cv-r:last-child{border-bottom:0}.cv-r .grow{display:flex;flex-direction:column;min-width:0}
+.cv-k{flex:none;font-size:11px;font-weight:800;padding:4px 7px;border-radius:8px;background:rgba(112,72,232,.14);color:#7048e8}.cv-k.tko{background:rgba(12,133,153,.14);color:#0c8599}
 
 </style>
 </head>
@@ -1883,7 +1890,7 @@ function seedExtra(st,by,td){
     {t:'Gebietsrunde Filialleitungen',date:W[3],start:'13:00',end:'16:30',cat:'gebiet',loc:'Dortmund'},
     {t:'Zahnarzt',date:W[4],start:'17:30',end:'18:30',cat:'privat'}
   ]);
-  seedKls(st,by);seedLem(st,by);st.metrics=lemMetrics().concat(st.metrics.filter(function(m){return !m.lem&&['m_kre','m_kon','m_ver'].indexOf(m.id)<0}));st.lemMig=3;st.metrics.forEach(function(m){if(!m.lem)m.t=m.t*Math.max(1,st.employees.length)});st.settings.refTarget=(st.settings.refTarget||3)*Math.max(1,st.employees.length);st.goals=[{id:uid(),name:'Girokonto laut LEM',unit:'VP',target:0,actual:0,metric:'__lp:gk'},{id:uid(),name:'Neue Google-Bewertungen',unit:'Stück',target:10,actual:4,metric:''}];
+  seedKls(st,by);seedLem(st,by);st.metrics=lemMetrics().concat(st.metrics.filter(function(m){return !m.lem&&['m_kre','m_kon','m_ver'].indexOf(m.id)<0}));st.lemMig=3;st.metrics.forEach(function(m){if(!m.lem)m.t=m.t*Math.max(1,st.employees.length)});st.settings.refTarget=(st.settings.refTarget||3)*Math.max(1,st.employees.length);st.goals=[{id:uid(),name:'TKE-Conversions im Team',unit:'Stück',target:60,actual:22,metric:''},{id:uid(),name:'Neue Google-Bewertungen',unit:'Stück',target:10,actual:4,metric:''}];
   st.reviews=defReviews(st.settings);
   st.reviews.snaps=[[-170,4.1,61],[-140,4.1,64],[-110,4.2,68],[-80,4.2,71],[-50,4.3,75],[-20,4.3,79]].map(function(x){return {date:td(x[0]),rating:x[1],count:x[2]}});
   st.reviews.list=[
@@ -3012,7 +3019,7 @@ function quickAct(k,pid){
   else if(k==='kudos')openKudosForm(pid);
   else if(k==='meas')openMeasForm('',{emp:pid});
   else if(k==='ref')openRefForm('',{emp:pid});
-  else if(k==='sales')openDealForm({emp:pid});
+  else if(k==='sales')openConvForm({emp:pid});
   else if(k==='obs')openObsForm(pid);
   else if(k==='qrec')openQrecForm(pid,'');
   else if(k==='time')openDayForm('me',todayISO());
@@ -3021,7 +3028,7 @@ function quickAct(k,pid){
   else if(k==='emp')openEmpForm();
 }
 function openMore(){
-  var groups=[['Ich',['me','wv','time']],['Mitarbeiter',['skills','dev','obs','qual','kudos','syn']],['Team-Leben',['events','media']],['Vertrieb',['kls','sales','refs','goals','reviews']],['Gebiet',['region']],['Organisation',['plan','tasks','settings']]];
+  var groups=[['Ich',['me','wv']],['Mitarbeiter',['skills','dev','obs','qual','kudos','syn']],['Team-Leben',['events','media']],['Vertrieb',['kls','sales','goals','reviews']],['Gebiet',['region']],['Organisation',['plan','tasks','settings']]];
   UI.sheet=true;
   openModal('<div class="m-head"><h3>Mehr</h3>'+X()+'</div>'+groups.map(function(g){return '<h6 class="ml-h">'+g[0]+'</h6><div class="mlist">'+g[1].map(function(id){var r=ROUTES[id];return '<a href="#/'+id+'" data-act="modal-close"><span class="mi">'+ic(r.icon,20)+'</span><span class="mt"><b>'+r.t+'</b><small>'+esc(r.sub())+'</small></span>'+ic('right',16)+'</a>'}).join('')+'</div>'}).join(''),'sm');
 }
@@ -3592,7 +3599,7 @@ function briefExtra(e){
   if(S.metrics.length){
     var res=personRes(e,mk);
     if(res.entered){
-      var tv=teamVP(mk);o.facts.push('Beitrag zum Teamziel '+monthLabel(mk)+': '+num(Math.round(res.vp.a))+' Verkaufspunkte'+(tv>0?' ('+Math.round(res.vp.a/tv*100)+' % des Teams)':'')+' · TKE '+convCount(mk,'tke',e.id)+' · TKO '+convCount(mk,'tko',e.id));
+      o.facts.push('Conversions '+monthLabel(mk)+': TKE '+convCount(mk,'tke',e.id)+' · TKO '+convCount(mk,'tko',e.id));
       res.rows.filter(function(r){return r.st.k==='done'||r.st.k==='ahead'}).slice(0,2).forEach(function(r){o.pos.push('Ergebnis '+r.m.n+': '+fmtV(r.m,r.a)+' von '+fmtV(r.m,r.t.v))});
       res.rows.filter(function(r){return (r.st.k==='bad'||r.st.k==='late')&&monthPace(mk)>=.3}).slice(0,2).forEach(function(r){o.themes.push('Ergebnis '+r.m.n+': '+(r.a==null?'0':fmtV(r.m,r.a))+' von '+fmtV(r.m,r.t.v)+' ('+r.st.l.toLowerCase()+')')});
       var lw=res.rows.filter(function(r){return r.st.k==='bad'||r.st.k==='late'})[0];
@@ -4727,10 +4734,6 @@ function viewSettings2(){
       li({icon:'grid',c:'#7048e8',t:'Kompetenzmodell',s:S.comps.length+' Kompetenzen',act:'set-comps'}),
       li({icon:'tasks',c:'#7048e8',t:'Führungsroutinen',s:S.routines.length+' Routinen',act:'rout-edit'}),
       li({icon:'shield',c:'#7048e8',t:'Nachweise und Pflichtschulungen',s:S.quals.length+' im Katalog',act:'qual-cat'})])+
-    lgroup('Vertrieb',[
-      li({icon:'target',c:'#1c7ed6',t:'LEM-Zielsystem',s:'Baufi-Phase',act:'lem-share'}),
-      li({icon:'chart',c:'#1c7ed6',t:'Kennzahlen und Ziele',s:S.metrics.map(function(m){return m.s||m.n}).slice(0,3).join(', ')+(S.metrics.length>3?' …':''),act:'set-mets'}),
-      li({icon:'send',c:'#1c7ed6',t:'Kanäle und Ansprechpartner',s:S.channels.map(function(c){return c.s||c.n}).join(', '),act:'set-chans'})])+
     lgroup('Darstellung',[li({icon:'moon',c:'#3d5a80',t:'Design',s:{auto:'Automatisch',light:'Hell',dark:'Dunkel'}[st.theme]+' · Hausfarben',act:'set-design'})])+
     lgroup('Daten',[
       li({icon:'share',c:'#1f9d55',t:'Backup sichern',s:lb===null?'Noch nie gesichert':'Zuletzt '+(lb===0?'heute':'vor '+lb+' '+plural(lb,'Tag','Tagen')),act:'export',cls:lb===null||lb>30?'warn':''}),
@@ -5742,7 +5745,7 @@ function registerExt5b(){
     {icon:'user',label:'Profil öffnen',fn:function(){go('person/'+e.id)}}]}};
 }
 /* ===================== Startseite aus Widgets ===================== */
-var HOME_IDS=['agenda','att','myday','team','kls','goals','region','sales','reviews','event','wv','bday','refs','qual','links'];
+var HOME_IDS=['agenda','att','myday','team','kls','goals','region','sales','reviews','event','wv','bday','qual','links'];
 var HOME_DEF=[{id:'kls',sz:'s'},{id:'goals',sz:'s'},{id:'agenda',sz:'l'},{id:'att',sz:'l'},{id:'myday',sz:'l'},{id:'team',sz:'l'}];
 function normHome(a){
   if(!Array.isArray(a))return HOME_DEF.map(function(x){return {id:x.id,sz:x.sz}});
@@ -5760,7 +5763,7 @@ function WG(){return {
   kls:{t:'Laufkunden-Puffer',icon:'scan',d:'KLS heute: freie Kapazität und Vorschläge',sz:['s','l'],l:wgKlsL,s:function(){var td=todayISO(),day=K().days[td];if(!isWorkday(new Date()))return {v:'–',s:'Heute geschlossen',to:'kls'};if(!day)return {v:'Foto',s:'KLS von heute fehlt',cls:'warn-txt',act:'kls-scan'};var a=klsAnalyze(td,day);return {v:a.kpi.cover===null?'–':a.kpi.cover+' %',s:a.issues.length?a.issues.length+' '+plural(a.issues.length,'Vorschlag','Vorschläge'):'Alles im grünen Bereich',cls:a.kpi.cover===null?'':pctCls(a.kpi.cover,95,80),to:'kls'}}},
   goals:{t:'LEM-Punkte',icon:'target',d:'Qualität, Verkauf und Wachstum im Jahr, mit größtem Hebel',sz:['s','l'],l:wgLemL,s:wgLemS},
   region:{t:'Gebiet',icon:'map',d:'Platz deiner Filiale im Gebietsvergleich',sz:['s','l'],l:wgRegionL,s:function(){var mk=regMonths().slice(-1)[0],k=R_().kpis[0];if(!mk||!k)return {v:'–',s:'Noch keine Werte',to:'region'};var r=ownRank(mk,k.id);return {v:r?r.rank+'. / '+r.of:'–',s:k.n+' · '+monthLabel(mk).split(' ')[0],cls:r?(r.rank<=Math.ceil(r.of/3)?'good-txt':r.rank>r.of*2/3?'bad-txt':''):'',to:'region'}}},
-  sales:{t:'Team-Ergebnisse',icon:'chart',d:'Zielerreichung des Teams im laufenden Monat',sz:['l','s'],l:wgSalesL,s:function(){var rs=teamRes(monthKey()).filter(function(x){return x.t>0});if(!rs.length)return {v:'–',s:'Keine Kennzahlen',to:'sales'};var p=rs.reduce(function(a,x){return a+(x.t>0?Math.min(1.5,x.a/x.t):0)},0)/rs.length;return {v:Math.round(p*100)+' %',s:'Zielerreichung Team',cls:pctTone(p/Math.max(.05,monthPace(monthKey()))),to:'sales'}}},
+  sales:{t:'TKE/TKO',icon:'chart',d:'Conversions des Teams im laufenden Monat',sz:['s','l'],l:wgSalesL,s:function(){var mk=monthKey();return {v:convCount(mk,'tke')+' / '+convCount(mk,'tko'),s:'TKE / TKO im Monat',act:'conv-new'}}},
   reviews:{t:'Google',icon:'star',d:'Aktuelle Sternebewertung',sz:['s'],s:function(){var l=rvLast(),c=rvOpenCritical().length;return {v:l?dec(l.rating,1)+' ★':'–',s:c?c+' kritisch offen':(l?l.count+' Bewertungen':'Stand eintragen'),cls:c?'bad-txt':'',to:'reviews'}}},
   event:{t:'Nächstes Event',icon:'flag',d:'Das nächste geplante Team-Event',sz:['s'],s:function(){var ev=upcomingEvents(120)[0];return ev?{v:relDays(ev.date),s:ev.t,to:'events'}:{v:'–',s:'Nichts geplant',to:'events'}}},
   wv:{t:'Wiedervorlagen',icon:'inbox',d:'Was heute wieder vorgelegt wird',sz:['s'],s:function(){var d=wvDue().length,o=wvOpen().length;return {v:String(d),s:d?'heute fällig · '+o+' offen':o+' offen, nichts fällig',cls:d?'warn-txt':'',to:'wv'}}},
@@ -5801,7 +5804,7 @@ function wgSalesL(){
   return wgCard('Team-Ergebnisse','sales',rs.slice(0,5).map(function(x){var p=x.t>0?Math.min(100,Math.round(x.a/x.t*100)):0;return '<div class="prow"><div class="l"><span>'+esc(x.m.n)+'</span><span class="muted">'+fmtV(x.m,x.a)+' / '+fmtV(x.m,x.t)+'</span></div><div class="bar"><i class="'+barCls(x.st)+'" data-w="'+p+'"></i>'+(pace>.03&&pace<.97?'<b class="pace" style="left:'+Math.round(pace*100)+'%"></b>':'')+'</div></div>'}).join(''),'<span class="muted small">Monat zu '+Math.round(pace*100)+' %</span>');
 }
 function wgLinksL(){
-  var l=[['cal','calendar','Kalender'],['me','brief','To-Dos'],['kls','scan','KLS'],['sales','chart','Ergebnisse'],['refs','send','Überleitungen'],['dev','trend','Entwicklung'],['region','map','Gebiet'],['plan','grid','Dienstplan']];
+  var l=[['cal','calendar','Kalender'],['me','brief','To-Dos'],['kls','scan','KLS'],['sales','chart','TKE/TKO'],['dev','trend','Entwicklung'],['region','map','Gebiet'],['plan','grid','Dienstplan']];
   return '<section class="card glass"><div class="card-h"><h2>Schnellzugriff</h2></div><div class="wg-links">'+l.map(function(x){return '<a href="#/'+x[0]+'">'+ic(x[1],20)+'<span>'+x[2]+'</span></a>'}).join('')+'</div></section>';
 }
 
@@ -5998,8 +6001,10 @@ function normLem(o){
   if(o.pr&&typeof o.pr==='object')Object.keys(o.pr).filter(function(k){return /^\d{4}-\d{2}$/.test(k)}).sort().slice(-36).forEach(function(k){var x=o.pr[k]||{},cc={},nn={};Object.keys(x.c||{}).forEach(function(id){var v=lemN(x.c[id]);if(PR_ALL.indexOf(id)>-1&&v!=null&&v>=0)cc[id]=Math.round(v)});['gk','kk'].forEach(function(t){var v=lemN((x.n||{})[t]);if(v!=null&&v>=0)nn[t]=Math.round(v)});var qq={};['ast','geh','sme'].forEach(function(t){var v=lemN((x.q||{})[t]);if(v!=null&&v>=0&&v<=300)qq[t]=v});d.pr[k]={c:cc,n:nn,q:qq,split:x.split!==false}});
   if(o.mon&&typeof o.mon==='object')Object.keys(o.mon).filter(function(k){return /^\d{4}-\d{2}$/.test(k)}).sort().slice(-36).forEach(function(mk){
     var m=o.mon[mk]||{},v={},ob=m.ob||{},ag=m.agb||{};Object.keys(m.v||{}).forEach(function(pid){if(LEM_PRODS.some(function(p){return p[0]===pid}))v[pid]=lemZI(m.v[pid])});
-    d.mon[mk]={vz:lemN(m.vz),v:v,um:lemZI(m.um),kv:lemN(m.kv),tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemKukiN(lemN(m.kuki)),ob:{z:lemN(ob.z),i:lemN(ob.i)},agb:{c:lemN(ag.c),e:lemN(ag.e),s:lemN(ag.s),a:lemN(ag.a)},stk:lemStk(m.stk),wp:lemWp(m),qp:lemQp(m),ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs),korr:lemN(m.korr)};
+    var lp=m.lp||{};
+    d.mon[mk]={lp:{v:lemPts(lp.v,100),w:lemPts(lp.w,50),q:lemPts(lp.q,65)},vz:lemN(m.vz),v:v,um:lemZI(m.um),kv:lemN(m.kv),tke:lemZI(m.tke),tko:lemZI(m.tko),kuki:lemKukiN(lemN(m.kuki)),ob:{z:lemN(ob.z),i:lemN(ob.i)},agb:{c:lemN(ag.c),e:lemN(ag.e),s:lemN(ag.s),a:lemN(ag.a)},stk:lemStk(m.stk),wp:lemWp(m),qp:lemQp(m),ts:lemN(m.ts),tsF:lemN(m.tsF),bank:lemN(m.bank),cs:lemN(m.cs),korr:lemN(m.korr)};
   });
+  d.lpMig=!!o.lpMig;
   return d;
 }
 function L(){return S.lem}
@@ -6023,7 +6028,7 @@ function lemMonths(mk,per){if(per==='m')return [mk];var y=mk.slice(0,4),o=[];for
 function lemLast(ms,f){for(var i=ms.length-1;i>=0;i--){var m=lemMon(ms[i]);if(m){var v=f(m);if(v!=null)return v}}return null}
 
 /* --- Berechnung für Monat (per 'm') oder Jahr bis Monat (per 'y') --- */
-function lemCalc(mk,per){
+function lemCalcOld(mk,per){
   var ms=lemMonths(mk,per),R={mk:mk,per:per,months:ms},pace=monthPace(mk),cm=monthKey();
   /* Verkauf: Ist aus Abschlüssen, ein Reporting-Wert hat Vorrang */
   var prods=L().prods.map(function(p){var z=0,zi=false,i=0,ii=false,app=0,ah=false,src={};ms.forEach(function(k){var m=lemMon(k),x=m&&m.v[p.id];if(x&&x.z!=null){z+=x.z;zi=true}var r=lemProdIst(k,p);if(r.v!=null){i+=r.v;ii=true;src[r.src]=1}if(r.app!=null){app+=r.app;ah=true}});
@@ -6222,6 +6227,7 @@ function seedLem(st,by){
     if(rnd(mk+'lia')>.4)add(mk,mk+'lia',{it:'kr_lia',a:Math.round(600+rnd(mk+'lz')*900),pgf:1,vol:6000});
     [['gk_std',13],['gk_prem',2],['gk_bge',1],['gk_blim',1],['gk_u18',1],['kk_cl',5],['kk_gold',1],['fg_fest',4],['fg_tg',2],['fg_jtg',1],['fg_gk',1],['bf_tipp',4],['bf_plan',1]].forEach(function(x){var c=x[1]+(rnd(mk+x[0])<.3?-1:rnd(mk+x[0])>.75?1:0);for(var j=0;j<c;j++)add(mk,mk+x[0]+j,{it:x[0],a:1})});
     if(i%2===0)add(mk,mk+'bfg',{it:'bf_geb',a:1,kred:true});
+    var ncv=10+Math.floor(rnd(mk+'ncv')*8);for(var jc=0;jc<ncv;jc++)add(mk,mk+'cv'+jc,{it:jc%5<3?'cv_tke':'cv_tko',a:1+(rnd(mk+'cva'+jc)>.8?1:0),kn:[]});
     for(var j2=0;j2<5;j2++)add(mk,mk+'ve'+j2,{it:j2===4?'v_rsv':'v_lfd',a:Math.round((18+rnd(mk+'b'+j2)*30)*100)/100,zw:'m',rec:j2===1?Math.round((30+rnd(mk+'r'+j2)*20)*100)/100:null,rate:j2===4?220:null});
     add(mk,mk+'obk',{it:'ob_kr',a:Math.round(1500+rnd(mk+'obz')*800),pgf:1,vol:9000});add(mk,mk+'obf',{it:'ob_fonds',a:20000});if(i%3===0)add(mk,mk+'obt',{it:'ob_tav',a:1000});
   }
@@ -6835,7 +6841,6 @@ function openConvForm(pre,id){
   var emp0=d?d.emp:(pre.emp!=null?pre.emp:''),ds=d?d.d:(pre.d||todayISO()),n=d?(d.a||1):1,kn=d?(d.kn||[]):[];
   closeModal();
   openModal('<div class="m-head"><div><h3>'+(d?'Conversion bearbeiten':'Conversions erfassen')+'</h3><span class="muted small">Wachstum · Stückzahl je Person und Tag</span></div>'+X()+'</div><form class="form" data-form="conv"><input type="hidden" name="id" value="'+esc(id||'')+'">'+
-    (d?'':dealGrpBar('cv'))+
     '<div class="full seg segfull"><button type="button" class="'+(k==='tke'?'on':'')+'" data-act="conv-k" data-v="tke">TKE</button><button type="button" class="'+(k==='tko'?'on':'')+'" data-act="conv-k" data-v="tko">TKO</button></div><input type="hidden" name="k" value="'+k+'">'+
     SEL('Wer','emp',who,emp0,'')+F('Datum','d',ds,'date','required')+
     '<label class="fld full"><span>Anzahl</span><div class="stepper"><button type="button" class="cb" data-act="conv-step" data-s="-1" aria-label="weniger">−</button><input name="n" type="number" inputmode="numeric" min="1" max="300" value="'+n+'" aria-label="Anzahl"><button type="button" class="cb" data-act="conv-step" data-s="1" aria-label="mehr">+</button></div></label>'+
@@ -6924,6 +6929,116 @@ function registerR15(){
   if(ROUTES.time){ROUTES.time.fn=function(){setTimeout(function(){go('plan')},0);return ''}}
   if(ROUTES.sales)ROUTES.sales.sub=function(){return 'Teamziel nach LEM und Beitrag je Person'};
 }
+/* ===================== Runde 16: LEM nur mit Säulenwerten, TKE/TKO statt Ergebnisse, ohne Überleitungen ===================== */
+
+/* ---------- LEM: je Monat drei Werte laut Reporting (Score YTD) ---------- */
+function lemLpMigrate(){
+  var l=L();if(l.lpMig)return;l.lpMig=true;
+  Object.keys(l.mon).forEach(function(mk){var m=l.mon[mk];if(m.lp&&(m.lp.v!=null||m.lp.w!=null||m.lp.q!=null))return;
+    try{var R=lemCalcOld(mk,'y'),has=m.v&&Object.keys(m.v).length||m.wp&&Object.keys(m.wp).some(function(k){return m.wp[k]!=null})||m.qp&&Object.keys(m.qp).some(function(k){return m.qp[k]!=null});
+      if(has)m.lp={v:R.v.pts==null?null:Math.round(R.v.pts*100)/100,w:R.w.pts,q:R.q.pts}}catch(e){}});
+}
+function lemLp(mk){var m=lemMon(mk);return m&&m.lp?m.lp:{v:null,w:null,q:null}}
+function lemHasLp(mk){var p=lemLp(mk);return p.v!=null||p.w!=null||p.q!=null}
+function lemCalc(mk,per){
+  lemLpMigrate();
+  var p=lemLp(mk),m=lemMon(mk),k=m&&m.korr!=null?m.korr:null,R={mk:mk,per:'y',months:[mk]};
+  R.v={pts:p.v};R.w={pts:p.w};R.q={pts:p.q};R.korr=k;
+  var have=['v','w','q'].filter(function(x){return R[x].pts!=null});
+  R.tot=have.length?Math.round((have.reduce(function(a,x){return a+R[x].pts},0)+(k||0))*100)/100:null;R.complete=have.length===3;R.exp=150;R.max=215;
+  return R;
+}
+function lemLatestMk(){var cur=monthKey();for(var i=0;i<14;i++){var k=shiftMonth(cur,-i);if(lemHasLp(k))return k}return cur}
+function lemLevers(){return []}
+function lemCheckCard(){return ''}
+function lemPer(){return 'y'}
+function lemAttention(){
+  var o=[],mk=monthKey(),pm=shiftMonth(mk,-1);if(!S.employees.length)return o;
+  if(new Date().getDate()>=10&&!lemHasLp(pm))o.push({sev:1,icon:'target',c:'#1c7ed6',t:'LEM-Werte für '+monthLabel(pm).split(' ')[0]+' fehlen',s:'Verkauf, Wachstum und KuBiS aus dem Reporting eintragen',act:'go',to:'goals'});
+  return o;
+}
+function lemPillRow(k,n,R){var p=R[k].pts,st=lemPillarState(p,LEM_EXP[k]);
+  return '<div class="lp-row click" data-act="lem-edit" data-v="'+k+'" tabindex="0"><div class="lp-rh"><b>'+n+'</b><span><b style="color:'+st.c+'">'+lemF(p)+'</b><small> / '+LEM_EXP[k]+' · max. '+LEM_MAX[k]+'</small></span></div>'+lemBar(p,LEM_EXP[k],LEM_MAX[k],st.c)+'</div>'}
+function viewLem(){
+  var mk=lemMk(),R=lemCalc(mk,'y'),y=mk.slice(0,4);
+  var top='<div class="toolbar rise lem-tb"><div class="mnav"><button class="btn icon sm" data-act="lem-m" data-k="-1" aria-label="Vorheriger Monat">'+ic('left',16)+'</button><b>'+esc(new Date(+y,+mk.slice(5)-1,1).toLocaleDateString('de-DE',{month:'long',year:'numeric'}))+'</b><button class="btn icon sm" data-act="lem-m" data-k="1" aria-label="Nächster Monat">'+ic('right',16)+'</button></div></div>';
+  var miss=!lemHasLp(mk)?'<div class="nb rise">'+ic('edit',16)+'<span class="grow">Für '+esc(monthLabel(mk))+' sind noch keine LEM-Werte erfasst.</span><button class="btn sm primary" data-act="lem-add">Eintragen</button></div>':'';
+  var pill='<section class="card glass rise s12"><div class="card-h"><h2>Säulen</h2><span class="sub">Score YTD laut Reporting · antippen zum Ändern</span></div>'+lemPillRow('v','Verkauf',R)+lemPillRow('w','Wachstum',R)+lemPillRow('q','KuBiS',R)+(R.korr?'<p class="muted small" style="margin-top:6px">Korrektur '+(R.korr>0?'+':'')+lemF(R.korr)+'</p>':'')+'</section>';
+  var ms=[];for(var i=1;i<=12;i++){var k=y+'-'+pad(i);if(k<=monthKey()||lemHasLp(k))ms.push(k)}
+  var hist='<section class="card glass rise s12"><div class="card-h"><h2>Verlauf '+y+'</h2><span class="sub">Score LEM YTD je Monat</span></div><div class="lem-tw"><table class="lem-t lem-h"><thead><tr><th></th><th>Verkauf</th><th>Wachstum</th><th>KuBiS</th><th>Gesamt</th></tr></thead><tbody>'+
+    ms.map(function(k){var r=lemCalc(k,'y');return '<tr class="click'+(k===mk?' on':'')+'" data-act="lem-open-m" data-v="'+k+'"><td>'+new Date(+k.slice(0,4),+k.slice(5)-1,1).toLocaleDateString('de-DE',{month:'short'})+'</td><td>'+lemF(r.v.pts)+'</td><td>'+lemF(r.w.pts)+'</td><td>'+lemF(r.q.pts)+'</td><td><b>'+lemF(r.tot)+'</b></td></tr>'}).join('')+'</tbody></table></div></section>';
+  return top+miss+'<div class="grid"><div class="s12">'+lemHero(R)+'</div>'+pill+hist+lemOwnGoals()+'</div>';
+}
+function openLemForm(mk){
+  mk=mk||lemMk();var m=lemMon(mk)||lemBlankMon(),p=m.lp||{};
+  sheet(lemSheetHead(mk,'LEM-Werte'),'<form class="lemf" data-form="lem-p"><input type="hidden" name="mk" value="'+mk+'">'+
+    '<p class="muted small" style="margin:2px 0 8px">Die Gesamtwerte je Säule aus der LEM-Übersicht (Score YTD).</p>'+
+    '<div class="lem-in one"><span><b>Verkauf</b><small>Score Verkauf YTD · 0 bis 100</small></span>'+lemIn('v',p.v,'z. B. 62,79','Verkauf')+'</div>'+
+    '<div class="lem-in one"><span><b>Wachstum</b><small>Score Wachstum · 0 bis 50</small></span>'+lemIn('w',p.w,'z. B. 44','Wachstum')+'</div>'+
+    '<div class="lem-in one"><span><b>KuBiS</b><small>KuBiS Gesamtscore · 0 bis 65</small></span>'+lemIn('q',p.q,'z. B. 62','KuBiS')+'</div>'+
+    '<div class="lem-in one"><span><b>Korrektur</b><small>Optional, mit Minus bei Abzug</small></span>'+lemIn('korr',m.korr,'0','Korrektur')+'</div>'+
+    formFoot()+'</form>');
+}
+function saveLemForm(f,d){
+  var mk=d.get('mk')||lemMk(),g=function(n){return lemN(d.get(n))},v={v:g('v'),w:g('w'),q:g('q')},lim={v:100,w:50,q:65},nm={v:'Verkauf',w:'Wachstum',q:'KuBiS'};
+  for(var k in lim)if(v[k]!=null&&(v[k]<0||v[k]>lim[k])){toast(nm[k]+': 0 bis '+lim[k]+' Punkte','err');return}
+  var m=lemMon(mk,true);m.lp=v;m.korr=g('korr');UI.lemMk=mk;save();closeModal();if(UI.route!=='goals')go('goals');else rerender();
+  var R=lemCalc(mk,'y');toast('LEM '+monthLabel(mk).split(' ')[0]+': '+lemF(R.tot)+' Punkte');
+}
+function wgLemS(){var mk=lemLatestMk(),R=lemCalc(mk,'y');if(R.tot==null)return {v:'–',s:'LEM-Werte eintragen',act:'lem-add'};var st=lemPillarState(R.tot,R.exp);return {v:lemF(R.tot),s:'von 150 · '+new Date(+mk.slice(0,4),+mk.slice(5)-1,1).toLocaleDateString('de-DE',{month:'short'}),cls:R.tot>=R.exp?'good-txt':R.tot>=135?'warn-txt':'bad-txt',to:'goals'}}
+function wgLemL(){var mk=lemLatestMk(),R=lemCalc(mk,'y'),n={v:'Verkauf',w:'Wachstum',q:'KuBiS'};
+  return '<section class="card glass"><a class="card-h wg-lh" href="#/goals"><h2>LEM-Punkte</h2><span class="muted small">'+lemF(R.tot)+' / 150 · '+esc(monthLabel(mk).split(' ')[0])+'</span>'+ic('right',16)+'</a>'+
+    ['v','w','q'].map(function(k){var p=R[k].pts,st=lemPillarState(p,LEM_EXP[k]);return '<div class="prow"><div class="l"><span>'+n[k]+'</span><span class="muted">'+lemF(p)+' / '+LEM_EXP[k]+'</span></div>'+lemBar(p,LEM_EXP[k],LEM_MAX[k],st.c)+'</div>'}).join('')+'</section>'}
+
+/* ---------- TKE/TKO statt Ergebnisse ---------- */
+function convDeals(mk,emp){return S.deals.filter(function(d){return d.d.slice(0,7)===mk&&d.it.indexOf('cv_')===0&&(emp==null||d.emp===emp)}).sort(function(a,b){return b.d.localeCompare(a.d)})}
+function convRow(d){var k=d.it.slice(3).toUpperCase();return '<div class="cv-r click" data-act="deal-open" data-id="'+esc(d.id)+'" tabindex="0"><span class="cv-k '+d.it.slice(3)+'">'+k+'</span><div class="grow"><b>'+(d.a||1)+'× · '+esc(dealWho(d.emp).split(' ')[0])+'</b><span class="muted small">'+fmt(d.d,{weekday:'short',day:'2-digit',month:'2-digit'})+(d.kn&&d.kn.length?' · '+d.kn.length+' '+plural(d.kn.length,'Kundennummer','Kundennummern'):'')+'</span></div>'+ic('right',15)+'</div>'}
+function viewSales(){
+  var mk=UI.salesMonth||monthKey();UI.salesMonth=mk;var cur=mk===monthKey();
+  var tool='<div class="toolbar rise">'+monthNav(mk,'sales-m')+'</div>';
+  var ce=convCount(mk,'tke'),co=convCount(mk,'tko');
+  var tot='<section class="card glass rise s12 conv-c"><div class="conv-n"><div><b>'+ce+'</b><span>TKE</span></div><div><b>'+co+'</b><span>TKO</span></div><button class="btn sm primary" data-act="conv-new">'+ic('plus',14)+' Erfassen</button></div></section>';
+  var ppl=[{id:'me',name:S.settings.manager||'Ich'}].concat(S.employees);
+  var per='<section class="card glass rise s12"><div class="card-h"><h2>Je Person</h2><span class="sub">'+(cur?'+1 tippen für eine Conversion heute':esc(monthLabel(mk)))+'</span></div>'+
+    ppl.map(function(e){var te=convCount(mk,'tke',e.id),to=convCount(mk,'tko',e.id);if(e.id==='me'&&!te&&!to&&!cur)return '';
+      return '<div class="cv-p">'+avatar(e.name,'sm')+'<b class="grow">'+esc(e.name.split(' ')[0])+'</b><span class="cv-c"><small>TKE</small><b>'+te+'</b>'+(cur?'<button type="button" class="btn icon sm" data-act="conv-plus" data-emp="'+esc(e.id)+'" data-k="tke" aria-label="+1 TKE für '+esc(e.name)+'">+1</button>':'')+'</span><span class="cv-c"><small>TKO</small><b>'+to+'</b>'+(cur?'<button type="button" class="btn icon sm" data-act="conv-plus" data-emp="'+esc(e.id)+'" data-k="tko" aria-label="+1 TKO für '+esc(e.name)+'">+1</button>':'')+'</span></div>'}).join('')+'</section>';
+  var l=convDeals(mk);
+  var list='<section class="card glass rise s12"><div class="card-h"><h2>Einträge</h2><span class="sub">'+l.length+'</span></div>'+(l.length?l.slice(0,60).map(convRow).join(''):'<p class="muted small">Noch nichts erfasst in diesem Monat.</p>')+'</section>';
+  return tool+'<div class="grid">'+tot+per+list+'</div>';
+}
+function tabSales(e){
+  var mk=UI.salesMonth||monthKey();UI.salesMonth=mk;var ms=[];for(var k=-5;k<=0;k++)ms.push(shiftMonth(monthKey(),k));
+  return '<div class="grid"><section class="card glass rise s7"><div class="card-h"><h2>TKE/TKO</h2></div>'+monthNav(mk,'sales-m')+'<div class="conv-n" style="margin:12px 0"><div><b>'+convCount(mk,'tke',e.id)+'</b><span>TKE</span></div><div><b>'+convCount(mk,'tko',e.id)+'</b><span>TKO</span></div><button class="btn sm primary" data-act="conv-new" data-emp="'+esc(e.id)+'">'+ic('plus',14)+' Erfassen</button></div>'+
+    convDeals(mk,e.id).slice(0,20).map(convRow).join('')+'</section>'+
+    '<section class="card glass rise s5"><div class="card-h"><h2>Verlauf</h2><span class="sub">TKE / TKO je Monat</span></div>'+ms.map(function(m){return '<div class="row"><div class="grow"><b>'+esc(monthLabel(m))+'</b></div><span>'+convCount(m,'tke',e.id)+' / '+convCount(m,'tko',e.id)+'</span></div>'}).join('')+'</section></div>';
+}
+function wgSalesL(){var mk=monthKey();return wgCard('TKE/TKO','sales','<div class="conv-n"><div><b>'+convCount(mk,'tke')+'</b><span>TKE</span></div><div><b>'+convCount(mk,'tko')+'</b><span>TKO</span></div><button class="btn sm" data-act="conv-new">'+ic('plus',14)+' Erfassen</button></div>')}
+function convPlus(emp,k){var rec=normDeals([{id:uid(),d:todayISO(),emp:emp,it:'cv_'+k,a:1,kn:[]}])[0];S.deals.push(rec);save();rerender();toast('+1 '+k.toUpperCase()+' · '+dealWho(emp).split(' ')[0])}
+function convCount(mk,k,emp){var n=0;S.deals.forEach(function(d){if(d.it==='cv_'+k&&d.d.slice(0,7)===mk&&(emp==null||d.emp===emp))n+=(d.a==null?1:d.a)});return n}
+function goalActual(g){return g.actual}
+function goalTarget(g){return g.target}
+
+/* ---------- Überleitungen ausgeblendet ---------- */
+function underused(){return []}
+function staleRefs(){return []}
+
+function registerR16(){
+  var h=hubById('sales');h.tabs=[['goals','LEM'],['sales','TKE/TKO'],['reviews','Google']];
+  ROUTES.sales.t='TKE/TKO';ROUTES.sales.sub=function(){return 'Conversions TKE und TKO je Person'};
+  ROUTES.goals.t='LEM';ROUTES.goals.sub=function(){return 'Verkauf, Wachstum und KuBiS laut Reporting'};
+  ROUTES.refs.fn=function(){setTimeout(function(){go('goals')},0);return ''};
+  P_TABS=P_TABS.filter(function(t){return t[0]!=='refs'}).map(function(t){return t[0]==='sales'?['sales','TKE/TKO']:t});
+  delete QA_ALL.ref;delete QA_ALL.pr;delete QA_ALL.conv;QA_ALL.sales=['trend','TKE/TKO'];
+  var qi=QA_TOP.indexOf('ref');if(qi>-1)QA_TOP[qi]='lem';
+  Object.assign(ACTIONS,{
+    'lem-add':function(){openLemForm(lemMk())},'lem-edit':function(){openLemForm(lemMk())},
+    'lem-open-m':function(t){UI.lemMk=t.dataset.v;openLemForm(t.dataset.v)},
+    'conv-plus':function(t){convPlus(t.dataset.emp,t.dataset.k)}
+  });
+  FORMS['lem-p']=saveLemForm;
+  PAGE_ACTS.goals=function(){return {add:{label:'LEM-Werte eintragen',fn:function(){openLemForm(lemMk())}},menu:[{icon:'plus',label:'Eigenes Monatsziel',fn:function(){openGoalForm()}},S.goals.length?{icon:'sparkle',label:'Eigene Ziele: neuen Monat starten',fn:function(){ACTIONS['goals-reset']()}}:null]}};
+  PAGE_ACTS.sales=function(){return {add:{label:'TKE/TKO erfassen',fn:function(){openConvForm({})}}}};
+}
 
 /* ============ Formulare (Modals) ============ */
 function X(){return '<button type="button" class="btn icon" data-act="modal-close" aria-label="Schließen">'+ic('x')+'</button>'}
@@ -7007,7 +7122,6 @@ function openGoalForm(id){
   var g=id?S.goals.filter(function(x){return x.id===id})[0]:null;g=g||{name:'',unit:'Stück',target:0,actual:0};
   openModal('<div class="m-head"><h3>'+(id?'Ziel bearbeiten':'Neues Ziel')+'</h3>'+X()+'</div><form data-form="goal" class="form"><input type="hidden" name="id" value="'+esc(id||'')+'">'+
     F('Bezeichnung','name',g.name,'text','required','full')+F('Zielwert (Monat)','target',g.target,'number','min="0" step="any" required')+F('Aktueller Stand','actual',g.actual,'number','min="0" step="any" required')+
-    SEL('Stand und Ziel automatisch','metric',[['','– manuell eintragen –']].concat(LEM_MET.map(function(x){return ['__lp:'+x[0],'LEM '+x[1]+' (VP, Ziel aus LEM)']})).concat(manualMets().map(function(m){return [m.id,m.n+' (Summe des Teams)']})),g.metric||'','full')+
     F('Einheit','unit',g.unit,'text','list="unitList"','full')+'<datalist id="unitList"><option value="Stück"><option value="€"><option value="Punkte"><option value="%"></datalist>'+
     '<div class="full m-foot" style="margin-top:6px">'+(id?'<button type="button" class="btn danger left" data-act="goal-del" data-id="'+esc(id)+'">'+ic('trash',15)+' Löschen</button>':'')+'<button type="button" class="btn" data-act="modal-close">Abbrechen</button><button class="btn primary" type="submit">'+ic('check',15)+' Speichern</button></div></form>');
 }
@@ -7317,7 +7431,7 @@ Object.assign(CHANGES,{
   'staff-me':function(v,t){S.staff.me=!!t.checked;save();rerender()}
 });
 
-registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();registerVp();registerPr();registerR15();
+registerExt();registerExt2();registerExt3();registerExt4();registerLem();registerExt5();registerExt5b();registerExt6();registerLemPage();registerKlsMe();registerVp();registerPr();registerR15();registerR16();
 /* ============ Events ============ */
 document.addEventListener('click',function(e){
   var el=e.target;if(!el||!el.closest)return;
